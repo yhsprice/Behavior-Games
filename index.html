@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choice Quest</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>Choice Quest</h1>
+      <p class="tagline">Practice good choices, kindness, timing, and calm reactions.</p>
+      <div class="hero-actions">
+        <a href="#games" class="btn primary">Play Games</a>
+        <a href="#tracker" class="btn secondary">Goal Tracker</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="games" class="panel">
+      <div class="section-header">
+        <h2>Game Categories</h2>
+        <p>Pick a category and answer simple real-life questions.</p>
+      </div>
+
+      <div class="category-grid" id="categoryGrid"></div>
+    </section>
+
+    <section id="gamePanel" class="panel hidden">
+      <div class="section-header game-header">
+        <div>
+          <h2 id="gameTitle">Game</h2>
+          <p id="gameSubtitle">Choose the best answer.</p>
+        </div>
+        <div class="progress-pill" id="questionCount">Question 1 of 1</div>
+      </div>
+
+      <div class="card question-card">
+        <div class="prompt-label">Situation</div>
+        <h3 id="questionText"></h3>
+        <div class="choices" id="choices"></div>
+        <div id="feedback" class="feedback hidden"></div>
+
+        <div class="game-actions">
+          <button id="nextBtn" class="btn primary hidden">Next</button>
+          <button id="backToMenuBtn" class="btn secondary">Back to Menu</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="tracker" class="panel">
+      <div class="section-header">
+        <h2>Goal Tracker / Goal Slacker</h2>
+        <p>Log how the week goes. Good choices earn points. Tough moments subtract a few. The bar shows progress.</p>
+      </div>
+
+      <div class="tracker-grid">
+        <div class="card">
+          <h3>Quick Points</h3>
+          <p class="small-note">Use these buttons during the week. No rocket science. Just tap and move on.</p>
+          <div class="point-buttons">
+            <button class="btn success" data-points="5" data-label="Waited without interrupting">+5 Waited turn</button>
+            <button class="btn success" data-points="5" data-label="Used kind words">+5 Kind words</button>
+            <button class="btn success" data-points="10" data-label="Handled serious moment well">+10 Serious moment</button>
+            <button class="btn success" data-points="8" data-label="Fixed a mistake">+8 Fixed mistake</button>
+            <button class="btn danger" data-points="-3" data-label="Interrupted">-3 Interrupted</button>
+            <button class="btn danger" data-points="-4" data-label="Said something mean">-4 Mean words</button>
+            <button class="btn danger" data-points="-4" data-label="Joked in a serious situation">-4 Wrong-time joke</button>
+            <button class="btn danger" data-points="-2" data-label="Ignored directions">-2 Ignored directions</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>This Week</h3>
+          <div class="score-wrap">
+            <div class="score-box">
+              <span class="score-label">Points</span>
+              <span id="scoreValue" class="score-value">0</span>
+            </div>
+            <div class="score-box">
+              <span class="score-label">Level</span>
+              <span id="scoreLevel" class="score-value">Starter</span>
+            </div>
+          </div>
+
+          <div class="meter-wrap">
+            <div class="meter-labels">
+              <span>Weekly Progress</span>
+              <span id="meterPercent">0%</span>
+            </div>
+            <div class="meter">
+              <div id="meterFill" class="meter-fill"></div>
+            </div>
+          </div>
+
+          <div class="custom-log">
+            <label for="customNote">Add a note</label>
+            <textarea id="customNote" rows="3" placeholder="Example: Waited quietly while mom was on the phone."></textarea>
+            <div class="custom-log-actions">
+              <input id="customPoints" type="number" value="5" />
+              <button id="addCustomBtn" class="btn primary">Add Note + Points</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card weekly-card">
+        <div class="weekly-header">
+          <h3>Weekly Log</h3>
+          <div class="weekly-actions">
+            <button id="resetWeekBtn" class="btn secondary">Reset Week</button>
+            <button id="exportBtn" class="btn secondary">Export Log</button>
+          </div>
+        </div>
+        <ul id="logList" class="log-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Built to practice better choices one click at a time.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
