@@ -157,3 +157,15 @@ const questions = [
     explanation: "People need to feel heard first."
   }
 ];
+
+function showGame() {
+  document.getElementById("game-section").style.display = "block";
+  document.getElementById("tracker-section").style.display = "none";
+  loadQuestion();
+}
+
+function showTracker() {
+  document.getElementById("game-section").style.display = "none";
+  document.getElementById("tracker-section").style.display = "block";
+  updateTracker();
+}
