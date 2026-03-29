@@ -158,6 +158,30 @@ const questions = [
   }
 ];
 
+let goodChoices = 0;
+let badChoices = 0;
+
+function addGood() {
+  goodChoices++;
+  saveTracker();
+  updateTracker();
+}
+
+function addBad() {
+  badChoices++;
+  saveTracker();
+  updateTracker();
+}
+
+function updateTracker() {
+  let total = goodChoices + badChoices;
+  let percent = total === 0 ? 0 : (goodChoices / total) * 100;
+
+  document.getElementById("tracker-bar").style.width = percent + "%";
+  document.getElementById("tracker-score").innerText =
+    "Good: " + goodChoices + " | Needs Work: " + badChoices;
+}
+
 function showGame() {
   document.getElementById("game-section").style.display = "block";
   document.getElementById("tracker-section").style.display = "none";
