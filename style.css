@@ -1,148 +1,290 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Choice Quest</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <canvas id="confetti-canvas"></canvas>
+* {
+  box-sizing: border-box;
+}
 
-  <div class="page">
-    <section class="hero card">
-      <h1>Choice Quest</h1>
-      <p>Practice good choices, kindness, timing, calm reactions, honesty, respect, responsibility, and online behavior.</p>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #eef3fb;
+  color: #1e2a3a;
+}
 
-      <div class="hero-buttons">
-        <button class="primary-btn" onclick="showScreen('game')">Play Games</button>
-        <button class="secondary-btn" onclick="showScreen('tracker')">Goal Tracker</button>
-      </div>
-    </section>
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+}
 
-    <section id="home-screen" class="card">
-      <h2>Game Categories</h2>
-      <p>Pick a category and answer real-life questions.</p>
+.page {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px 40px;
+  position: relative;
+  z-index: 1;
+}
 
-      <div class="category-grid">
-        <button class="category-btn" onclick="startGame('interrupting')">
-          <span class="category-name">Interrupting</span>
-          <span id="best-interrupting" class="category-sub">Best Score: 0</span>
-        </button>
+.card {
+  background: #ffffff;
+  border: 1px solid #d9e3f2;
+  border-radius: 24px;
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 6px 20px rgba(24, 49, 83, 0.06);
+}
 
-        <button class="category-btn" onclick="startGame('kindness')">
-          <span class="category-name">Kindness</span>
-          <span id="best-kindness" class="category-sub">Best Score: 0</span>
-        </button>
+.hero {
+  background: #dfe9f8;
+}
 
-        <button class="category-btn" onclick="startGame('calm')">
-          <span class="category-name">Calm Reactions</span>
-          <span id="best-calm" class="category-sub">Best Score: 0</span>
-        </button>
+h1 {
+  font-size: 48px;
+  margin: 0 0 10px;
+}
 
-        <button class="category-btn" onclick="startGame('honesty')">
-          <span class="category-name">Honesty</span>
-          <span id="best-honesty" class="category-sub">Best Score: 0</span>
-        </button>
+h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
 
-        <button class="category-btn" onclick="startGame('respect')">
-          <span class="category-name">Respect</span>
-          <span id="best-respect" class="category-sub">Best Score: 0</span>
-        </button>
+h3 {
+  margin-top: 0;
+  font-size: 28px;
+  line-height: 1.3;
+}
 
-        <button class="category-btn" onclick="startGame('responsibility')">
-          <span class="category-name">Responsibility</span>
-          <span id="best-responsibility" class="category-sub">Best Score: 0</span>
-        </button>
+p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #4a5b73;
+}
 
-        <button class="category-btn" onclick="startGame('teasing')">
-          <span class="category-name">Teasing</span>
-          <span id="best-teasing" class="category-sub">Best Score: 0</span>
-        </button>
+.hero-buttons,
+.category-grid,
+.tracker-buttons,
+.bottom-buttons,
+.answer-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 
-        <button class="category-btn" onclick="startGame('online')">
-          <span class="category-name">Online Behavior</span>
-          <span id="best-online" class="category-sub">Best Score: 0</span>
-        </button>
-      </div>
-    </section>
+.category-grid {
+  margin-top: 18px;
+}
 
-    <section id="game-screen" class="card hidden">
-      <div class="top-row">
-        <h2 id="game-title">Game</h2>
-        <button class="small-btn" onclick="goHome()">Back</button>
-      </div>
+button {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
 
-      <div class="progress-wrap">
-        <div class="progress-bar-bg">
-          <div id="game-progress-bar" class="progress-bar-fill"></div>
-        </div>
-        <div id="progress-text" class="progress-text">Question 1 of 10</div>
-      </div>
+button:hover {
+  transform: translateY(-1px);
+  opacity: 0.96;
+}
 
-      <div class="game-info-row">
-        <span id="score-text" class="score-pill">Score: 0</span>
-        <span id="badge-text" class="badge-pill">Badge: Starting Out</span>
-      </div>
+.primary-btn {
+  background: #2f67ea;
+  color: #ffffff;
+}
 
-      <div class="question-box">
-        <h3 id="question-text">Question goes here</h3>
-        <div id="answer-buttons" class="answer-buttons"></div>
-        <div id="feedback-box" class="feedback-box"></div>
-      </div>
+.secondary-btn {
+  background: #e8e8ed;
+  color: #1e2a3a;
+}
 
-      <div class="bottom-buttons">
-        <button id="next-btn" class="primary-btn hidden" onclick="nextQuestion()">Next Question</button>
-        <button id="restart-btn" class="secondary-btn hidden" onclick="restartCurrentGame()">Play Again</button>
-      </div>
-    </section>
+.danger-btn {
+  background: #d94b4b;
+  color: #ffffff;
+}
 
-    <section id="tracker-screen" class="card hidden">
-      <div class="top-row">
-        <h2>Goal Tracker</h2>
-        <button class="small-btn" onclick="goHome()">Back</button>
-      </div>
+.category-btn {
+  background: #f4f7fc;
+  color: #1e2a3a;
+  border: 1px solid #d9e3f2;
+  min-width: 220px;
+  text-align: left;
+}
 
-      <p>Track real-life choices during the week.</p>
+.category-name {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 6px;
+}
 
-      <div class="tracker-stats">
-        <div class="stat-box">
-          <div class="stat-label">Good Choices</div>
-          <div id="good-count" class="stat-number">0</div>
-        </div>
+.category-sub {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5a6b83;
+}
 
-        <div class="stat-box">
-          <div class="stat-label">Needs Work</div>
-          <div id="bad-count" class="stat-number">0</div>
-        </div>
+.small-btn {
+  background: #eef3fb;
+  color: #1e2a3a;
+  padding: 10px 14px;
+  font-size: 14px;
+}
 
-        <div class="stat-box">
-          <div class="stat-label">Weekly Badge</div>
-          <div id="tracker-badge" class="stat-badge">Starting Out</div>
-        </div>
-      </div>
+.hidden {
+  display: none;
+}
 
-      <div class="progress-wrap">
-        <div class="progress-bar-bg">
-          <div id="tracker-progress-bar" class="progress-bar-fill"></div>
-        </div>
-        <div id="tracker-percent-text" class="progress-text">0% good choices</div>
-      </div>
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
 
-      <div class="tracker-meta">
-        <span id="tracker-week-text">Week of --</span>
-        <span id="tracker-total-text">Total choices: 0</span>
-      </div>
+.progress-wrap {
+  margin: 18px 0;
+}
 
-      <div class="tracker-buttons">
-        <button class="primary-btn" onclick="addGoodChoice()">+ Good Choice</button>
-        <button class="secondary-btn" onclick="addNeedsWork()">+ Needs Work</button>
-        <button class="danger-btn" onclick="resetTracker()">Reset Tracker</button>
-      </div>
-    </section>
-  </div>
+.progress-bar-bg {
+  width: 100%;
+  height: 18px;
+  background: #dbe4f2;
+  border-radius: 999px;
+  overflow: hidden;
+}
 
-  <script src="questions.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #2f67ea;
+  transition: width 0.25s ease;
+}
+
+.progress-text {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #5a6b83;
+}
+
+.game-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.score-pill,
+.badge-pill {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  background: #f4f7fc;
+  border: 1px solid #d9e3f2;
+}
+
+.question-box {
+  background: #f8fbff;
+  border: 1px solid #dce7f5;
+  border-radius: 18px;
+  padding: 22px;
+}
+
+.answer-buttons {
+  flex-direction: column;
+  margin-top: 18px;
+}
+
+.answer-buttons button {
+  width: 100%;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid #d6e2f0;
+  color: #1e2a3a;
+}
+
+.answer-buttons button.correct {
+  background: #dff5e6;
+  border-color: #7dc792;
+}
+
+.answer-buttons button.wrong {
+  background: #fde2e2;
+  border-color: #dc7d7d;
+}
+
+.answer-buttons button.disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.feedback-box {
+  margin-top: 18px;
+  min-height: 48px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.tracker-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.stat-box {
+  flex: 1;
+  min-width: 180px;
+  background: #f8fbff;
+  border: 1px solid #dce7f5;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #5a6b83;
+  margin-bottom: 8px;
+}
+
+.stat-number {
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.stat-badge {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.tracker-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 10px 0 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #5a6b83;
+}
+
+@media (max-width: 700px) {
+  h1 {
+    font-size: 36px;
+  }
+
+  h3 {
+    font-size: 22px;
+  }
+
+  .top-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .category-btn {
+    width: 100%;
+    min-width: 100%;
+  }
+}
