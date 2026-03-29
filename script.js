@@ -3,6 +3,7 @@ let currentQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let answered = false;
+let gameLength = 10;
 
 let goodChoices = 0;
 let needsWork = 0;
@@ -32,10 +33,12 @@ function goHome() {
 
 function startGame(category) {
   currentCategory = category;
-  currentQuestions = allQuestions[category];
-  currentQuestionIndex = 0;
   score = 0;
+  currentQuestionIndex = 0;
   answered = false;
+
+  const fullSet = allQuestions[category] || [];
+  currentQuestions = shuffleArray([...fullSet]).slice(0, gameLength);
 
   document.getElementById("home-screen").classList.add("hidden");
   document.getElementById("tracker-screen").classList.add("hidden");
@@ -58,6 +61,11 @@ function loadQuestion() {
   answered = false;
 
   const questionData = currentQuestions[currentQuestionIndex];
+  if (!questionData) {
+    finishGame();
+    return;
+  }
+
   document.getElementById("question-text").textContent = questionData.question;
 
   const answerButtons = document.getElementById("answer-buttons");
@@ -88,6 +96,7 @@ function selectAnswer(selectedIndex) {
 
   answerButtons.forEach((button, index) => {
     button.classList.add("disabled");
+    button.disabled = true;
 
     if (index === questionData.correct) {
       button.classList.add("correct");
@@ -96,8 +105,6 @@ function selectAnswer(selectedIndex) {
     if (index === selectedIndex && index !== questionData.correct) {
       button.classList.add("wrong");
     }
-
-    button.disabled = true;
   });
 
   if (selectedIndex === questionData.correct) {
@@ -126,7 +133,19 @@ function finishGame() {
   const nextBtn = document.getElementById("next-btn");
   const restartBtn = document.getElementById("restart-btn");
 
-  feedbackBox.textContent += " Game finished! Final score: " + score;
+  let message = " Game finished! Final score: " + score + " out of " + (currentQuestions.length * 10) + ".";
+
+  if (score === currentQuestions.length * 10) {
+    message += " Perfect score. Nicely done.";
+  } else if (score >= currentQuestions.length * 7) {
+    message += " Strong job.";
+  } else if (score >= currentQuestions.length * 5) {
+    message += " Not bad. Keep practicing.";
+  } else {
+    message += " More practice will help.";
+  }
+
+  feedbackBox.textContent += message;
   nextBtn.classList.add("hidden");
   restartBtn.classList.remove("hidden");
 }
@@ -138,7 +157,7 @@ function restartCurrentGame() {
 function updateGameProgress() {
   const total = currentQuestions.length;
   const currentNumber = currentQuestionIndex + 1;
-  const percent = (currentNumber / total) * 100;
+  const percent = total === 0 ? 0 : (currentNumber / total) * 100;
 
   document.getElementById("game-progress-bar").style.width = percent + "%";
   document.getElementById("progress-text").textContent = "Question " + currentNumber + " of " + total;
@@ -182,6 +201,14 @@ function saveTracker() {
 function loadTracker() {
   goodChoices = parseInt(localStorage.getItem("choiceQuestGoodChoices")) || 0;
   needsWork = parseInt(localStorage.getItem("choiceQuestNeedsWork")) || 0;
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
 loadTracker();
