@@ -21,12 +21,23 @@
 
     <section id="home-screen" class="card">
       <h2>Game Categories</h2>
-      <p>Pick a category and answer simple real-life questions.</p>
+      <p>Pick a category and answer real-life questions.</p>
 
       <div class="category-grid">
-        <button class="category-btn" onclick="startGame('interrupting')">Interrupting</button>
-        <button class="category-btn" onclick="startGame('kindness')">Kindness</button>
-        <button class="category-btn" onclick="startGame('calm')">Calm Reactions</button>
+        <button class="category-btn" onclick="startGame('interrupting')">
+          <span class="category-name">Interrupting</span>
+          <span id="best-interrupting" class="category-sub">Best Score: 0</span>
+        </button>
+
+        <button class="category-btn" onclick="startGame('kindness')">
+          <span class="category-name">Kindness</span>
+          <span id="best-kindness" class="category-sub">Best Score: 0</span>
+        </button>
+
+        <button class="category-btn" onclick="startGame('calm')">
+          <span class="category-name">Calm Reactions</span>
+          <span id="best-calm" class="category-sub">Best Score: 0</span>
+        </button>
       </div>
     </section>
 
@@ -40,11 +51,12 @@
         <div class="progress-bar-bg">
           <div id="game-progress-bar" class="progress-bar-fill"></div>
         </div>
-        <div id="progress-text" class="progress-text">Question 1 of 1</div>
+        <div id="progress-text" class="progress-text">Question 1 of 10</div>
       </div>
 
-      <div class="score-line">
-        <span id="score-text">Score: 0</span>
+      <div class="game-info-row">
+        <span id="score-text" class="score-pill">Score: 0</span>
+        <span id="badge-text" class="badge-pill">Badge: Starting Out</span>
       </div>
 
       <div class="question-box">
@@ -72,9 +84,15 @@
           <div class="stat-label">Good Choices</div>
           <div id="good-count" class="stat-number">0</div>
         </div>
+
         <div class="stat-box">
           <div class="stat-label">Needs Work</div>
           <div id="bad-count" class="stat-number">0</div>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-label">Weekly Badge</div>
+          <div id="tracker-badge" class="stat-badge">Starting Out</div>
         </div>
       </div>
 
@@ -83,6 +101,11 @@
           <div id="tracker-progress-bar" class="progress-bar-fill"></div>
         </div>
         <div id="tracker-percent-text" class="progress-text">0% good choices</div>
+      </div>
+
+      <div class="tracker-meta">
+        <span id="tracker-week-text">Week of --</span>
+        <span id="tracker-total-text">Total choices: 0</span>
       </div>
 
       <div class="tracker-buttons">
@@ -94,7 +117,7 @@
 
   </div>
 
-<script src="questions.js"></script>
-<script src="script.js"></script>
+  <script src="questions.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
