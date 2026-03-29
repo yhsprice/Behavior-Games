@@ -12,8 +12,17 @@ let currentWeekKey = "";
 let bestScores = {
   interrupting: 0,
   kindness: 0,
-  calm: 0
+  calm: 0,
+  honesty: 0,
+  respect: 0,
+  responsibility: 0,
+  teasing: 0,
+  online: 0
 };
+
+let audioContext;
+let confettiPieces = [];
+let confettiAnimating = false;
 
 function showScreen(screenName) {
   const homeScreen = document.getElementById("home-screen");
@@ -57,7 +66,12 @@ function startGame(category) {
   const titleMap = {
     interrupting: "Interrupting",
     kindness: "Kindness",
-    calm: "Calm Reactions"
+    calm: "Calm Reactions",
+    honesty: "Honesty",
+    respect: "Respect",
+    responsibility: "Responsibility",
+    teasing: "Teasing",
+    online: "Online Behavior"
   };
 
   document.getElementById("game-title").textContent = titleMap[category] || "Game";
@@ -122,8 +136,10 @@ function selectAnswer(selectedIndex) {
   if (selectedIndex === questionData.correct) {
     score += 10;
     feedbackBox.textContent = "✅ Correct! " + questionData.explanation;
+    playCorrectSound();
   } else {
     feedbackBox.textContent = "❌ Not quite. " + questionData.explanation;
+    playWrongSound();
   }
 
   document.getElementById("score-text").textContent = "Score: " + score;
@@ -155,6 +171,8 @@ function finishGame() {
 
   if (score === currentQuestions.length * 10) {
     message += " Perfect score. Nicely done.";
+    launchConfetti();
+    playWinSound();
   } else if (score >= currentQuestions.length * 8) {
     message += " Strong job.";
   } else if (score >= currentQuestions.length * 5) {
@@ -202,6 +220,7 @@ function addGoodChoice() {
   goodChoices++;
   saveTracker();
   updateTrackerDisplay();
+  playCorrectSound();
 }
 
 function addNeedsWork() {
@@ -209,6 +228,7 @@ function addNeedsWork() {
   needsWork++;
   saveTracker();
   updateTrackerDisplay();
+  playWrongSound();
 }
 
 function resetTracker() {
@@ -299,19 +319,22 @@ function loadBestScores() {
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      bestScores.interrupting = parsed.interrupting || 0;
-      bestScores.kindness = parsed.kindness || 0;
-      bestScores.calm = parsed.calm || 0;
+      Object.keys(bestScores).forEach((key) => {
+        bestScores[key] = parsed[key] || 0;
+      });
     } catch (e) {
-      bestScores = { interrupting: 0, kindness: 0, calm: 0 };
+      console.log("Best scores reset.");
     }
   }
 }
 
 function updateBestScoreDisplay() {
-  document.getElementById("best-interrupting").textContent = "Best Score: " + bestScores.interrupting;
-  document.getElementById("best-kindness").textContent = "Best Score: " + bestScores.kindness;
-  document.getElementById("best-calm").textContent = "Best Score: " + bestScores.calm;
+  Object.keys(bestScores).forEach((key) => {
+    const el = document.getElementById("best-" + key);
+    if (el) {
+      el.textContent = "Best Score: " + bestScores[key];
+    }
+  });
 }
 
 function shuffleArray(array) {
@@ -321,6 +344,109 @@ function shuffleArray(array) {
   }
   return array;
 }
+
+function getAudioContext() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioContext;
+}
+
+function playTone(frequency, duration, type, volume) {
+  const ctx = getAudioContext();
+  const oscillator = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  oscillator.type = type;
+  oscillator.frequency.value = frequency;
+  gain.gain.value = volume;
+
+  oscillator.connect(gain);
+  gain.connect(ctx.destination);
+
+  oscillator.start();
+
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+  oscillator.stop(ctx.currentTime + duration);
+}
+
+function playCorrectSound() {
+  playTone(700, 0.15, "sine", 0.08);
+  setTimeout(() => playTone(900, 0.18, "sine", 0.06), 90);
+}
+
+function playWrongSound() {
+  playTone(280, 0.2, "square", 0.05);
+}
+
+function playWinSound() {
+  playTone(600, 0.15, "triangle", 0.06);
+  setTimeout(() => playTone(800, 0.15, "triangle", 0.06), 120);
+  setTimeout(() => playTone(1000, 0.2, "triangle", 0.06), 240);
+}
+
+function launchConfetti() {
+  const canvas = document.getElementById("confetti-canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  confettiPieces = [];
+  const colors = ["#2f67ea", "#ffcc00", "#ff5f5f", "#4ecdc4", "#8a5cff", "#42b883"];
+
+  for (let i = 0; i < 150; i++) {
+    confettiPieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height,
+      size: Math.random() * 8 + 4,
+      speedY: Math.random() * 3 + 2,
+      speedX: Math.random() * 2 - 1,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360
+    });
+  }
+
+  if (!confettiAnimating) {
+    confettiAnimating = true;
+    animateConfetti();
+  }
+
+  setTimeout(() => {
+    confettiAnimating = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }, 3000);
+}
+
+function animateConfetti() {
+  if (!confettiAnimating) return;
+
+  const canvas = document.getElementById("confetti-canvas");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  confettiPieces.forEach((piece) => {
+    piece.y += piece.speedY;
+    piece.x += piece.speedX;
+    piece.rotation += 4;
+
+    ctx.save();
+    ctx.translate(piece.x, piece.y);
+    ctx.rotate(piece.rotation * Math.PI / 180);
+    ctx.fillStyle = piece.color;
+    ctx.fillRect(-piece.size / 2, -piece.size / 2, piece.size, piece.size);
+    ctx.restore();
+  });
+
+  requestAnimationFrame(animateConfetti);
+}
+
+window.addEventListener("resize", () => {
+  const canvas = document.getElementById("confetti-canvas");
+  if (canvas) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+});
 
 loadTracker();
 checkWeeklyReset();
