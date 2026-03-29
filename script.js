@@ -1,195 +1,188 @@
-const questions = [
-  // EASY (1–30)
-  {
-    question: "Your teacher is talking and you dropped your pencil. What should you do?",
-    choices: ["Interrupt", "Wait", "Talk to a friend"],
-    correct: 1,
-    explanation: "Instructions are important—wait."
-  },
-  {
-    question: "Your friend is telling a story. What should you do?",
-    choices: ["Interrupt", "Listen", "Talk louder"],
-    correct: 1,
-    explanation: "Listening shows respect."
-  },
-  {
-    question: "Your parent is talking and you want a snack. What should you do?",
-    choices: ["Interrupt", "Wait", "Yell"],
-    correct: 1,
-    explanation: "Snacks are not urgent."
-  },
-  {
-    question: "Someone is about to trip. What should you do?",
-    choices: ["Interrupt", "Wait", "Ignore"],
-    correct: 0,
-    explanation: "Safety comes first."
-  },
-  {
-    question: "Your teacher is helping another student. What should you do?",
-    choices: ["Interrupt", "Wait", "Complain"],
-    correct: 1,
-    explanation: "Wait your turn."
-  },
-
-  {
-    question: "You want to tell a joke during a serious conversation. What should you do?",
-    choices: ["Interrupt", "Wait", "Say it anyway"],
-    correct: 1,
-    explanation: "Timing matters."
-  },
-  {
-    question: "Someone is about to touch something hot. What should you do?",
-    choices: ["Interrupt", "Wait", "Watch"],
-    correct: 0,
-    explanation: "Preventing harm is important."
-  },
-  {
-    question: "Your sibling is talking and you want attention. What should you do?",
-    choices: ["Interrupt", "Wait", "Annoy them"],
-    correct: 1,
-    explanation: "Attention can wait."
-  },
-  {
-    question: "Your teacher is explaining directions. What should you do?",
-    choices: ["Interrupt", "Listen", "Ignore"],
-    correct: 1,
-    explanation: "Listening helps you understand."
-  },
-  {
-    question: "You know the answer but the teacher is still talking. What should you do?",
-    choices: ["Interrupt", "Wait", "Shout"],
-    correct: 1,
-    explanation: "Let them finish."
-  },
-
-  // MEDIUM (31–70)
-  {
-    question: "Your parent is on the phone and you feel sick. What should you do?",
-    choices: ["Interrupt", "Wait", "Ignore"],
-    correct: 0,
-    explanation: "Health is important."
-  },
-  {
-    question: "Two people are talking and you need something small. What should you do?",
-    choices: ["Interrupt", "Wait or say excuse me", "Walk away mad"],
-    correct: 1,
-    explanation: "Polite interruption is okay."
-  },
-  {
-    question: "Your friend is talking and you disagree. What should you do?",
-    choices: ["Interrupt", "Wait", "Yell"],
-    correct: 1,
-    explanation: "Let them finish first."
-  },
-  {
-    question: "You are bored while someone is talking. What should you do?",
-    choices: ["Interrupt", "Wait", "Distract others"],
-    correct: 1,
-    explanation: "Boredom isn’t an emergency."
-  },
-  {
-    question: "You are in a store and want something. What should you do?",
-    choices: ["Interrupt", "Wait", "Grab it"],
-    correct: 1,
-    explanation: "Wait your turn."
-  },
-
-  {
-    question: "Someone is crying and talking. What should you do?",
-    choices: ["Interrupt", "Listen", "Ignore"],
-    correct: 1,
-    explanation: "Listening shows care."
-  },
-  {
-    question: "Your coach is giving instructions. What should you do?",
-    choices: ["Interrupt", "Listen", "Ignore"],
-    correct: 1,
-    explanation: "Instructions matter."
-  },
-  {
-    question: "You forgot homework and teacher is talking. What should you do?",
-    choices: ["Interrupt", "Wait", "Blame others"],
-    correct: 1,
-    explanation: "Non-urgent issues can wait."
-  },
-  {
-    question: "You walk into a room where someone is on a video call. What should you do?",
-    choices: ["Interrupt", "Wait quietly", "Talk loudly"],
-    correct: 1,
-    explanation: "Respect conversations."
-  },
-  {
-    question: "Someone is about to do something unsafe. What should you do?",
-    choices: ["Interrupt", "Wait", "Ignore"],
-    correct: 0,
-    explanation: "Safety is priority."
-  },
-
-  // HARD (71–100)
-  {
-    question: "Your teacher is talking and you realize you misunderstood directions that affect your grade. What should you do?",
-    choices: ["Interrupt", "Wait", "Ignore"],
-    correct: 0,
-    explanation: "Important situations can justify interrupting."
-  },
-  {
-    question: "Your parent is talking and you remember something important for tomorrow. What should you do?",
-    choices: ["Interrupt", "Wait or write it down", "Forget"],
-    correct: 1,
-    explanation: "Not urgent—handle it smartly."
-  },
-  {
-    question: "Your friend is talking and says something wrong. What should you do?",
-    choices: ["Interrupt", "Wait", "Embarrass them"],
-    correct: 1,
-    explanation: "Correct respectfully."
-  },
-  {
-    question: "You think something might be dangerous but aren’t sure. What should you do?",
-    choices: ["Interrupt", "Wait", "Ignore"],
-    correct: 0,
-    explanation: "When in doubt—speak up."
-  },
-  {
-    question: "Someone is venting and you want to give advice immediately. What should you do?",
-    choices: ["Interrupt", "Listen first", "Walk away"],
-    correct: 1,
-    explanation: "People need to feel heard first."
-  }
-];
+let currentCategory = "";
+let currentQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let answered = false;
 
 let goodChoices = 0;
-let badChoices = 0;
+let needsWork = 0;
 
-function addGood() {
-  goodChoices++;
-  saveTracker();
-  updateTracker();
+function showScreen(screenName) {
+  const homeScreen = document.getElementById("home-screen");
+  const gameScreen = document.getElementById("game-screen");
+  const trackerScreen = document.getElementById("tracker-screen");
+
+  homeScreen.classList.add("hidden");
+  gameScreen.classList.add("hidden");
+  trackerScreen.classList.add("hidden");
+
+  if (screenName === "game") {
+    homeScreen.classList.remove("hidden");
+  } else if (screenName === "tracker") {
+    trackerScreen.classList.remove("hidden");
+    updateTrackerDisplay();
+  }
 }
 
-function addBad() {
-  badChoices++;
-  saveTracker();
-  updateTracker();
+function goHome() {
+  document.getElementById("home-screen").classList.remove("hidden");
+  document.getElementById("game-screen").classList.add("hidden");
+  document.getElementById("tracker-screen").classList.add("hidden");
 }
 
-function updateTracker() {
-  let total = goodChoices + badChoices;
-  let percent = total === 0 ? 0 : (goodChoices / total) * 100;
+function startGame(category) {
+  currentCategory = category;
+  currentQuestions = allQuestions[category];
+  currentQuestionIndex = 0;
+  score = 0;
+  answered = false;
 
-  document.getElementById("tracker-bar").style.width = percent + "%";
-  document.getElementById("tracker-score").innerText =
-    "Good: " + goodChoices + " | Needs Work: " + badChoices;
-}
+  document.getElementById("home-screen").classList.add("hidden");
+  document.getElementById("tracker-screen").classList.add("hidden");
+  document.getElementById("game-screen").classList.remove("hidden");
 
-function showGame() {
-  document.getElementById("game-section").style.display = "block";
-  document.getElementById("tracker-section").style.display = "none";
+  const titleMap = {
+    interrupting: "Interrupting",
+    kindness: "Kindness",
+    calm: "Calm Reactions"
+  };
+
+  document.getElementById("game-title").textContent = titleMap[category] || "Game";
+  document.getElementById("score-text").textContent = "Score: 0";
+  document.getElementById("restart-btn").classList.add("hidden");
+
   loadQuestion();
 }
 
-function showTracker() {
-  document.getElementById("game-section").style.display = "none";
-  document.getElementById("tracker-section").style.display = "block";
-  updateTracker();
+function loadQuestion() {
+  answered = false;
+
+  const questionData = currentQuestions[currentQuestionIndex];
+  document.getElementById("question-text").textContent = questionData.question;
+
+  const answerButtons = document.getElementById("answer-buttons");
+  answerButtons.innerHTML = "";
+
+  document.getElementById("feedback-box").textContent = "";
+  document.getElementById("next-btn").classList.add("hidden");
+
+  questionData.choices.forEach((choice, index) => {
+    const button = document.createElement("button");
+    button.textContent = choice;
+    button.onclick = function () {
+      selectAnswer(index);
+    };
+    answerButtons.appendChild(button);
+  });
+
+  updateGameProgress();
 }
+
+function selectAnswer(selectedIndex) {
+  if (answered) return;
+
+  answered = true;
+  const questionData = currentQuestions[currentQuestionIndex];
+  const answerButtons = document.querySelectorAll("#answer-buttons button");
+  const feedbackBox = document.getElementById("feedback-box");
+
+  answerButtons.forEach((button, index) => {
+    button.classList.add("disabled");
+
+    if (index === questionData.correct) {
+      button.classList.add("correct");
+    }
+
+    if (index === selectedIndex && index !== questionData.correct) {
+      button.classList.add("wrong");
+    }
+
+    button.disabled = true;
+  });
+
+  if (selectedIndex === questionData.correct) {
+    score += 10;
+    feedbackBox.textContent = "✅ Correct! " + questionData.explanation;
+  } else {
+    feedbackBox.textContent = "❌ Not quite. " + questionData.explanation;
+  }
+
+  document.getElementById("score-text").textContent = "Score: " + score;
+
+  if (currentQuestionIndex < currentQuestions.length - 1) {
+    document.getElementById("next-btn").classList.remove("hidden");
+  } else {
+    finishGame();
+  }
+}
+
+function nextQuestion() {
+  currentQuestionIndex++;
+  loadQuestion();
+}
+
+function finishGame() {
+  const feedbackBox = document.getElementById("feedback-box");
+  const nextBtn = document.getElementById("next-btn");
+  const restartBtn = document.getElementById("restart-btn");
+
+  feedbackBox.textContent += " Game finished! Final score: " + score;
+  nextBtn.classList.add("hidden");
+  restartBtn.classList.remove("hidden");
+}
+
+function restartCurrentGame() {
+  startGame(currentCategory);
+}
+
+function updateGameProgress() {
+  const total = currentQuestions.length;
+  const currentNumber = currentQuestionIndex + 1;
+  const percent = (currentNumber / total) * 100;
+
+  document.getElementById("game-progress-bar").style.width = percent + "%";
+  document.getElementById("progress-text").textContent = "Question " + currentNumber + " of " + total;
+}
+
+function addGoodChoice() {
+  goodChoices++;
+  saveTracker();
+  updateTrackerDisplay();
+}
+
+function addNeedsWork() {
+  needsWork++;
+  saveTracker();
+  updateTrackerDisplay();
+}
+
+function resetTracker() {
+  goodChoices = 0;
+  needsWork = 0;
+  saveTracker();
+  updateTrackerDisplay();
+}
+
+function updateTrackerDisplay() {
+  document.getElementById("good-count").textContent = goodChoices;
+  document.getElementById("bad-count").textContent = needsWork;
+
+  const total = goodChoices + needsWork;
+  const percent = total === 0 ? 0 : Math.round((goodChoices / total) * 100);
+
+  document.getElementById("tracker-progress-bar").style.width = percent + "%";
+  document.getElementById("tracker-percent-text").textContent = percent + "% good choices";
+}
+
+function saveTracker() {
+  localStorage.setItem("choiceQuestGoodChoices", goodChoices);
+  localStorage.setItem("choiceQuestNeedsWork", needsWork);
+}
+
+function loadTracker() {
+  goodChoices = parseInt(localStorage.getItem("choiceQuestGoodChoices")) || 0;
+  needsWork = parseInt(localStorage.getItem("choiceQuestNeedsWork")) || 0;
+}
+
+loadTracker();
+updateTrackerDisplay();
