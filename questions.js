@@ -46,16 +46,16 @@ function buildInterruptingQuestions() {
   ];
 
   const situations = [
-    { text: "you dropped your pencil", choices: ["Interrupt right away", "Wait until they finish", "Start talking to a friend instead"], correct: 1, explanation: "This is not urgent. Waiting shows respect." },
-    { text: "you want to ask for a snack", choices: ["Interrupt immediately", "Wait for a pause or say excuse me", "Whine until noticed"], correct: 1, explanation: "A snack is not an emergency." },
-    { text: "you forgot your homework at home", choices: ["Interrupt right away", "Wait until there is a good time", "Blame someone else loudly"], correct: 1, explanation: "This matters, but it can wait for a better moment." },
-    { text: "you want to tell a joke", choices: ["Say it right away", "Wait until later", "Talk over the speaker"], correct: 1, explanation: "Timing matters." },
-    { text: "you need to know what time lunch is", choices: ["Interrupt right away", "Wait for a pause", "Ask someone else by yelling"], correct: 1, explanation: "That question can wait." },
+    { text: "you dropped your pencil", choices: ["Interrupt and make a joke about it because you like making them laugh", "Wait until they finish", "Start playing with it to get their attention"], correct: 1, explanation: "This is not urgent. Waiting shows respect." },
+    { text: "you want to ask for a snack", choices: ["Pretend you hear your stomach growl and ask if they heard that", "Wait for a pause or say excuse me", "Glare at them and clear your throat to get their attention"], correct: 1, explanation: "A snack is not an emergency." },
+    { text: "you forgot your homework at home", choices: ["Panic and tell them it's important", "Wait until there is a good time", "Blame someone else loudly"], correct: 1, explanation: "This matters, but it can wait for a better moment." },
+    { text: "you want to tell a joke", choices: ["Say it right away", "Wait until later", "Talk over whoever is speaking"], correct: 1, explanation: "Timing matters." },
+    { text: "you need to know what time lunch is", choices: ["Interrupt whomever is speaking right away", "Wait for a pause", "Ask someone else by yelling"], correct: 1, explanation: "That question can wait." },
     { text: "you suddenly feel very sick", choices: ["Wait quietly", "Interrupt and tell them", "Say nothing"], correct: 1, explanation: "Health and safety are good reasons to interrupt." },
     { text: "you see smoke coming from a trash can", choices: ["Wait until later", "Interrupt and warn an adult", "Ignore it"], correct: 1, explanation: "Danger beats manners." },
-    { text: "someone is about to trip over a backpack", choices: ["Interrupt and warn them", "Wait to see what happens", "Laugh"], correct: 0, explanation: "Preventing injury is important." },
+    { text: "someone is about to trip over a backpack", choices: ["Interrupt and warn them", "Wait to see what happens", "Laugh and tell others to watch"], correct: 0, explanation: "Preventing injury is important." },
     { text: "someone is about to touch a hot pan", choices: ["Interrupt and warn them", "Stay quiet", "Let them find out"], correct: 0, explanation: "Safety comes first." },
-    { text: "you see a younger child running toward the street", choices: ["Interrupt and alert an adult", "Wait your turn", "Keep watching"], correct: 0, explanation: "This is urgent." }
+    { text: "you see a younger child running toward the street", choices: ["Interrupt and alert an adult", "Wait your turn to speak", "No worries, someone else is probably watching them"], correct: 0, explanation: "This is urgent." }
   ];
 
   return combineQuestions(starters, situations, "What should you do?");
@@ -76,7 +76,7 @@ function buildKindnessQuestions() {
   ];
 
   const situations = [
-    { text: "someone drops their books", choices: ["Laugh", "Walk away", "Help pick them up"], correct: 2, explanation: "Helping someone is a kind choice." },
+    { text: "someone drops their books", choices: ["Laugh", "Ignore them, they don't need help", "Help pick them up"], correct: 2, explanation: "Helping someone is a kind choice." },
     { text: "a classmate is sitting alone", choices: ["Ignore them", "Invite them to join you", "Tell others not to sit there"], correct: 1, explanation: "Including others is kind." },
     { text: "your friend loses a game", choices: ["Brag about winning", "Say something encouraging", "Make fun of them"], correct: 1, explanation: "Kindness matters most when someone feels bad." },
     { text: "someone makes a small mistake", choices: ["Tease them", "Stay calm and be respectful", "Tell everyone"], correct: 1, explanation: "Kind people do not pile on when someone slips up." },
@@ -107,10 +107,10 @@ function buildCalmQuestions() {
 
   const situations = [
     { text: "someone bumps into you by accident", choices: ["Yell at them", "Stay calm and move on", "Push them back"], correct: 1, explanation: "Accidents happen. Calm reactions keep problems small." },
-    { text: "you lose a game you wanted to win", choices: ["Throw something", "Take a breath and try again later", "Blame everyone"], correct: 1, explanation: "Staying calm after losing shows self-control." },
+    { text: "you lose a game you wanted to win", choices: ["Throw something to get your anger out", "Take a breath and try again later", "Blame everyone"], correct: 1, explanation: "Staying calm after losing shows self-control." },
     { text: "your plans change at the last minute", choices: ["Explode", "Take a breath and adjust", "Refuse to speak"], correct: 1, explanation: "Calm people adjust instead of melting down." },
-    { text: "someone says something rude", choices: ["Say something mean back right away", "Pause before responding", "Start shouting"], correct: 1, explanation: "Pausing first is stronger than snapping back." },
-    { text: "something feels unfair", choices: ["Yell immediately", "Use a calm voice and explain", "Storm off"], correct: 1, explanation: "A calm voice gets better results." },
+    { text: "someone says something rude", choices: ["Say something mean back right away", "Pause before responding and think about how you would want treated if that was you", "Start shouting"], correct: 1, explanation: "Pausing first is stronger than snapping back." },
+    { text: "something feels unfair", choices: ["Yell immediately", "Use a calm voice and explain why", "Storm off"], correct: 1, explanation: "A calm voice gets better results." },
     { text: "you are frustrated because work is hard", choices: ["Quit angrily", "Take a short break and try again", "Rip it up"], correct: 1, explanation: "A calm reset works better than a meltdown." },
     { text: "you have to wait longer than expected", choices: ["Complain loudly", "Be patient and stay calm", "Make everyone miserable"], correct: 1, explanation: "Waiting is easier when you stay calm." },
     { text: "someone misunderstands what you said", choices: ["Get louder and madder", "Explain calmly", "Insult them"], correct: 1, explanation: "Calm explanations solve more than angry ones." },
