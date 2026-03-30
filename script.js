@@ -333,6 +333,16 @@ function resetTracker() {
   goodChoices = 0;
   needsWork = 0;
   currentWeekKey = getWeekKey();
+
+  trackerCategories = {
+    listening: { good: 0, bad: 0 },
+    kindness: { good: 0, bad: 0 },
+    calmBody: { good: 0, bad: 0 },
+    honesty: { good: 0, bad: 0 },
+    respect: { good: 0, bad: 0 },
+    responsibility: { good: 0, bad: 0 }
+  };
+
   saveTracker();
   updateTrackerDisplay();
 }
@@ -348,6 +358,49 @@ function updateTrackerDisplay() {
   const messageEl = document.getElementById("tracker-message");
   const goodBar = document.getElementById("good-bar");
   const needsBar = document.getElementById("needs-bar");
+  const improvedEl = document.getElementById("most-improved");
+  const focusEl = document.getElementById("focus-area");
+
+  if (!goodEl) return;
+
+  goodEl.textContent = goodChoices;
+  badEl.textContent = needsWork;
+
+  const total = goodChoices + needsWork;
+  const percent = total === 0 ? 0 : Math.round((goodChoices / total) * 100);
+  const badPercent = total === 0 ? 0 : Math.round((needsWork / total) * 100);
+
+  totalEl.textContent = total;
+  barEl.style.width = percent + "%";
+  percentEl.textContent = percent + "% good choices";
+  badgeEl.textContent = getTrackerBadge(percent, total);
+  weekEl.textContent = "Week of " + formatWeekKey(currentWeekKey);
+
+  goodBar.style.width = percent + "%";
+  needsBar.style.width = badPercent + "%";
+
+  let message = "Let’s get started.";
+  if (total === 0) {
+    message = "No choices tracked yet.";
+  } else if (percent === 100) {
+    message = "Amazing week. You’re on fire.";
+  } else if (percent >= 80) {
+    message = "Strong progress. Keep it going.";
+  } else if (percent >= 60) {
+    message = "Good momentum. You’re building habits.";
+  } else if (percent >= 40) {
+    message = "Still working on it. Progress is progress.";
+  } else {
+    message = "Fresh reset energy might help.";
+  }
+
+  messageEl.textContent = message;
+
+  updateCategoryDisplay();
+
+  if (improvedEl) improvedEl.textContent = getMostImprovedArea();
+  if (focusEl) focusEl.textContent = getFocusArea();
+}
 
   let trackerCategories = {
   listening: { good: 0, bad: 0 },
@@ -358,6 +411,75 @@ function updateTrackerDisplay() {
   responsibility: { good: 0, bad: 0 }
 };
 
+  function addCategoryChoice(category, isGood) {
+  checkWeeklyReset();
+
+  if (!trackerCategories[category]) return;
+
+  if (isGood) {
+    trackerCategories[category].good++;
+    goodChoices++;
+  } else {
+    trackerCategories[category].bad++;
+    needsWork++;
+  }
+
+  saveTracker();
+  updateTrackerDisplay();
+}
+
+function updateCategoryDisplay() {
+  Object.keys(trackerCategories).forEach((key) => {
+    const goodEl = document.getElementById(key + "-good");
+    const badEl = document.getElementById(key + "-bad");
+
+    if (goodEl) goodEl.textContent = "Good: " + trackerCategories[key].good;
+    if (badEl) badEl.textContent = "Needs Work: " + trackerCategories[key].bad;
+  });
+}
+
+function getMostImprovedArea() {
+  let bestKey = "--";
+  let bestScore = -999999;
+
+  Object.keys(trackerCategories).forEach((key) => {
+    const value = trackerCategories[key].good - trackerCategories[key].bad;
+    if (value > bestScore) {
+      bestScore = value;
+      bestKey = key;
+    }
+  });
+
+  return formatCategoryName(bestKey);
+}
+
+function getFocusArea() {
+  let worstKey = "--";
+  let worstScore = 999999;
+
+  Object.keys(trackerCategories).forEach((key) => {
+    const value = trackerCategories[key].good - trackerCategories[key].bad;
+    if (value < worstScore) {
+      worstScore = value;
+      worstKey = key;
+    }
+  });
+
+  return formatCategoryName(worstKey);
+}
+
+function formatCategoryName(key) {
+  const map = {
+    listening: "Listening",
+    kindness: "Kindness",
+    calmBody: "Calm Body",
+    honesty: "Honesty",
+    respect: "Respect",
+    responsibility: "Responsibility"
+  };
+
+  return map[key] || "--";
+}
   if (!goodEl) return;
 
   goodEl.textContent = goodChoices;
@@ -405,12 +527,22 @@ function saveTracker() {
   localStorage.setItem("choiceQuestGoodChoices", goodChoices);
   localStorage.setItem("choiceQuestNeedsWork", needsWork);
   localStorage.setItem("choiceQuestWeekKey", currentWeekKey);
+  localStorage.setItem("choiceQuestTrackerCategories", JSON.stringify(trackerCategories));
 }
 
 function loadTracker() {
   goodChoices = parseInt(localStorage.getItem("choiceQuestGoodChoices")) || 0;
   needsWork = parseInt(localStorage.getItem("choiceQuestNeedsWork")) || 0;
   currentWeekKey = localStorage.getItem("choiceQuestWeekKey") || getWeekKey();
+
+  const savedCategories = localStorage.getItem("choiceQuestTrackerCategories");
+  if (savedCategories) {
+    try {
+      trackerCategories = JSON.parse(savedCategories);
+    } catch (e) {
+      console.log("Tracker categories could not be loaded.");
+    }
+  }
 }
 
 function checkWeeklyReset() {
