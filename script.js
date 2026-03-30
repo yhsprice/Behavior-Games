@@ -383,13 +383,12 @@ function updateTrackerDisplay() {
   }
 
   messageEl.textContent = message;
-}
 function getTrackerBadge(percent, total) {
   if (total === 0) return "Starting Out";
-  if (percent === 100) return "Amazing Week";
-  if (percent >= 80) return "Great Week";
-  if (percent >= 60) return "Good Progress";
-  if (percent >= 40) return "Keep Going";
+  if (percent === 100) return "Legend Week";
+  if (percent >= 80) return "Goal Crusher";
+  if (percent >= 60) return "Steady Climber";
+  if (percent >= 40) return "Still Building";
   return "Fresh Start";
 }
 
