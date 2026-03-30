@@ -430,3 +430,152 @@ button:hover {
 .needs-fill {
   background: #d94b4b;
 }
+
+.tracker-highlight-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.tracker-highlight-box {
+  flex: 1;
+  min-width: 220px;
+  background: #f8fbff;
+  border: 1px solid #dce7f5;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.tracker-highlight-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5a6b83;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.tracker-highlight-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e2a3a;
+}
+
+.good-box {
+  background: #f2fbf5;
+}
+
+.needs-box {
+  background: #fff5f5;
+}
+
+.total-box {
+  background: #f8fbff;
+}
+
+.tracker-mini-bars {
+  margin: 18px 0 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mini-bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mini-bar-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #4a5b73;
+}
+
+.mini-bar-bg {
+  width: 100%;
+  height: 14px;
+  background: #dbe4f2;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.mini-bar-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.25s ease;
+}
+
+.good-fill {
+  background: #42b883;
+}
+
+.needs-fill {
+  background: #d94b4b;
+}
+
+.tracker-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 20px 0 24px;
+}
+
+.tracker-category-card {
+  background: #f8fbff;
+  border: 1px solid #dce7f5;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.tracker-category-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.tracker-category-counts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #4a5b73;
+}
+
+.tracker-category-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tracker-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.tracker-summary-card {
+  background: #f8fbff;
+  border: 1px solid #dce7f5;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.tracker-summary-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5a6b83;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.tracker-summary-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e2a3a;
+}
