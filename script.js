@@ -1,4 +1,4 @@
-const APP_VERSION = "14-highscore-badges-streaks";
+const APP_VERSION = "15-fixed-home-tracker-results";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -29,12 +29,30 @@ let streaks = {
   online: 0
 };
 
+let goodChoices = 0;
+let needsWork = 0;
+let currentWeekKey = "";
+
 // ---------------- SCREEN CONTROL ----------------
 
 function hideAllScreens() {
   document.getElementById("home-screen").classList.add("hidden");
   document.getElementById("game-screen").classList.add("hidden");
   document.getElementById("results-screen").classList.add("hidden");
+  document.getElementById("tracker-screen").classList.add("hidden");
+}
+
+function showScreen(screen) {
+  hideAllScreens();
+
+  if (screen === "game") {
+    document.getElementById("home-screen").classList.remove("hidden");
+    updateBestScoreDisplay();
+  } else if (screen === "tracker") {
+    document.getElementById("tracker-screen").classList.remove("hidden");
+    checkWeeklyReset();
+    updateTrackerDisplay();
+  }
 }
 
 function goHome() {
@@ -153,6 +171,7 @@ function finishGame() {
 
   saveBestScores();
   saveStreaks();
+  updateBestScoreDisplay();
 
   document.getElementById("results-score").textContent = "Score: " + score + "/" + total;
   document.getElementById("results-badge").textContent = "Badge: " + badge;
@@ -181,15 +200,11 @@ function finishGame() {
 
   hideAllScreens();
   document.getElementById("results-screen").classList.remove("hidden");
-
-  updateBestScoreDisplay();
 }
 
 function restartCurrentGame() {
   startGame(currentCategory);
 }
-
-// ---------------- PROGRESS ----------------
 
 function updateProgress() {
   const current = currentQuestionIndex + 1;
@@ -298,6 +313,108 @@ function loadStreaks() {
   }
 }
 
+// ---------------- TRACKER ----------------
+
+function addGoodChoice() {
+  checkWeeklyReset();
+  goodChoices++;
+  saveTracker();
+  updateTrackerDisplay();
+}
+
+function addNeedsWork() {
+  checkWeeklyReset();
+  needsWork++;
+  saveTracker();
+  updateTrackerDisplay();
+}
+
+function resetTracker() {
+  goodChoices = 0;
+  needsWork = 0;
+  currentWeekKey = getWeekKey();
+  saveTracker();
+  updateTrackerDisplay();
+}
+
+function updateTrackerDisplay() {
+  const goodEl = document.getElementById("good-count");
+  const badEl = document.getElementById("bad-count");
+  const barEl = document.getElementById("tracker-progress-bar");
+  const percentEl = document.getElementById("tracker-percent-text");
+  const totalEl = document.getElementById("tracker-total-text");
+  const badgeEl = document.getElementById("tracker-badge");
+  const weekEl = document.getElementById("tracker-week-text");
+
+  if (!goodEl) return;
+
+  goodEl.textContent = goodChoices;
+  badEl.textContent = needsWork;
+
+  const total = goodChoices + needsWork;
+  const percent = total === 0 ? 0 : Math.round((goodChoices / total) * 100);
+
+  barEl.style.width = percent + "%";
+  percentEl.textContent = percent + "% good choices";
+  totalEl.textContent = "Total choices: " + total;
+  badgeEl.textContent = getTrackerBadge(percent, total);
+  weekEl.textContent = "Week of " + formatWeekKey(currentWeekKey);
+}
+
+function getTrackerBadge(percent, total) {
+  if (total === 0) return "Starting Out";
+  if (percent === 100) return "Amazing Week";
+  if (percent >= 80) return "Great Week";
+  if (percent >= 60) return "Good Progress";
+  if (percent >= 40) return "Keep Going";
+  return "Fresh Start";
+}
+
+function saveTracker() {
+  localStorage.setItem("choiceQuestGoodChoices", goodChoices);
+  localStorage.setItem("choiceQuestNeedsWork", needsWork);
+  localStorage.setItem("choiceQuestWeekKey", currentWeekKey);
+}
+
+function loadTracker() {
+  goodChoices = parseInt(localStorage.getItem("choiceQuestGoodChoices")) || 0;
+  needsWork = parseInt(localStorage.getItem("choiceQuestNeedsWork")) || 0;
+  currentWeekKey = localStorage.getItem("choiceQuestWeekKey") || getWeekKey();
+}
+
+function checkWeeklyReset() {
+  const newWeekKey = getWeekKey();
+
+  if (currentWeekKey !== newWeekKey) {
+    goodChoices = 0;
+    needsWork = 0;
+    currentWeekKey = newWeekKey;
+    saveTracker();
+  }
+}
+
+function getWeekKey() {
+  const now = new Date();
+  const day = now.getDay();
+  const diffToMonday = day === 0 ? -6 : 1 - day;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diffToMonday);
+  monday.setHours(0, 0, 0, 0);
+
+  const year = monday.getFullYear();
+  const month = String(monday.getMonth() + 1).padStart(2, "0");
+  const date = String(monday.getDate()).padStart(2, "0");
+
+  return year + "-" + month + "-" + date;
+}
+
+function formatWeekKey(weekKey) {
+  if (!weekKey) return "--";
+  const parts = weekKey.split("-");
+  if (parts.length !== 3) return weekKey;
+  return parts[1] + "/" + parts[2] + "/" + parts[0];
+}
+
 // ---------------- CONFETTI ----------------
 
 function launchConfetti() {
@@ -306,6 +423,7 @@ function launchConfetti() {
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   for (let i = 0; i < 150; i++) {
     ctx.fillStyle = ["#2f67ea", "#ffcc00", "#ff5f5f", "#42b883"][Math.floor(Math.random() * 4)];
@@ -316,6 +434,10 @@ function launchConfetti() {
       8
     );
   }
+
+  setTimeout(() => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }, 1200);
 }
 
 // ---------------- UTIL ----------------
@@ -328,6 +450,7 @@ function shuffleArray(arr) {
 
 loadBestScores();
 loadStreaks();
+loadTracker();
 updateBestScoreDisplay();
 goHome();
 
