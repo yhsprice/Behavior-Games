@@ -1,3 +1,5 @@
+const APP_VERSION = "10";
+
 let currentCategory = "";
 let currentQuestions = [];
 let currentQuestionIndex = 0;
@@ -5,6 +7,8 @@ let score = 0;
 let answered = false;
 let gameLength = 10;
 let gameFinished = false;
+
+let audioCtx = null;
 
 // -------------------- SCREEN CONTROL --------------------
 
@@ -33,20 +37,47 @@ function goHome() {
 
 function startGame(category) {
   currentCategory = category;
-  score = 0;
   currentQuestionIndex = 0;
+  score = 0;
+  answered = false;
   gameFinished = false;
 
-  currentQuestions = shuffleArray([...allQuestions[category]]).slice(0, gameLength);
+  const source = Array.isArray(allQuestions[category]) ? allQuestions[category] : [];
+  currentQuestions = shuffleArray([...source]).slice(0, gameLength);
 
   hideAllScreens();
   document.getElementById("game-screen").classList.remove("hidden");
+
+  const titleMap = {
+    interrupting: "Interrupting",
+    kindness: "Kindness",
+    calm: "Calm Reactions",
+    honesty: "Honesty",
+    respect: "Respect",
+    responsibility: "Responsibility",
+    teasing: "Teasing",
+    online: "Online Behavior"
+  };
+
+  document.getElementById("game-title").textContent = titleMap[category] || "Game";
+  document.getElementById("score-text").textContent = "Score: 0";
+  document.getElementById("badge-text").textContent = "Badge: Starting Out";
+  document.getElementById("feedback-box").textContent = "";
+  document.getElementById("restart-btn").classList.add("hidden");
+  document.getElementById("next-btn").classList.add("hidden");
 
   loadQuestion();
 }
 
 function loadQuestion() {
   if (gameFinished) return;
+
+  answered = false;
+
+  if (currentQuestionIndex >= currentQuestions.length) {
+    finishGame();
+    return;
+  }
 
   const q = currentQuestions[currentQuestionIndex];
 
@@ -63,33 +94,41 @@ function loadQuestion() {
     btn.onclick = () => selectAnswer(i);
     container.appendChild(btn);
   });
+
+  updateProgress();
+  updateBadge();
 }
 
-function selectAnswer(i) {
+function selectAnswer(selectedIndex) {
   if (answered || gameFinished) return;
+
   answered = true;
 
   const q = currentQuestions[currentQuestionIndex];
   const buttons = document.querySelectorAll("#answer-buttons button");
+  const feedback = document.getElementById("feedback-box");
 
-  buttons.forEach((btn, index) => {
+  buttons.forEach((btn, i) => {
     btn.disabled = true;
-    if (index === q.correct) btn.classList.add("correct");
-    if (index === i && i !== q.correct) btn.classList.add("wrong");
+    btn.classList.add("disabled");
+
+    if (i === q.correct) btn.classList.add("correct");
+    if (i === selectedIndex && i !== q.correct) btn.classList.add("wrong");
   });
 
-  if (i === q.correct) {
+  if (selectedIndex === q.correct) {
     score += 10;
-    document.getElementById("feedback-box").textContent = "✅ Correct! " + q.explanation;
+    feedback.textContent = "✅ Correct! " + q.explanation;
     playCorrectSound();
   } else {
-    document.getElementById("feedback-box").textContent = "❌ Not quite. " + q.explanation;
+    feedback.textContent = "❌ Not quite. " + q.explanation;
     playWrongSound();
   }
 
   document.getElementById("score-text").textContent = "Score: " + score;
+  updateBadge();
 
-  if (currentQuestionIndex >= currentQuestions.length - 1) {
+  if (currentQuestionIndex === currentQuestions.length - 1) {
     finishGame();
   } else {
     document.getElementById("next-btn").classList.remove("hidden");
@@ -97,36 +136,79 @@ function selectAnswer(i) {
 }
 
 function nextQuestion() {
-  answered = false;
-  currentQuestionIndex++;
+  if (gameFinished) return;
+
+  currentQuestionIndex += 1;
+
+  if (currentQuestionIndex >= currentQuestions.length) {
+    finishGame();
+    return;
+  }
+
   loadQuestion();
 }
 
 function finishGame() {
+  if (gameFinished) return;
+
   gameFinished = true;
 
   const total = currentQuestions.length * 10;
-  const box = document.getElementById("feedback-box");
+  const feedback = document.getElementById("feedback-box");
+  const nextBtn = document.getElementById("next-btn");
+  const restartBtn = document.getElementById("restart-btn");
 
-  box.textContent += ` Game finished! Final score: ${score}/${total}.`;
+  nextBtn.classList.add("hidden");
+  restartBtn.classList.remove("hidden");
+
+  let message = " Game finished! Final score: " + score + "/" + total + ".";
 
   if (score === total) {
-    box.textContent += " Perfect score!";
+    message += " Perfect score!";
     launchConfetti();
     playWinSound();
+  } else if (score >= total * 0.8) {
+    message += " Strong job.";
+  } else if (score >= total * 0.5) {
+    message += " Keep practicing.";
+  } else {
+    message += " More practice will help.";
   }
 
-  document.getElementById("next-btn").classList.add("hidden");
-  document.getElementById("restart-btn").classList.remove("hidden");
+  if (feedback.textContent.trim()) {
+    feedback.textContent += message;
+  } else {
+    feedback.textContent = message.trim();
+  }
 }
 
 function restartCurrentGame() {
   startGame(currentCategory);
 }
 
-// -------------------- SOUND --------------------
+function updateProgress() {
+  const total = currentQuestions.length || gameLength;
+  const current = Math.min(currentQuestionIndex + 1, total);
+  const percent = total ? (current / total) * 100 : 0;
 
-let audioCtx;
+  document.getElementById("game-progress-bar").style.width = percent + "%";
+  document.getElementById("progress-text").textContent = "Question " + current + " of " + total;
+}
+
+function updateBadge() {
+  const total = currentQuestions.length * 10;
+  const percent = total ? (score / total) * 100 : 0;
+
+  let badge = "Starting Out";
+  if (percent === 100) badge = "Choice Champion";
+  else if (percent >= 80) badge = "Strong Thinker";
+  else if (percent >= 60) badge = "Good Judgment";
+  else if (percent >= 40) badge = "Getting There";
+
+  document.getElementById("badge-text").textContent = "Badge: " + badge;
+}
+
+// -------------------- SOUND --------------------
 
 function getAudio() {
   if (!audioCtx) {
@@ -135,67 +217,101 @@ function getAudio() {
   return audioCtx;
 }
 
-function playTone(freq, time) {
+function playTone(freq, duration, type = "sine", volume = 0.07) {
   const ctx = getAudio();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
 
+  osc.type = type;
   osc.frequency.value = freq;
+  gain.gain.value = volume;
+
   osc.connect(gain);
   gain.connect(ctx.destination);
 
   osc.start();
-  gain.gain.setValueAtTime(0.1, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + time);
-  osc.stop(ctx.currentTime + time);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+  osc.stop(ctx.currentTime + duration);
 }
 
 function playCorrectSound() {
-  playTone(700, 0.15);
-  setTimeout(() => playTone(900, 0.15), 100);
+  playTone(700, 0.12, "sine", 0.06);
+  setTimeout(() => playTone(900, 0.14, "sine", 0.05), 80);
 }
 
 function playWrongSound() {
-  playTone(250, 0.2);
+  playTone(240, 0.18, "square", 0.04);
 }
 
 function playWinSound() {
-  playTone(600, 0.15);
-  setTimeout(() => playTone(800, 0.15), 150);
-  setTimeout(() => playTone(1000, 0.2), 300);
+  playTone(600, 0.12, "triangle", 0.05);
+  setTimeout(() => playTone(800, 0.12, "triangle", 0.05), 120);
+  setTimeout(() => playTone(1000, 0.18, "triangle", 0.05), 240);
 }
 
 // -------------------- CONFETTI --------------------
 
+let confettiPieces = [];
+let confettiAnimating = false;
+
 function launchConfetti() {
   const canvas = document.getElementById("confetti-canvas");
-  const ctx = canvas.getContext("2d");
+  if (!canvas) return;
 
+  const ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const pieces = Array.from({ length: 100 }, () => ({
+  const colors = ["#2f67ea", "#ffcc00", "#ff5f5f", "#4ecdc4", "#8a5cff", "#42b883"];
+
+  confettiPieces = Array.from({ length: 140 }, () => ({
     x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    size: Math.random() * 6 + 4,
-    speed: Math.random() * 3 + 2
+    y: Math.random() * -canvas.height,
+    size: Math.random() * 8 + 4,
+    speedY: Math.random() * 3 + 2,
+    speedX: Math.random() * 2 - 1,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    rotation: Math.random() * 360
   }));
 
-  function draw() {
+  confettiAnimating = true;
+
+  function animate() {
+    if (!confettiAnimating) return;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    pieces.forEach(p => {
-      ctx.fillStyle = "blue";
-      ctx.fillRect(p.x, p.y, p.size, p.size);
-      p.y += p.speed;
-      if (p.y > canvas.height) p.y = 0;
+    confettiPieces.forEach((p) => {
+      p.x += p.speedX;
+      p.y += p.speedY;
+      p.rotation += 5;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+      ctx.restore();
     });
 
-    requestAnimationFrame(draw);
+    requestAnimationFrame(animate);
   }
 
-  draw();
+  animate();
+
+  setTimeout(() => {
+    confettiAnimating = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }, 3000);
 }
+
+window.addEventListener("resize", () => {
+  const canvas = document.getElementById("confetti-canvas");
+  if (canvas) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+});
 
 // -------------------- UTIL --------------------
 
@@ -208,6 +324,8 @@ function shuffleArray(arr) {
 }
 
 // -------------------- INIT --------------------
+
+console.log("Choice Quest script version", APP_VERSION);
 
 hideAllScreens();
 document.getElementById("home-screen").classList.remove("hidden");
