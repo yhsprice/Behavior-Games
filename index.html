@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Choice Quest</title>
-  <link rel="stylesheet" href="style.css?v=4" />
-
+  <link rel="stylesheet" href="style.css?v=12" />
 </head>
 <body>
   <canvas id="confetti-canvas"></canvas>
@@ -94,7 +93,24 @@
 
       <div class="bottom-buttons">
         <button id="next-btn" class="primary-btn hidden" onclick="nextQuestion()">Next Question</button>
-        <button id="restart-btn" class="secondary-btn hidden" onclick="restartCurrentGame()">Play Again</button>
+      </div>
+    </section>
+
+    <section id="results-screen" class="card hidden">
+      <div class="top-row">
+        <h2>Results</h2>
+        <button class="small-btn" onclick="goHome()">Back</button>
+      </div>
+
+      <div class="results-box">
+        <div class="results-score" id="results-score">Score: 0/100</div>
+        <div class="results-badge" id="results-badge">Badge: Starting Out</div>
+        <p id="results-message">Nice work.</p>
+      </div>
+
+      <div class="bottom-buttons">
+        <button class="primary-btn" onclick="restartCurrentGame()">Play Again</button>
+        <button class="secondary-btn" onclick="goHome()">Main Page</button>
       </div>
     </section>
 
@@ -143,7 +159,7 @@
     </section>
   </div>
 
-<script src="questions.js?v=8"></script>
-<script src="script.js?v=8"></script>
+  <script src="questions.js?v=12"></script>
+  <script src="game.js?v=12"></script>
 </body>
 </html>
