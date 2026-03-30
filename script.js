@@ -342,9 +342,12 @@ function updateTrackerDisplay() {
   const badEl = document.getElementById("bad-count");
   const barEl = document.getElementById("tracker-progress-bar");
   const percentEl = document.getElementById("tracker-percent-text");
-  const totalEl = document.getElementById("tracker-total-text");
+  const totalEl = document.getElementById("tracker-total-number");
   const badgeEl = document.getElementById("tracker-badge");
   const weekEl = document.getElementById("tracker-week-text");
+  const messageEl = document.getElementById("tracker-message");
+  const goodBar = document.getElementById("good-bar");
+  const needsBar = document.getElementById("needs-bar");
 
   if (!goodEl) return;
 
@@ -353,14 +356,34 @@ function updateTrackerDisplay() {
 
   const total = goodChoices + needsWork;
   const percent = total === 0 ? 0 : Math.round((goodChoices / total) * 100);
+  const badPercent = total === 0 ? 0 : Math.round((needsWork / total) * 100);
 
+  totalEl.textContent = total;
   barEl.style.width = percent + "%";
   percentEl.textContent = percent + "% good choices";
-  totalEl.textContent = "Total choices: " + total;
   badgeEl.textContent = getTrackerBadge(percent, total);
   weekEl.textContent = "Week of " + formatWeekKey(currentWeekKey);
-}
 
+  goodBar.style.width = percent + "%";
+  needsBar.style.width = badPercent + "%";
+
+  let message = "Let’s get started.";
+  if (total === 0) {
+    message = "No choices tracked yet.";
+  } else if (percent === 100) {
+    message = "Amazing week. You’re on fire.";
+  } else if (percent >= 80) {
+    message = "Strong progress. Keep it going.";
+  } else if (percent >= 60) {
+    message = "Good momentum. You’re building habits.";
+  } else if (percent >= 40) {
+    message = "Still working on it. Progress is progress.";
+  } else {
+    message = "Fresh reset energy might help.";
+  }
+
+  messageEl.textContent = message;
+}
 function getTrackerBadge(percent, total) {
   if (total === 0) return "Starting Out";
   if (percent === 100) return "Amazing Week";
