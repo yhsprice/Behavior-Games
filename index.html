@@ -116,51 +116,78 @@
   </div>
 </section>
 
-    <section id="tracker-screen" class="card hidden">
-      <div class="top-row">
-        <h2>Goal Tracker</h2>
-        <button class="small-btn" onclick="goHome()">Back</button>
-      </div>
-
-      <p>Track real-life choices during the week.</p>
-
-      <div class="tracker-stats">
-        <div class="stat-box">
-          <div class="stat-label">Good Choices</div>
-          <div id="good-count" class="stat-number">0</div>
-        </div>
-
-        <div class="stat-box">
-          <div class="stat-label">Needs Work</div>
-          <div id="bad-count" class="stat-number">0</div>
-        </div>
-
-        <div class="stat-box">
-          <div class="stat-label">Weekly Badge</div>
-          <div id="tracker-badge" class="stat-badge">Starting Out</div>
-        </div>
-      </div>
-
-      <div class="progress-wrap">
-        <div class="progress-bar-bg">
-          <div id="tracker-progress-bar" class="progress-bar-fill"></div>
-        </div>
-        <div id="tracker-percent-text" class="progress-text">0% good choices</div>
-      </div>
-
-      <div class="tracker-meta">
-        <span id="tracker-week-text">Week of --</span>
-        <span id="tracker-total-text">Total choices: 0</span>
-      </div>
-
-      <div class="tracker-buttons">
-        <button class="primary-btn" onclick="addGoodChoice()">+ Good Choice</button>
-        <button class="secondary-btn" onclick="addNeedsWork()">+ Needs Work</button>
-        <button class="danger-btn" onclick="resetTracker()">Reset Tracker</button>
-      </div>
-    </section>
+   <section id="tracker-screen" class="card hidden">
+  <div class="top-row">
+    <h2>Goal Tracker</h2>
+    <button class="small-btn" onclick="goHome()">Back</button>
   </div>
 
+  <p>Track real-life choices during the week and watch your progress grow.</p>
+
+  <div class="tracker-highlight-row">
+    <div class="tracker-highlight-box">
+      <div class="tracker-highlight-label">This Week</div>
+      <div id="tracker-week-text" class="tracker-highlight-value">Week of --</div>
+    </div>
+
+    <div class="tracker-highlight-box">
+      <div class="tracker-highlight-label">Tracker Level</div>
+      <div id="tracker-badge" class="tracker-highlight-value">Starting Out</div>
+    </div>
+
+    <div class="tracker-highlight-box">
+      <div class="tracker-highlight-label">Progress Message</div>
+      <div id="tracker-message" class="tracker-highlight-value">Let’s get started.</div>
+    </div>
+  </div>
+
+  <div class="tracker-stats">
+    <div class="stat-box good-box">
+      <div class="stat-label">Good Choices</div>
+      <div id="good-count" class="stat-number">0</div>
+    </div>
+
+    <div class="stat-box needs-box">
+      <div class="stat-label">Needs Work</div>
+      <div id="bad-count" class="stat-number">0</div>
+    </div>
+
+    <div class="stat-box total-box">
+      <div class="stat-label">Total Choices</div>
+      <div id="tracker-total-number" class="stat-number">0</div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div id="tracker-progress-bar" class="progress-bar-fill"></div>
+    </div>
+    <div id="tracker-percent-text" class="progress-text">0% good choices</div>
+  </div>
+
+  <div class="tracker-mini-bars">
+    <div class="mini-bar-group">
+      <div class="mini-bar-label">Good Choices</div>
+      <div class="mini-bar-bg">
+        <div id="good-bar" class="mini-bar-fill good-fill"></div>
+      </div>
+    </div>
+
+    <div class="mini-bar-group">
+      <div class="mini-bar-label">Needs Work</div>
+      <div class="mini-bar-bg">
+        <div id="needs-bar" class="mini-bar-fill needs-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tracker-buttons">
+    <button class="primary-btn" onclick="addGoodChoice()">+ Good Choice</button>
+    <button class="secondary-btn" onclick="addNeedsWork()">+ Needs Work</button>
+    <button class="danger-btn" onclick="resetTracker()">Reset Tracker</button>
+  </div>
+</section>
+    
  <script src="questions.js?v=13"></script>
 <script src="script.js?v=13"></script>
 </body>
