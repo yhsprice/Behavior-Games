@@ -20,33 +20,28 @@ let bestScores = {
   online: 0
 };
 
-let audioContext;
-let confettiPieces = [];
-let confettiAnimating = false;
+function hideAllScreens() {
+  document.getElementById("home-screen").classList.add("hidden");
+  document.getElementById("game-screen").classList.add("hidden");
+  document.getElementById("tracker-screen").classList.add("hidden");
+}
 
 function showScreen(screenName) {
-  const homeScreen = document.getElementById("home-screen");
-  const gameScreen = document.getElementById("game-screen");
-  const trackerScreen = document.getElementById("tracker-screen");
-
-  homeScreen.classList.add("hidden");
-  gameScreen.classList.add("hidden");
-  trackerScreen.classList.add("hidden");
+  hideAllScreens();
 
   if (screenName === "game") {
-    homeScreen.classList.remove("hidden");
+    document.getElementById("home-screen").classList.remove("hidden");
     updateBestScoreDisplay();
   } else if (screenName === "tracker") {
-    trackerScreen.classList.remove("hidden");
+    document.getElementById("tracker-screen").classList.remove("hidden");
     checkWeeklyReset();
     updateTrackerDisplay();
   }
 }
 
 function goHome() {
+  hideAllScreens();
   document.getElementById("home-screen").classList.remove("hidden");
-  document.getElementById("game-screen").classList.add("hidden");
-  document.getElementById("tracker-screen").classList.add("hidden");
   updateBestScoreDisplay();
 }
 
@@ -59,8 +54,7 @@ function startGame(category) {
   const fullSet = allQuestions[category] || [];
   currentQuestions = shuffleArray([...fullSet]).slice(0, gameLength);
 
-  document.getElementById("home-screen").classList.add("hidden");
-  document.getElementById("tracker-screen").classList.add("hidden");
+  hideAllScreens();
   document.getElementById("game-screen").classList.remove("hidden");
 
   const titleMap = {
@@ -92,12 +86,11 @@ function loadQuestion() {
   }
 
   document.getElementById("question-text").textContent = questionData.question;
+  document.getElementById("feedback-box").textContent = "";
+  document.getElementById("next-btn").classList.add("hidden");
 
   const answerButtons = document.getElementById("answer-buttons");
   answerButtons.innerHTML = "";
-
-  document.getElementById("feedback-box").textContent = "";
-  document.getElementById("next-btn").classList.add("hidden");
 
   questionData.choices.forEach((choice, index) => {
     const button = document.createElement("button");
@@ -136,10 +129,8 @@ function selectAnswer(selectedIndex) {
   if (selectedIndex === questionData.correct) {
     score += 10;
     feedbackBox.textContent = "✅ Correct! " + questionData.explanation;
-    playCorrectSound();
   } else {
     feedbackBox.textContent = "❌ Not quite. " + questionData.explanation;
-    playWrongSound();
   }
 
   document.getElementById("score-text").textContent = "Score: " + score;
@@ -164,24 +155,10 @@ function finishGame() {
 
   saveBestScore(currentCategory, score);
   updateBestScoreDisplay();
-  updateGameBadge();
 
   let message = " Game finished! Final score: " + score + " out of " + (currentQuestions.length * 10) + ".";
-  message += " Badge earned: " + getGameBadge(score, currentQuestions.length) + ".";
-
-  if (score === currentQuestions.length * 10) {
-    message += " Perfect score. Nicely done.";
-    launchConfetti();
-    playWinSound();
-  } else if (score >= currentQuestions.length * 8) {
-    message += " Strong job.";
-  } else if (score >= currentQuestions.length * 5) {
-    message += " Solid effort. Keep practicing.";
-  } else {
-    message += " More practice will help.";
-  }
-
   feedbackBox.textContent += message;
+
   nextBtn.classList.add("hidden");
   restartBtn.classList.remove("hidden");
 }
@@ -200,8 +177,7 @@ function updateGameProgress() {
 }
 
 function updateGameBadge() {
-  document.getElementById("badge-text").textContent =
-    "Badge: " + getGameBadge(score, currentQuestions.length);
+  document.getElementById("badge-text").textContent = "Badge: " + getGameBadge(score, currentQuestions.length);
 }
 
 function getGameBadge(scoreValue, totalQuestions) {
@@ -220,7 +196,6 @@ function addGoodChoice() {
   goodChoices++;
   saveTracker();
   updateTrackerDisplay();
-  playCorrectSound();
 }
 
 function addNeedsWork() {
@@ -228,7 +203,6 @@ function addNeedsWork() {
   needsWork++;
   saveTracker();
   updateTrackerDisplay();
-  playWrongSound();
 }
 
 function resetTracker() {
@@ -322,9 +296,7 @@ function loadBestScores() {
       Object.keys(bestScores).forEach((key) => {
         bestScores[key] = parsed[key] || 0;
       });
-    } catch (e) {
-      console.log("Best scores reset.");
-    }
+    } catch (e) {}
   }
 }
 
@@ -345,111 +317,10 @@ function shuffleArray(array) {
   return array;
 }
 
-function getAudioContext() {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  return audioContext;
-}
-
-function playTone(frequency, duration, type, volume) {
-  const ctx = getAudioContext();
-  const oscillator = ctx.createOscillator();
-  const gain = ctx.createGain();
-
-  oscillator.type = type;
-  oscillator.frequency.value = frequency;
-  gain.gain.value = volume;
-
-  oscillator.connect(gain);
-  gain.connect(ctx.destination);
-
-  oscillator.start();
-
-  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-  oscillator.stop(ctx.currentTime + duration);
-}
-
-function playCorrectSound() {
-  playTone(700, 0.15, "sine", 0.08);
-  setTimeout(() => playTone(900, 0.18, "sine", 0.06), 90);
-}
-
-function playWrongSound() {
-  playTone(280, 0.2, "square", 0.05);
-}
-
-function playWinSound() {
-  playTone(600, 0.15, "triangle", 0.06);
-  setTimeout(() => playTone(800, 0.15, "triangle", 0.06), 120);
-  setTimeout(() => playTone(1000, 0.2, "triangle", 0.06), 240);
-}
-
-function launchConfetti() {
-  const canvas = document.getElementById("confetti-canvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  confettiPieces = [];
-  const colors = ["#2f67ea", "#ffcc00", "#ff5f5f", "#4ecdc4", "#8a5cff", "#42b883"];
-
-  for (let i = 0; i < 150; i++) {
-    confettiPieces.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * -canvas.height,
-      size: Math.random() * 8 + 4,
-      speedY: Math.random() * 3 + 2,
-      speedX: Math.random() * 2 - 1,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      rotation: Math.random() * 360
-    });
-  }
-
-  if (!confettiAnimating) {
-    confettiAnimating = true;
-    animateConfetti();
-  }
-
-  setTimeout(() => {
-    confettiAnimating = false;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }, 3000);
-}
-
-function animateConfetti() {
-  if (!confettiAnimating) return;
-
-  const canvas = document.getElementById("confetti-canvas");
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  confettiPieces.forEach((piece) => {
-    piece.y += piece.speedY;
-    piece.x += piece.speedX;
-    piece.rotation += 4;
-
-    ctx.save();
-    ctx.translate(piece.x, piece.y);
-    ctx.rotate(piece.rotation * Math.PI / 180);
-    ctx.fillStyle = piece.color;
-    ctx.fillRect(-piece.size / 2, -piece.size / 2, piece.size, piece.size);
-    ctx.restore();
-  });
-
-  requestAnimationFrame(animateConfetti);
-}
-
-window.addEventListener("resize", () => {
-  const canvas = document.getElementById("confetti-canvas");
-  if (canvas) {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-});
-
 loadTracker();
 checkWeeklyReset();
 loadBestScores();
+hideAllScreens();
+document.getElementById("home-screen").classList.remove("hidden");
 updateTrackerDisplay();
 updateBestScoreDisplay();
