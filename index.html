@@ -96,25 +96,25 @@
       </div>
     </section>
 
-    <section id="results-screen" class="hidden">
-  <h2>Results</h2>
-  <div id="results-score"></div>
-  <p id="results-message"></p>
+    <section id="results-screen" class="card hidden">
+  <div class="top-row">
+    <h2>Results</h2>
+    <button class="small-btn" onclick="goHome()">Back</button>
+  </div>
 
-  <button onclick="goHome()">Back to Home</button>
+  <div class="results-box">
+    <div id="new-high-score" class="new-high-score hidden">🏆 NEW HIGH SCORE!</div>
+    <div id="results-score" class="results-score">Score: 0/100</div>
+    <div id="results-badge" class="results-badge">Badge: Starting Out</div>
+    <div id="results-streak" class="results-streak">Current Streak: 0</div>
+    <p id="results-message">Nice work.</p>
+  </div>
+
+  <div class="bottom-buttons">
+    <button class="primary-btn" onclick="restartCurrentGame()">Play Again</button>
+    <button class="secondary-btn" onclick="goHome()">Main Page</button>
+  </div>
 </section>
-
-      <div class="results-box">
-        <div class="results-score" id="results-score">Score: 0/100</div>
-        <div class="results-badge" id="results-badge">Badge: Starting Out</div>
-        <p id="results-message">Nice work.</p>
-      </div>
-
-      <div class="bottom-buttons">
-        <button class="primary-btn" onclick="restartCurrentGame()">Play Again</button>
-        <button class="secondary-btn" onclick="goHome()">Main Page</button>
-      </div>
-    </section>
 
     <section id="tracker-screen" class="card hidden">
       <div class="top-row">
