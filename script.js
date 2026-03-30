@@ -1,4 +1,4 @@
-const APP_VERSION = "15-fixed-home-tracker-results";
+const APP_VERSION = "16-full-clean-script";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -33,23 +33,35 @@ let goodChoices = 0;
 let needsWork = 0;
 let currentWeekKey = "";
 
+let trackerCategories = {
+  listening: { good: 0, bad: 0 },
+  kindness: { good: 0, bad: 0 },
+  calmBody: { good: 0, bad: 0 },
+  honesty: { good: 0, bad: 0 },
+  respect: { good: 0, bad: 0 },
+  responsibility: { good: 0, bad: 0 }
+};
+
 // ---------------- SCREEN CONTROL ----------------
 
 function hideAllScreens() {
-  document.getElementById("home-screen").classList.add("hidden");
-  document.getElementById("game-screen").classList.add("hidden");
-  document.getElementById("results-screen").classList.add("hidden");
-  document.getElementById("tracker-screen").classList.add("hidden");
+  const ids = ["home-screen", "game-screen", "results-screen", "tracker-screen"];
+  ids.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add("hidden");
+  });
 }
 
 function showScreen(screen) {
   hideAllScreens();
 
   if (screen === "game") {
-    document.getElementById("home-screen").classList.remove("hidden");
+    const home = document.getElementById("home-screen");
+    if (home) home.classList.remove("hidden");
     updateBestScoreDisplay();
   } else if (screen === "tracker") {
-    document.getElementById("tracker-screen").classList.remove("hidden");
+    const tracker = document.getElementById("tracker-screen");
+    if (tracker) tracker.classList.remove("hidden");
     checkWeeklyReset();
     updateTrackerDisplay();
   }
@@ -57,7 +69,8 @@ function showScreen(screen) {
 
 function goHome() {
   hideAllScreens();
-  document.getElementById("home-screen").classList.remove("hidden");
+  const home = document.getElementById("home-screen");
+  if (home) home.classList.remove("hidden");
   updateBestScoreDisplay();
 }
 
@@ -70,10 +83,12 @@ function startGame(category) {
   answered = false;
   gameFinished = false;
 
-  currentQuestions = shuffleArray([...allQuestions[category]]).slice(0, 10);
+  const source = Array.isArray(allQuestions[category]) ? allQuestions[category] : [];
+  currentQuestions = shuffleArray([...source]).slice(0, 10);
 
   hideAllScreens();
-  document.getElementById("game-screen").classList.remove("hidden");
+  const gameScreen = document.getElementById("game-screen");
+  if (gameScreen) gameScreen.classList.remove("hidden");
 
   const titleMap = {
     interrupting: "Interrupting",
@@ -86,29 +101,42 @@ function startGame(category) {
     online: "Online Behavior"
   };
 
-  document.getElementById("game-title").textContent = titleMap[category] || "Game";
-  document.getElementById("score-text").textContent = "Score: 0";
-  document.getElementById("feedback-box").textContent = "";
-  document.getElementById("new-high-score").classList.add("hidden");
+  const gameTitle = document.getElementById("game-title");
+  const scoreText = document.getElementById("score-text");
+  const feedbackBox = document.getElementById("feedback-box");
+  const newHighScore = document.getElementById("new-high-score");
+
+  if (gameTitle) gameTitle.textContent = titleMap[category] || "Game";
+  if (scoreText) scoreText.textContent = "Score: 0";
+  if (feedbackBox) feedbackBox.textContent = "";
+  if (newHighScore) newHighScore.classList.add("hidden");
 
   loadQuestion();
 }
 
 function loadQuestion() {
   if (gameFinished) return;
+  if (currentQuestionIndex >= currentQuestions.length) {
+    finishGame();
+    return;
+  }
+
+  answered = false;
 
   const q = currentQuestions[currentQuestionIndex];
-  document.getElementById("question-text").textContent = q.question;
+  const questionText = document.getElementById("question-text");
+  const answerButtons = document.getElementById("answer-buttons");
+  const feedbackBox = document.getElementById("feedback-box");
 
-  const container = document.getElementById("answer-buttons");
-  container.innerHTML = "";
-  document.getElementById("feedback-box").textContent = "";
+  if (questionText) questionText.textContent = q.question;
+  if (feedbackBox) feedbackBox.textContent = "";
+  if (answerButtons) answerButtons.innerHTML = "";
 
   q.choices.forEach((choice, i) => {
     const btn = document.createElement("button");
     btn.textContent = choice;
     btn.onclick = () => selectAnswer(i);
-    container.appendChild(btn);
+    if (answerButtons) answerButtons.appendChild(btn);
   });
 
   updateProgress();
@@ -120,6 +148,8 @@ function selectAnswer(index) {
 
   const q = currentQuestions[currentQuestionIndex];
   const buttons = document.querySelectorAll("#answer-buttons button");
+  const feedbackBox = document.getElementById("feedback-box");
+  const scoreText = document.getElementById("score-text");
 
   buttons.forEach((btn, i) => {
     btn.disabled = true;
@@ -129,12 +159,12 @@ function selectAnswer(index) {
 
   if (index === q.correct) {
     score += 10;
-    document.getElementById("feedback-box").textContent = "✅ Correct! " + q.explanation;
+    if (feedbackBox) feedbackBox.textContent = "✅ Correct! " + q.explanation;
   } else {
-    document.getElementById("feedback-box").textContent = "❌ Not quite. " + q.explanation;
+    if (feedbackBox) feedbackBox.textContent = "❌ Not quite. " + q.explanation;
   }
 
-  document.getElementById("score-text").textContent = "Score: " + score;
+  if (scoreText) scoreText.textContent = "Score: " + score;
 
   setTimeout(() => {
     if (currentQuestionIndex === currentQuestions.length - 1) {
@@ -148,10 +178,11 @@ function selectAnswer(index) {
 }
 
 function finishGame() {
+  if (gameFinished) return;
   gameFinished = true;
 
   const total = currentQuestions.length * 10;
-  const percent = (score / total) * 100;
+  const percent = total === 0 ? 0 : (score / total) * 100;
   const badge = getBadge(currentCategory, percent);
 
   const oldBest = bestScores[currentCategory] || 0;
@@ -173,10 +204,15 @@ function finishGame() {
   saveStreaks();
   updateBestScoreDisplay();
 
-  document.getElementById("results-score").textContent = "Score: " + score + "/" + total;
-  document.getElementById("results-badge").textContent = "Badge: " + badge;
-  document.getElementById("results-streak").textContent =
-    "Current Streak: " + (streaks[currentCategory] || 0);
+  const resultsScore = document.getElementById("results-score");
+  const resultsBadge = document.getElementById("results-badge");
+  const resultsStreak = document.getElementById("results-streak");
+  const resultsMessage = document.getElementById("results-message");
+  const newHighEl = document.getElementById("new-high-score");
+
+  if (resultsScore) resultsScore.textContent = "Score: " + score + "/" + total;
+  if (resultsBadge) resultsBadge.textContent = "Badge: " + badge;
+  if (resultsStreak) resultsStreak.textContent = "Current Streak: " + (streaks[currentCategory] || 0);
 
   let message = "Nice work.";
   if (percent === 100) {
@@ -189,17 +225,16 @@ function finishGame() {
     message = "Keep practicing. Progress still counts.";
   }
 
-  document.getElementById("results-message").textContent = message;
+  if (resultsMessage) resultsMessage.textContent = message;
 
-  const newHighEl = document.getElementById("new-high-score");
-  if (isNewHighScore) {
-    newHighEl.classList.remove("hidden");
-  } else {
-    newHighEl.classList.add("hidden");
+  if (newHighEl) {
+    if (isNewHighScore) newHighEl.classList.remove("hidden");
+    else newHighEl.classList.add("hidden");
   }
 
   hideAllScreens();
-  document.getElementById("results-screen").classList.remove("hidden");
+  const resultsScreen = document.getElementById("results-screen");
+  if (resultsScreen) resultsScreen.classList.remove("hidden");
 }
 
 function restartCurrentGame() {
@@ -207,8 +242,9 @@ function restartCurrentGame() {
 }
 
 function updateProgress() {
+  const progressText = document.getElementById("progress-text");
   const current = currentQuestionIndex + 1;
-  document.getElementById("progress-text").textContent = "Question " + current + " of 10";
+  if (progressText) progressText.textContent = "Question " + current + " of 10";
 }
 
 // ---------------- BADGES ----------------
@@ -287,7 +323,11 @@ function saveBestScores() {
 function loadBestScores() {
   const saved = localStorage.getItem("bestScores");
   if (saved) {
-    bestScores = JSON.parse(saved);
+    try {
+      bestScores = JSON.parse(saved);
+    } catch (e) {
+      console.log("Best scores could not be loaded.");
+    }
   }
 }
 
@@ -309,7 +349,11 @@ function saveStreaks() {
 function loadStreaks() {
   const saved = localStorage.getItem("streaks");
   if (saved) {
-    streaks = JSON.parse(saved);
+    try {
+      streaks = JSON.parse(saved);
+    } catch (e) {
+      console.log("Streaks could not be loaded.");
+    }
   }
 }
 
@@ -325,6 +369,23 @@ function addGoodChoice() {
 function addNeedsWork() {
   checkWeeklyReset();
   needsWork++;
+  saveTracker();
+  updateTrackerDisplay();
+}
+
+function addCategoryChoice(category, isGood) {
+  checkWeeklyReset();
+
+  if (!trackerCategories[category]) return;
+
+  if (isGood) {
+    trackerCategories[category].good++;
+    goodChoices++;
+  } else {
+    trackerCategories[category].bad++;
+    needsWork++;
+  }
+
   saveTracker();
   updateTrackerDisplay();
 }
@@ -370,14 +431,14 @@ function updateTrackerDisplay() {
   const percent = total === 0 ? 0 : Math.round((goodChoices / total) * 100);
   const badPercent = total === 0 ? 0 : Math.round((needsWork / total) * 100);
 
-  totalEl.textContent = total;
-  barEl.style.width = percent + "%";
-  percentEl.textContent = percent + "% good choices";
-  badgeEl.textContent = getTrackerBadge(percent, total);
-  weekEl.textContent = "Week of " + formatWeekKey(currentWeekKey);
+  if (totalEl) totalEl.textContent = total;
+  if (barEl) barEl.style.width = percent + "%";
+  if (percentEl) percentEl.textContent = percent + "% good choices";
+  if (badgeEl) badgeEl.textContent = getTrackerBadge(percent, total);
+  if (weekEl) weekEl.textContent = "Week of " + formatWeekKey(currentWeekKey);
 
-  goodBar.style.width = percent + "%";
-  needsBar.style.width = badPercent + "%";
+  if (goodBar) goodBar.style.width = percent + "%";
+  if (needsBar) needsBar.style.width = badPercent + "%";
 
   let message = "Let’s get started.";
   if (total === 0) {
@@ -394,38 +455,12 @@ function updateTrackerDisplay() {
     message = "Fresh reset energy might help.";
   }
 
-  messageEl.textContent = message;
+  if (messageEl) messageEl.textContent = message;
 
   updateCategoryDisplay();
 
   if (improvedEl) improvedEl.textContent = getMostImprovedArea();
   if (focusEl) focusEl.textContent = getFocusArea();
-}
-
-  let trackerCategories = {
-  listening: { good: 0, bad: 0 },
-  kindness: { good: 0, bad: 0 },
-  calmBody: { good: 0, bad: 0 },
-  honesty: { good: 0, bad: 0 },
-  respect: { good: 0, bad: 0 },
-  responsibility: { good: 0, bad: 0 }
-};
-
-  function addCategoryChoice(category, isGood) {
-  checkWeeklyReset();
-
-  if (!trackerCategories[category]) return;
-
-  if (isGood) {
-    trackerCategories[category].good++;
-    goodChoices++;
-  } else {
-    trackerCategories[category].bad++;
-    needsWork++;
-  }
-
-  saveTracker();
-  updateTrackerDisplay();
 }
 
 function updateCategoryDisplay() {
@@ -480,40 +515,7 @@ function formatCategoryName(key) {
 
   return map[key] || "--";
 }
-  if (!goodEl) return;
 
-  goodEl.textContent = goodChoices;
-  badEl.textContent = needsWork;
-
-  const total = goodChoices + needsWork;
-  const percent = total === 0 ? 0 : Math.round((goodChoices / total) * 100);
-  const badPercent = total === 0 ? 0 : Math.round((needsWork / total) * 100);
-
-  totalEl.textContent = total;
-  barEl.style.width = percent + "%";
-  percentEl.textContent = percent + "% good choices";
-  badgeEl.textContent = getTrackerBadge(percent, total);
-  weekEl.textContent = "Week of " + formatWeekKey(currentWeekKey);
-
-  goodBar.style.width = percent + "%";
-  needsBar.style.width = badPercent + "%";
-
-  let message = "Let’s get started.";
-  if (total === 0) {
-    message = "No choices tracked yet.";
-  } else if (percent === 100) {
-    message = "Amazing week. You’re on fire.";
-  } else if (percent >= 80) {
-    message = "Strong progress. Keep it going.";
-  } else if (percent >= 60) {
-    message = "Good momentum. You’re building habits.";
-  } else if (percent >= 40) {
-    message = "Still working on it. Progress is progress.";
-  } else {
-    message = "Fresh reset energy might help.";
-  }
-
-  messageEl.textContent = message;
 function getTrackerBadge(percent, total) {
   if (total === 0) return "Starting Out";
   if (percent === 100) return "Legend Week";
@@ -552,6 +554,16 @@ function checkWeeklyReset() {
     goodChoices = 0;
     needsWork = 0;
     currentWeekKey = newWeekKey;
+
+    trackerCategories = {
+      listening: { good: 0, bad: 0 },
+      kindness: { good: 0, bad: 0 },
+      calmBody: { good: 0, bad: 0 },
+      honesty: { good: 0, bad: 0 },
+      respect: { good: 0, bad: 0 },
+      responsibility: { good: 0, bad: 0 }
+    };
+
     saveTracker();
   }
 }
@@ -582,8 +594,9 @@ function formatWeekKey(weekKey) {
 
 function launchConfetti() {
   const canvas = document.getElementById("confetti-canvas");
-  const ctx = canvas.getContext("2d");
+  if (!canvas) return;
 
+  const ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
