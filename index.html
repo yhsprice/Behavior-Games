@@ -116,7 +116,7 @@
   </div>
 </section>
 
-   <section id="tracker-screen" class="card hidden">
+<section id="tracker-screen" class="card hidden">
   <div class="top-row">
     <h2>Goal Tracker</h2>
     <button class="small-btn" onclick="goHome()">Back</button>
@@ -181,6 +181,95 @@
     </div>
   </div>
 
+  <h3>Track by Skill Area</h3>
+  <p>Pick the area you want to track and mark whether it went well or needs work.</p>
+
+  <div class="tracker-category-grid">
+    <div class="tracker-category-card">
+      <div class="tracker-category-title">Listening</div>
+      <div class="tracker-category-counts">
+        <span id="listening-good">Good: 0</span>
+        <span id="listening-bad">Needs Work: 0</span>
+      </div>
+      <div class="tracker-category-buttons">
+        <button class="primary-btn" onclick="addCategoryChoice('listening', true)">+ Good</button>
+        <button class="secondary-btn" onclick="addCategoryChoice('listening', false)">+ Needs Work</button>
+      </div>
+    </div>
+
+    <div class="tracker-category-card">
+      <div class="tracker-category-title">Kindness</div>
+      <div class="tracker-category-counts">
+        <span id="kindness-good">Good: 0</span>
+        <span id="kindness-bad">Needs Work: 0</span>
+      </div>
+      <div class="tracker-category-buttons">
+        <button class="primary-btn" onclick="addCategoryChoice('kindness', true)">+ Good</button>
+        <button class="secondary-btn" onclick="addCategoryChoice('kindness', false)">+ Needs Work</button>
+      </div>
+    </div>
+
+    <div class="tracker-category-card">
+      <div class="tracker-category-title">Calm Body</div>
+      <div class="tracker-category-counts">
+        <span id="calmBody-good">Good: 0</span>
+        <span id="calmBody-bad">Needs Work: 0</span>
+      </div>
+      <div class="tracker-category-buttons">
+        <button class="primary-btn" onclick="addCategoryChoice('calmBody', true)">+ Good</button>
+        <button class="secondary-btn" onclick="addCategoryChoice('calmBody', false)">+ Needs Work</button>
+      </div>
+    </div>
+
+    <div class="tracker-category-card">
+      <div class="tracker-category-title">Honesty</div>
+      <div class="tracker-category-counts">
+        <span id="honesty-good">Good: 0</span>
+        <span id="honesty-bad">Needs Work: 0</span>
+      </div>
+      <div class="tracker-category-buttons">
+        <button class="primary-btn" onclick="addCategoryChoice('honesty', true)">+ Good</button>
+        <button class="secondary-btn" onclick="addCategoryChoice('honesty', false)">+ Needs Work</button>
+      </div>
+    </div>
+
+    <div class="tracker-category-card">
+      <div class="tracker-category-title">Respect</div>
+      <div class="tracker-category-counts">
+        <span id="respect-good">Good: 0</span>
+        <span id="respect-bad">Needs Work: 0</span>
+      </div>
+      <div class="tracker-category-buttons">
+        <button class="primary-btn" onclick="addCategoryChoice('respect', true)">+ Good</button>
+        <button class="secondary-btn" onclick="addCategoryChoice('respect', false)">+ Needs Work</button>
+      </div>
+    </div>
+
+    <div class="tracker-category-card">
+      <div class="tracker-category-title">Responsibility</div>
+      <div class="tracker-category-counts">
+        <span id="responsibility-good">Good: 0</span>
+        <span id="responsibility-bad">Needs Work: 0</span>
+      </div>
+      <div class="tracker-category-buttons">
+        <button class="primary-btn" onclick="addCategoryChoice('responsibility', true)">+ Good</button>
+        <button class="secondary-btn" onclick="addCategoryChoice('responsibility', false)">+ Needs Work</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tracker-summary-grid">
+    <div class="tracker-summary-card">
+      <div class="tracker-summary-label">Most Improved Area</div>
+      <div id="most-improved" class="tracker-summary-value">--</div>
+    </div>
+
+    <div class="tracker-summary-card">
+      <div class="tracker-summary-label">Focus Area Next</div>
+      <div id="focus-area" class="tracker-summary-value">--</div>
+    </div>
+  </div>
+
   <div class="tracker-buttons">
     <button class="primary-btn" onclick="addGoodChoice()">+ Good Choice</button>
     <button class="secondary-btn" onclick="addNeedsWork()">+ Needs Work</button>
@@ -189,6 +278,6 @@
 </section>
     
  <script src="questions.js?v=13"></script>
-<script src="script.js?v=13"></script>
+ <script src="script.js?v=13"></script>
 </body>
 </html>
