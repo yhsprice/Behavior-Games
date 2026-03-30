@@ -349,6 +349,15 @@ function updateTrackerDisplay() {
   const goodBar = document.getElementById("good-bar");
   const needsBar = document.getElementById("needs-bar");
 
+  let trackerCategories = {
+  listening: { good: 0, bad: 0 },
+  kindness: { good: 0, bad: 0 },
+  calmBody: { good: 0, bad: 0 },
+  honesty: { good: 0, bad: 0 },
+  respect: { good: 0, bad: 0 },
+  responsibility: { good: 0, bad: 0 }
+};
+
   if (!goodEl) return;
 
   goodEl.textContent = goodChoices;
