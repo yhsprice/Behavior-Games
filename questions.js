@@ -9,12 +9,19 @@ const allQuestions = {
   online: buildOnlineQuestions()
 };
 
+function makeQuestion(starter, situationText, endingText) {
+  const cleanStarter = starter.trim().replace(/[.?!]\s*$/, "");
+  const cleanSituation = situationText.trim().replace(/[.?!]\s*$/, "");
+  const cleanEnding = endingText.trim();
+  return `${cleanStarter}, ${cleanSituation}. ${cleanEnding}`;
+}
+
 function combineQuestions(starters, situations, endingText) {
   const results = [];
   starters.forEach((starter) => {
     situations.forEach((situation) => {
       results.push({
-        question: `${starter}, ${situation.text} ${endingText}`,
+        question: makeQuestion(starter, situation.text, endingText),
         choices: situation.choices,
         correct: situation.correct,
         explanation: situation.explanation
