@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Choice Quest</title>
-  <link rel="stylesheet" href="style.css?v=12" />
+  <link rel="stylesheet" href="style.css?v=16" />
 </head>
 <body>
   <canvas id="confetti-canvas"></canvas>
@@ -12,7 +12,7 @@
   <div class="page">
     <section class="hero card">
       <h1>Choice Quest</h1>
-      <p>Practice good choices, kindness, timing, calm reactions, honesty, respect, responsibility, and online behavior.</p>
+      <p>Practice good choices, kindness, timing, calm reactions, honesty, respect, responsibility, teasing, and online behavior.</p>
 
       <div class="hero-buttons">
         <button class="primary-btn" onclick="showScreen('game')">Play Games</button>
@@ -82,7 +82,6 @@
 
       <div class="game-info-row">
         <span id="score-text" class="score-pill">Score: 0</span>
-        <span id="badge-text" class="badge-pill">Badge: Starting Out</span>
       </div>
 
       <div class="question-box">
@@ -90,194 +89,191 @@
         <div id="answer-buttons" class="answer-buttons"></div>
         <div id="feedback-box" class="feedback-box"></div>
       </div>
-
-      <div class="bottom-buttons">
-        <button id="next-btn" class="primary-btn hidden" onclick="nextQuestion()">Next Question</button>
-      </div>
     </section>
 
     <section id="results-screen" class="card hidden">
-  <div class="top-row">
-    <h2>Results</h2>
-    <button class="small-btn" onclick="goHome()">Back</button>
+      <div class="top-row">
+        <h2>Results</h2>
+        <button class="small-btn" onclick="goHome()">Back</button>
+      </div>
+
+      <div class="results-box">
+        <div id="new-high-score" class="new-high-score hidden">🏆 NEW HIGH SCORE!</div>
+        <div id="results-score" class="results-score">Score: 0/100</div>
+        <div id="results-badge" class="results-badge">Badge: Starting Out</div>
+        <div id="results-streak" class="results-streak">Current Streak: 0</div>
+        <p id="results-message">Nice work.</p>
+      </div>
+
+      <div class="bottom-buttons">
+        <button class="primary-btn" onclick="restartCurrentGame()">Play Again</button>
+        <button class="secondary-btn" onclick="goHome()">Main Page</button>
+      </div>
+    </section>
+
+    <section id="tracker-screen" class="card hidden">
+      <div class="top-row">
+        <h2>Goal Tracker</h2>
+        <button class="small-btn" onclick="goHome()">Back</button>
+      </div>
+
+      <p>Track real-life choices during the week and watch your progress grow.</p>
+
+      <div class="tracker-highlight-row">
+        <div class="tracker-highlight-box">
+          <div class="tracker-highlight-label">This Week</div>
+          <div id="tracker-week-text" class="tracker-highlight-value">Week of --</div>
+        </div>
+
+        <div class="tracker-highlight-box">
+          <div class="tracker-highlight-label">Tracker Level</div>
+          <div id="tracker-badge" class="tracker-highlight-value">Starting Out</div>
+        </div>
+
+        <div class="tracker-highlight-box">
+          <div class="tracker-highlight-label">Progress Message</div>
+          <div id="tracker-message" class="tracker-highlight-value">Let’s get started.</div>
+        </div>
+      </div>
+
+      <div class="tracker-stats">
+        <div class="stat-box good-box">
+          <div class="stat-label">Good Choices</div>
+          <div id="good-count" class="stat-number">0</div>
+        </div>
+
+        <div class="stat-box needs-box">
+          <div class="stat-label">Needs Work</div>
+          <div id="bad-count" class="stat-number">0</div>
+        </div>
+
+        <div class="stat-box total-box">
+          <div class="stat-label">Total Choices</div>
+          <div id="tracker-total-number" class="stat-number">0</div>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-bar-bg">
+          <div id="tracker-progress-bar" class="progress-bar-fill"></div>
+        </div>
+        <div id="tracker-percent-text" class="progress-text">0% good choices</div>
+      </div>
+
+      <div class="tracker-mini-bars">
+        <div class="mini-bar-group">
+          <div class="mini-bar-label">Good Choices</div>
+          <div class="mini-bar-bg">
+            <div id="good-bar" class="mini-bar-fill good-fill"></div>
+          </div>
+        </div>
+
+        <div class="mini-bar-group">
+          <div class="mini-bar-label">Needs Work</div>
+          <div class="mini-bar-bg">
+            <div id="needs-bar" class="mini-bar-fill needs-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Track by Skill Area</h3>
+      <p>Pick the area you want to track and mark whether it went well or needs work.</p>
+
+      <div class="tracker-category-grid">
+        <div class="tracker-category-card">
+          <div class="tracker-category-title">Listening</div>
+          <div class="tracker-category-counts">
+            <span id="listening-good">Good: 0</span>
+            <span id="listening-bad">Needs Work: 0</span>
+          </div>
+          <div class="tracker-category-buttons">
+            <button class="primary-btn" onclick="addCategoryChoice('listening', true)">+ Good</button>
+            <button class="secondary-btn" onclick="addCategoryChoice('listening', false)">+ Needs Work</button>
+          </div>
+        </div>
+
+        <div class="tracker-category-card">
+          <div class="tracker-category-title">Kindness</div>
+          <div class="tracker-category-counts">
+            <span id="kindness-good">Good: 0</span>
+            <span id="kindness-bad">Needs Work: 0</span>
+          </div>
+          <div class="tracker-category-buttons">
+            <button class="primary-btn" onclick="addCategoryChoice('kindness', true)">+ Good</button>
+            <button class="secondary-btn" onclick="addCategoryChoice('kindness', false)">+ Needs Work</button>
+          </div>
+        </div>
+
+        <div class="tracker-category-card">
+          <div class="tracker-category-title">Calm Body</div>
+          <div class="tracker-category-counts">
+            <span id="calmBody-good">Good: 0</span>
+            <span id="calmBody-bad">Needs Work: 0</span>
+          </div>
+          <div class="tracker-category-buttons">
+            <button class="primary-btn" onclick="addCategoryChoice('calmBody', true)">+ Good</button>
+            <button class="secondary-btn" onclick="addCategoryChoice('calmBody', false)">+ Needs Work</button>
+          </div>
+        </div>
+
+        <div class="tracker-category-card">
+          <div class="tracker-category-title">Honesty</div>
+          <div class="tracker-category-counts">
+            <span id="honesty-good">Good: 0</span>
+            <span id="honesty-bad">Needs Work: 0</span>
+          </div>
+          <div class="tracker-category-buttons">
+            <button class="primary-btn" onclick="addCategoryChoice('honesty', true)">+ Good</button>
+            <button class="secondary-btn" onclick="addCategoryChoice('honesty', false)">+ Needs Work</button>
+          </div>
+        </div>
+
+        <div class="tracker-category-card">
+          <div class="tracker-category-title">Respect</div>
+          <div class="tracker-category-counts">
+            <span id="respect-good">Good: 0</span>
+            <span id="respect-bad">Needs Work: 0</span>
+          </div>
+          <div class="tracker-category-buttons">
+            <button class="primary-btn" onclick="addCategoryChoice('respect', true)">+ Good</button>
+            <button class="secondary-btn" onclick="addCategoryChoice('respect', false)">+ Needs Work</button>
+          </div>
+        </div>
+
+        <div class="tracker-category-card">
+          <div class="tracker-category-title">Responsibility</div>
+          <div class="tracker-category-counts">
+            <span id="responsibility-good">Good: 0</span>
+            <span id="responsibility-bad">Needs Work: 0</span>
+          </div>
+          <div class="tracker-category-buttons">
+            <button class="primary-btn" onclick="addCategoryChoice('responsibility', true)">+ Good</button>
+            <button class="secondary-btn" onclick="addCategoryChoice('responsibility', false)">+ Needs Work</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tracker-summary-grid">
+        <div class="tracker-summary-card">
+          <div class="tracker-summary-label">Most Improved Area</div>
+          <div id="most-improved" class="tracker-summary-value">--</div>
+        </div>
+
+        <div class="tracker-summary-card">
+          <div class="tracker-summary-label">Focus Area Next</div>
+          <div id="focus-area" class="tracker-summary-value">--</div>
+        </div>
+      </div>
+
+      <div class="tracker-buttons">
+        <button class="primary-btn" onclick="addGoodChoice()">+ Good Choice</button>
+        <button class="secondary-btn" onclick="addNeedsWork()">+ Needs Work</button>
+        <button class="danger-btn" onclick="resetTracker()">Reset Tracker</button>
+      </div>
+    </section>
   </div>
 
-  <div class="results-box">
-    <div id="new-high-score" class="new-high-score hidden">🏆 NEW HIGH SCORE!</div>
-    <div id="results-score" class="results-score">Score: 0/100</div>
-    <div id="results-badge" class="results-badge">Badge: Starting Out</div>
-    <div id="results-streak" class="results-streak">Current Streak: 0</div>
-    <p id="results-message">Nice work.</p>
-  </div>
-
-  <div class="bottom-buttons">
-    <button class="primary-btn" onclick="restartCurrentGame()">Play Again</button>
-    <button class="secondary-btn" onclick="goHome()">Main Page</button>
-  </div>
-</section>
-
-<section id="tracker-screen" class="card hidden">
-  <div class="top-row">
-    <h2>Goal Tracker</h2>
-    <button class="small-btn" onclick="goHome()">Back</button>
-  </div>
-
-  <p>Track real-life choices during the week and watch your progress grow.</p>
-
-  <div class="tracker-highlight-row">
-    <div class="tracker-highlight-box">
-      <div class="tracker-highlight-label">This Week</div>
-      <div id="tracker-week-text" class="tracker-highlight-value">Week of --</div>
-    </div>
-
-    <div class="tracker-highlight-box">
-      <div class="tracker-highlight-label">Tracker Level</div>
-      <div id="tracker-badge" class="tracker-highlight-value">Starting Out</div>
-    </div>
-
-    <div class="tracker-highlight-box">
-      <div class="tracker-highlight-label">Progress Message</div>
-      <div id="tracker-message" class="tracker-highlight-value">Let’s get started.</div>
-    </div>
-  </div>
-
-  <div class="tracker-stats">
-    <div class="stat-box good-box">
-      <div class="stat-label">Good Choices</div>
-      <div id="good-count" class="stat-number">0</div>
-    </div>
-
-    <div class="stat-box needs-box">
-      <div class="stat-label">Needs Work</div>
-      <div id="bad-count" class="stat-number">0</div>
-    </div>
-
-    <div class="stat-box total-box">
-      <div class="stat-label">Total Choices</div>
-      <div id="tracker-total-number" class="stat-number">0</div>
-    </div>
-  </div>
-
-  <div class="progress-wrap">
-    <div class="progress-bar-bg">
-      <div id="tracker-progress-bar" class="progress-bar-fill"></div>
-    </div>
-    <div id="tracker-percent-text" class="progress-text">0% good choices</div>
-  </div>
-
-  <div class="tracker-mini-bars">
-    <div class="mini-bar-group">
-      <div class="mini-bar-label">Good Choices</div>
-      <div class="mini-bar-bg">
-        <div id="good-bar" class="mini-bar-fill good-fill"></div>
-      </div>
-    </div>
-
-    <div class="mini-bar-group">
-      <div class="mini-bar-label">Needs Work</div>
-      <div class="mini-bar-bg">
-        <div id="needs-bar" class="mini-bar-fill needs-fill"></div>
-      </div>
-    </div>
-  </div>
-
-  <h3>Track by Skill Area</h3>
-  <p>Pick the area you want to track and mark whether it went well or needs work.</p>
-
-  <div class="tracker-category-grid">
-    <div class="tracker-category-card">
-      <div class="tracker-category-title">Listening</div>
-      <div class="tracker-category-counts">
-        <span id="listening-good">Good: 0</span>
-        <span id="listening-bad">Needs Work: 0</span>
-      </div>
-      <div class="tracker-category-buttons">
-        <button class="primary-btn" onclick="addCategoryChoice('listening', true)">+ Good</button>
-        <button class="secondary-btn" onclick="addCategoryChoice('listening', false)">+ Needs Work</button>
-      </div>
-    </div>
-
-    <div class="tracker-category-card">
-      <div class="tracker-category-title">Kindness</div>
-      <div class="tracker-category-counts">
-        <span id="kindness-good">Good: 0</span>
-        <span id="kindness-bad">Needs Work: 0</span>
-      </div>
-      <div class="tracker-category-buttons">
-        <button class="primary-btn" onclick="addCategoryChoice('kindness', true)">+ Good</button>
-        <button class="secondary-btn" onclick="addCategoryChoice('kindness', false)">+ Needs Work</button>
-      </div>
-    </div>
-
-    <div class="tracker-category-card">
-      <div class="tracker-category-title">Calm Body</div>
-      <div class="tracker-category-counts">
-        <span id="calmBody-good">Good: 0</span>
-        <span id="calmBody-bad">Needs Work: 0</span>
-      </div>
-      <div class="tracker-category-buttons">
-        <button class="primary-btn" onclick="addCategoryChoice('calmBody', true)">+ Good</button>
-        <button class="secondary-btn" onclick="addCategoryChoice('calmBody', false)">+ Needs Work</button>
-      </div>
-    </div>
-
-    <div class="tracker-category-card">
-      <div class="tracker-category-title">Honesty</div>
-      <div class="tracker-category-counts">
-        <span id="honesty-good">Good: 0</span>
-        <span id="honesty-bad">Needs Work: 0</span>
-      </div>
-      <div class="tracker-category-buttons">
-        <button class="primary-btn" onclick="addCategoryChoice('honesty', true)">+ Good</button>
-        <button class="secondary-btn" onclick="addCategoryChoice('honesty', false)">+ Needs Work</button>
-      </div>
-    </div>
-
-    <div class="tracker-category-card">
-      <div class="tracker-category-title">Respect</div>
-      <div class="tracker-category-counts">
-        <span id="respect-good">Good: 0</span>
-        <span id="respect-bad">Needs Work: 0</span>
-      </div>
-      <div class="tracker-category-buttons">
-        <button class="primary-btn" onclick="addCategoryChoice('respect', true)">+ Good</button>
-        <button class="secondary-btn" onclick="addCategoryChoice('respect', false)">+ Needs Work</button>
-      </div>
-    </div>
-
-    <div class="tracker-category-card">
-      <div class="tracker-category-title">Responsibility</div>
-      <div class="tracker-category-counts">
-        <span id="responsibility-good">Good: 0</span>
-        <span id="responsibility-bad">Needs Work: 0</span>
-      </div>
-      <div class="tracker-category-buttons">
-        <button class="primary-btn" onclick="addCategoryChoice('responsibility', true)">+ Good</button>
-        <button class="secondary-btn" onclick="addCategoryChoice('responsibility', false)">+ Needs Work</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="tracker-summary-grid">
-    <div class="tracker-summary-card">
-      <div class="tracker-summary-label">Most Improved Area</div>
-      <div id="most-improved" class="tracker-summary-value">--</div>
-    </div>
-
-    <div class="tracker-summary-card">
-      <div class="tracker-summary-label">Focus Area Next</div>
-      <div id="focus-area" class="tracker-summary-value">--</div>
-    </div>
-  </div>
-
-  <div class="tracker-buttons">
-    <button class="primary-btn" onclick="addGoodChoice()">+ Good Choice</button>
-    <button class="secondary-btn" onclick="addNeedsWork()">+ Needs Work</button>
-    <button class="danger-btn" onclick="resetTracker()">Reset Tracker</button>
-  </div>
-</section>
-    
- <script src="questions.js?v=13"></script>
- <script src="script.js?v=13"></script>
+  <script src="questions.js?v=16"></script>
+  <script src="script.js?v=16"></script>
 </body>
 </html>
