@@ -1,4 +1,4 @@
-const APP_VERSION = "16-full-clean-script";
+const APP_VERSION = "17-manual-next-button";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -105,17 +105,23 @@ function startGame(category) {
   const scoreText = document.getElementById("score-text");
   const feedbackBox = document.getElementById("feedback-box");
   const newHighScore = document.getElementById("new-high-score");
+  const nextBtn = document.getElementById("next-btn");
 
   if (gameTitle) gameTitle.textContent = titleMap[category] || "Game";
   if (scoreText) scoreText.textContent = "Score: 0";
   if (feedbackBox) feedbackBox.textContent = "";
   if (newHighScore) newHighScore.classList.add("hidden");
+  if (nextBtn) {
+    nextBtn.classList.add("hidden");
+    nextBtn.textContent = "Next Question";
+  }
 
   loadQuestion();
 }
 
 function loadQuestion() {
   if (gameFinished) return;
+
   if (currentQuestionIndex >= currentQuestions.length) {
     finishGame();
     return;
@@ -127,10 +133,17 @@ function loadQuestion() {
   const questionText = document.getElementById("question-text");
   const answerButtons = document.getElementById("answer-buttons");
   const feedbackBox = document.getElementById("feedback-box");
+  const nextBtn = document.getElementById("next-btn");
 
   if (questionText) questionText.textContent = q.question;
   if (feedbackBox) feedbackBox.textContent = "";
   if (answerButtons) answerButtons.innerHTML = "";
+  if (nextBtn) {
+    nextBtn.classList.add("hidden");
+    nextBtn.textContent = currentQuestionIndex === currentQuestions.length - 1
+      ? "See Results"
+      : "Next Question";
+  }
 
   q.choices.forEach((choice, i) => {
     const btn = document.createElement("button");
@@ -150,6 +163,7 @@ function selectAnswer(index) {
   const buttons = document.querySelectorAll("#answer-buttons button");
   const feedbackBox = document.getElementById("feedback-box");
   const scoreText = document.getElementById("score-text");
+  const nextBtn = document.getElementById("next-btn");
 
   buttons.forEach((btn, i) => {
     btn.disabled = true;
@@ -166,15 +180,23 @@ function selectAnswer(index) {
 
   if (scoreText) scoreText.textContent = "Score: " + score;
 
-  setTimeout(() => {
-    if (currentQuestionIndex === currentQuestions.length - 1) {
-      finishGame();
-    } else {
-      currentQuestionIndex++;
-      answered = false;
-      loadQuestion();
-    }
-  }, 700);
+  if (nextBtn) {
+    nextBtn.textContent = currentQuestionIndex === currentQuestions.length - 1
+      ? "See Results"
+      : "Next Question";
+    nextBtn.classList.remove("hidden");
+  }
+}
+
+function nextQuestion() {
+  if (!answered || gameFinished) return;
+
+  if (currentQuestionIndex === currentQuestions.length - 1) {
+    finishGame();
+  } else {
+    currentQuestionIndex++;
+    loadQuestion();
+  }
 }
 
 function finishGame() {
@@ -243,8 +265,13 @@ function restartCurrentGame() {
 
 function updateProgress() {
   const progressText = document.getElementById("progress-text");
+  const progressBar = document.getElementById("game-progress-bar");
   const current = currentQuestionIndex + 1;
-  if (progressText) progressText.textContent = "Question " + current + " of 10";
+  const total = currentQuestions.length || 10;
+  const percent = Math.round((currentQuestionIndex / total) * 100);
+
+  if (progressText) progressText.textContent = "Question " + current + " of " + total;
+  if (progressBar) progressBar.style.width = percent + "%";
 }
 
 // ---------------- BADGES ----------------
