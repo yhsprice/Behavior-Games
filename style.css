@@ -230,6 +230,12 @@ button:hover {
   line-height: 1.5;
 }
 
+#next-btn {
+  margin-top: 16px;
+  width: 100%;
+  text-align: center;
+}
+
 .results-box {
   background: #f8fbff;
   border: 1px solid #dce7f5;
@@ -464,3 +470,5 @@ button:hover {
     min-width: 100%;
   }
 }
+
+
