@@ -234,6 +234,8 @@ button:hover {
   margin-top: 16px;
   width: 100%;
   text-align: center;
+  font-size: 18px;
+  padding: 16px;
 }
 
 .results-box {
