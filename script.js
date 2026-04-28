@@ -215,6 +215,29 @@ shuffledChoices.forEach((choiceObj) => {
   updateProgress();
 }
 
+function playSound(type) {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  oscillator.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  if (type === "correct") {
+    oscillator.frequency.setValueAtTime(700, audioCtx.currentTime);
+    oscillator.frequency.setValueAtTime(950, audioCtx.currentTime + 0.12);
+  } else {
+    oscillator.frequency.setValueAtTime(180, audioCtx.currentTime);
+    oscillator.frequency.setValueAtTime(120, audioCtx.currentTime + 0.12);
+  }
+
+  gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.35);
+}
+
 function selectAnswer(index) {
   if (answered || gameFinished) return;
   answered = true;
@@ -237,17 +260,20 @@ function selectAnswer(index) {
     void questionBox.offsetWidth;
   }
 
-  if (index === q.correct) {
-    score += 10;
+if (index === q.correct) {
+  playSound("correct");
+  score += 10;
 
-    if (feedbackBox) {
-      feedbackBox.className = "feedback-box correct-feedback";
-      feedbackBox.textContent = "✅ Correct! " + q.explanation;
-    }
+  if (feedbackBox) {
+    feedbackBox.className = "feedback-box correct-feedback";
+    feedbackBox.textContent = "✅ Correct! " + q.explanation;
+  }
 
-    if (questionBox) questionBox.classList.add("correct-glow");
-    if (currentCategory === "online") showAccessDenied(false);
-  } else {
+  if (questionBox) questionBox.classList.add("correct-glow");
+  if (currentCategory === "online") showAccessDenied(false);
+} else {
+  playSound("wrong");
+    
     if (feedbackBox) {
       feedbackBox.className = "feedback-box wrong-feedback";
       feedbackBox.textContent = "❌ Not quite. " + q.explanation;
@@ -736,7 +762,7 @@ function launchConfetti() {
   if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
-  const duration = 2600;
+  const duration = 5000;
   const start = performance.now();
 
   if (confettiAnimationId) {
@@ -751,7 +777,7 @@ function launchConfetti() {
     x: Math.random() * canvas.width,
     y: Math.random() * -canvas.height,
     size: 6 + Math.random() * 8,
-    speed: 2 + Math.random() * 5,
+    speed: 1 + Math.random() * 2.5,
     rotation: Math.random() * 360,
     rotationSpeed: -8 + Math.random() * 16,
     drift: -2 + Math.random() * 4,
