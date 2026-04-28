@@ -9,7 +9,9 @@ const allQuestions = {
         "Ask others what they are doing"
       ],
       correct: 0,
-      explanation: "It is always best to treat others the way you want to be treated."
+      explanation: "It is always best to treat others the way you want to be treated.",
+      difficulty: "beginner",
+      image: "images/respect-1.png"
     },
     {
       question: "Which of these is a way to show respect at school?",
@@ -20,7 +22,9 @@ const allQuestions = {
         "Ignoring the teacher so you don't bother her"
       ],
       correct: 0,
-      explanation: "Always raise your hand before speaking."
+      explanation: "Always raise your hand before speaking.",
+      difficulty: "beginner",
+      image: "images/respect-2.png"
     },
     {
       question: "What is a respectful way to handle a disagreement with a friend?",
@@ -31,9 +35,11 @@ const allQuestions = {
         "Pretend they are right and move on"
       ],
       correct: 0,
-      explanation: "Listen to their side because sometimes things can be more different than you realize."
+      explanation: "Listen to their side because sometimes things can be more different than you realize.",
+      difficulty: "advanced",
+      image: "images/respect-3.png"
     },
-        {
+    {
       question: "How can you show respect for your own things?",
       choices: [
         "Taking care of your books and belongings",
@@ -42,183 +48,38 @@ const allQuestions = {
         "Giving toys away without asking your parents"
       ],
       correct: 0,
-      explanation: "It is disrespectful to tear up or break things you own."
-    },
-    {
-      question: "What should you do if someone is talking to you?",
-      choices: [
-        "Make eye contact and listen",
-        "Walk away",
-        "Look at your phone",
-        "Interrupt them"
-      ],
-      correct: 0,
-      explanation: "Respect is listening and paying attention."
-    },
-    {
-      question: "Which behavior shows respect in public places?",
-      choices: [
-        "Using polite manners like 'please' and 'thank you'",
-        "Running and shouting in a store",
-        "Leaving trash on the floor",
-        "Listening in on other peoples conversations"
-      ],
-      correct: 0,
-      explanation: "Always ask politely and show respect when talking with others."
-    },
-    {
-      question: "What is self-respect?",
-      choices: [
-        "Feeling confident and proud of who you are",
-        "Being better than everyone else",
-        "Ignoring rules",
-        "Telling others what to do"
-      ],
-      correct: 0,
-      explanation: "Always respect yourself and others."
-    },
-    {
-      question: "True or False: Respecting someone means you treat them the way you want to be treated.",
-      choices: [
-        "TRUE",
-        "FALSE"
-      ],
-      correct: 0,
-      explanation: "Even when you don't want to, you need to think about how you would want to be treated."
-    },
-    {
-      question: "What is an example of respectful behavior in public?",
-      choices: [
-        "Using a quiet voice and walking",
-        "Running around in a quiet library",
-        "Leaving trash on the table",
-        "Interrupting others because you want to tell them something"
-      ],
-      correct: 0,
-      explanation: "Excitement is hard to handle, but always be patient and respect others."
-    },
-    {
-      question: "What does 'respecting boundaries' mean?",
-      choices: [
-        "Asking for permission and respecting a 'no'",
-        "Taking things without asking",
-        "Pushing someone",
-        "Letting others do whatever they want without worrying"
-      ],
-      correct: 0,
-      explanation: "Respecting boundaries means that if someone doesn't want something, you respect that."
-    },
-    {
-      question: "What should you do if you accidentally bump into someone?",
-      choices: [
-        "Say 'Excuse me' or 'Sorry'",
-        "Run away from them and hide",
-        "Get mad at them",
-        "Try to hug them as an apology"
-      ],
-      correct: 0,
-      explanation: "Saying you are sorry or 'Excuse me' is respectful."
-    },
-    {
-      question: "Why is respect important?",
-      choices: [
-        "All of the above",
-        "It builds trust",
-        "It teaches self-control",
-        "It helps you feel like you are doing good"
-      ],
-      correct: 0,
-      explanation: "Respect builds trust and self-control."
+      explanation: "It is disrespectful to tear up or break things you own.",
+      difficulty: "beginner",
+      image: "images/respect-4.png"
     }
   ],
-    interrupting: [
+
+  interrupting: [
     {
-      question: "Your friend is telling a long story about their cat, and you want to tell them about your dog. What should you do?",
+      question: "Your friend is telling a long story. What should you do?",
       choices: [
-        "Wait (If it's not urgent, wait for a pause!)",
+        "Wait for a pause",
         "Glare at them to hurry up",
-        "Tell them to hurry up because you have something to say",
-        "Ignore them and tell them your story"
+        "Interrupt them",
+        "Ignore them and talk anyway"
       ],
       correct: 0,
-      explanation: "Everyone deserves their chance to tell a story. Be patient and wait until they are done."
+      explanation: "Everyone deserves their chance to speak.",
+      difficulty: "beginner",
+      image: "images/interrupting-1.png"
     },
     {
-      question: "You see a small fire in the trash can. What should you do?",
+      question: "You see a small fire in a trash can. What should you do?",
       choices: [
         "Interrupt immediately!",
-        "Wait until everyone is done talking",
+        "Wait until everyone finishes talking",
         "Ignore it",
-        "Tell your friends and see how they react"
+        "Tell your friends first"
       ],
       correct: 0,
-      explanation: "Safety emergencies come first."
-    },
-    {
-      question: "The teacher is talking, and you forgot to ask for a pencil. What should you do?",
-      choices: [
-        "Wait and raise your hand slightly",
-        "Interrupt your teacher",
-        "Ask one of your friends for a pencil",
-        "Just grab one from someone"
-      ],
-      correct: 0,
-      explanation: "Be patient and wait until it is your turn."
-    },
-    {
-      question: "A student is hurt on the playground and crying. What should you do?",
-      choices: [
-        "Go find an adult",
-        "Tell them to get up and stop crying",
-        "Ignore them",
-        "Tell your friends"
-      ],
-      correct: 0,
-      explanation: "Check on them first and then tell an adult."
-    },
-    {
-      question: "Your friend is talking, but you just remembered a funny joke. What should you do?",
-      choices: [
-        "Wait (Wait for a break in the conversation)",
-        "Interrupt them, your joke is funny",
-        "Tell another friend listening, they won't mind",
-        "Tell them to hurry up"
-      ],
-      correct: 0,
-      explanation: "Jokes can wait, it makes people like them more if they weren't interrupted."
-    },
-    {
-      question: "You have to go to the bathroom very badly. What should you do?",
-      choices: [
-        "Interrupt politely",
-        "Leave the room and go to the bathroom",
-        "Yell at the teacher you need to go",
-        "Tell your friends and see if they will ask the teacher for you"
-      ],
-      correct: 0,
-      explanation: "It's usually okay to interrupt sometimes, but try to wait for a pause if possible."
-    },
-    {
-      question: "The teacher is talking to another teacher, and you want to ask a question. What should you do?",
-      choices: [
-        "Wait until they are finished",
-        "Tug on their arm to get their attention",
-        "Interrupt them",
-        "Yell at them so they can hear you"
-      ],
-      correct: 0,
-      explanation: "Wait until they are finished speaking if you can."
-    },
-    {
-      question: "How should you interrupt if needed?",
-      choices: [
-        "All of the above",
-        "Wait for a pause",
-        "Walk up politely and say excuse me",
-        "Wait for them to look at you"
-      ],
-      correct: 0,
-      explanation: "Always ask yourself if this is a time when interruption is needed, not just wanted."
+      explanation: "Safety emergencies always come first.",
+      difficulty: "advanced",
+      image: "images/interrupting-2.png"
     }
   ],
     kindness: [
@@ -231,7 +92,9 @@ const allQuestions = {
         "Tell them they should try to sit with others"
       ],
       correct: 0,
-      explanation: "Sometimes people are shy and it helps to be friends with them."
+      explanation: "Sometimes people are shy and it helps to be friends with them.",
+      difficulty: "beginner",
+      image: "images/kindness-1.png"
     },
     {
       question: "On the bus, a student falls asleep and the bus passes their house. What should you do?",
@@ -242,7 +105,9 @@ const allQuestions = {
         "Scream 911 emergency"
       ],
       correct: 0,
-      explanation: "Don't scare your driver. Just kindly alert them."
+      explanation: "Don't scare your driver. Just kindly alert them.",
+      difficulty: "beginner",
+      image: "images/kindness-2.png"
     },
     {
       question: "At school, someone drops their books. What should you do?",
@@ -253,7 +118,9 @@ const allQuestions = {
         "Tell your teacher"
       ],
       correct: 0,
-      explanation: "This is a time you can help them, but if they say no thank you - walk away."
+      explanation: "This is a time you can help them, but if they say no thank you, walk away.",
+      difficulty: "beginner",
+      image: "images/kindness-3.png"
     },
     {
       question: "Someone forgets their lunch at school. What should you do?",
@@ -264,7 +131,9 @@ const allQuestions = {
         "Tell a teacher"
       ],
       correct: 0,
-      explanation: "If you are allowed, it is good to share, but ask the student before sharing."
+      explanation: "If you are allowed, it is good to share, but ask the student before sharing.",
+      difficulty: "advanced",
+      image: "images/kindness-4.png"
     },
     {
       question: "Your friend loses a soccer game and is sad. What should you do?",
@@ -275,7 +144,9 @@ const allQuestions = {
         "Tell them they need to practice more"
       ],
       correct: 0,
-      explanation: "Encouragement can help them feel better."
+      explanation: "Encouragement can help them feel better.",
+      difficulty: "advanced",
+      image: "images/kindness-5.png"
     },
     {
       question: "Your friend is having a bad day. A kind action is:",
@@ -286,7 +157,9 @@ const allQuestions = {
         "Respect their wishes"
       ],
       correct: 0,
-      explanation: "Not everyone wants to be bothered when having a bad day."
+      explanation: "Not everyone wants to be bothered when having a bad day. Don't try to bother them.",
+      difficulty: "beginner",
+      image: "images/kindness-6.png"
     },
     {
       question: "What is empathy?",
@@ -297,7 +170,9 @@ const allQuestions = {
         "Helping others"
       ],
       correct: 0,
-      explanation: "Being empathetic means you understand why others feel the way they do."
+      explanation: "Being empathetic means that when people are sad, you can understand why they feel the way they do.",
+      difficulty: "advanced",
+      image: "images/kindness-7.png"
     },
     {
       question: "Your sibling worked hard on completing something. What is the kindest choice?",
@@ -308,21 +183,26 @@ const allQuestions = {
         "Ignore it"
       ],
       correct: 0,
-      explanation: "Think about what you would want said to you."
+      explanation: "Saying supportive things means that you think about what you would want said to you in this situation.",
+      difficulty: "advanced",
+      image: "images/kindness-8.png"
     },
     {
-      question: "Someone you know made a mistake. What should you do?",
+      question: "Uh oh, someone you know made a mistake. What should you do?",
       choices: [
         "Stay calm and respectful",
         "Tease them",
         "Tell everyone",
-        "Do something to draw attention to yourself"
+        "Drop or break something to make the attention turn to you"
       ],
       correct: 0,
-      explanation: "Mistakes happen. Respect matters."
+      explanation: "Always respect others. Mistakes happen, and everyone learns from mistakes.",
+      difficulty: "advanced",
+      image: "images/kindness-9.png"
     }
   ],
-    calm: [
+
+  calm: [
     {
       question: "At home, you have to wait longer than expected to do something. What should you do?",
       choices: [
@@ -332,7 +212,9 @@ const allQuestions = {
         "Tell everyone to hurry up"
       ],
       correct: 0,
-      explanation: "Always be patient and stay calm unless it's an emergency."
+      explanation: "Always be patient and stay calm unless it's an emergency.",
+      difficulty: "beginner",
+      image: "images/calm-1.png"
     },
     {
       question: "While doing homework, it seems unfair and you don't want to do it. What should you do?",
@@ -343,7 +225,9 @@ const allQuestions = {
         "Don't do it"
       ],
       correct: 0,
-      explanation: "If you ask for help, it will help you understand what you are doing."
+      explanation: "If you ask for help, it will help you understand what you are doing.",
+      difficulty: "beginner",
+      image: "images/calm-2.png"
     },
     {
       question: "Your plans change at the last minute. What should you do first?",
@@ -354,7 +238,9 @@ const allQuestions = {
         "Throw things"
       ],
       correct: 0,
-      explanation: "It will be okay. Just readjust your mind and stay positive."
+      explanation: "It will be okay. Just readjust your mind and stay positive.",
+      difficulty: "advanced",
+      image: "images/calm-3.png"
     },
     {
       question: "You are frustrated because work you have to do in school is hard. What should you do?",
@@ -365,7 +251,9 @@ const allQuestions = {
         "Slam a door"
       ],
       correct: 0,
-      explanation: "Take a deep breath and keep trying."
+      explanation: "Take a deep breath and keep trying.",
+      difficulty: "advanced",
+      image: "images/calm-4.png"
     },
     {
       question: "Your siblings like to annoy you on purpose. What should you do?",
@@ -376,40 +264,48 @@ const allQuestions = {
         "Hit them"
       ],
       correct: 0,
-      explanation: "Treat others the way you would want to be treated."
+      explanation: "Treat others the way you would want to be treated.",
+      difficulty: "beginner",
+      image: "images/calm-5.png"
     },
     {
       question: "You were given a chore you don't want to do. What should you do?",
       choices: [
         "Try hard and get it over with",
         "Quit angrily",
-        "Talk a sibling into doing it",
+        "Try to talk a sibling into doing it",
         "Argue about doing it"
       ],
       correct: 0,
-      explanation: "We all have things we don't want to do, but you have to listen to adults."
+      explanation: "We all have things we don't want to do, but you have to listen to adults.",
+      difficulty: "beginner",
+      image: "images/calm-6.png"
     },
     {
       question: "On the bus, someone misunderstands something you told them. What should you do?",
       choices: [
         "Explain what you meant calmly",
         "Get louder and madder at them",
-        "Insult them",
+        "Insult them for not hearing correctly",
         "Tell them they need to listen better"
       ],
       correct: 0,
-      explanation: "Everyone misunderstands sometimes. Be patient."
+      explanation: "Everyone misunderstands sometimes. Be nice and realize that sometimes you mess up also.",
+      difficulty: "advanced",
+      image: "images/calm-7.png"
     },
     {
       question: "You make a mistake in front of others at school. What should you do first?",
       choices: [
         "Take a deep breath and fix it",
         "Panic and yell",
-        "Blame someone else",
-        "Ignore it"
+        "Blame it on someone else",
+        "Ignore it and move on"
       ],
       correct: 0,
-      explanation: "Fixing mistakes builds trust."
+      explanation: "If you ignore your mistakes, it is almost like lying since you are not admitting to the error.",
+      difficulty: "advanced",
+      image: "images/calm-8.png"
     },
     {
       question: "You have to wait longer at lunch than expected and you are hungry. What should you do?",
@@ -420,179 +316,186 @@ const allQuestions = {
         "Tell everyone to hurry up"
       ],
       correct: 0,
-      explanation: "Be patient and wait your turn."
+      explanation: "Be patient and wait until it is your turn.",
+      difficulty: "advanced",
+      image: "images/calm-9.png"
     },
     {
       question: "Someone is feeling sick and might throw up. What should you do?",
       choices: [
-        "Don't panic and find someone to tell",
+        "Don't panic and see if you can find someone to tell",
         "Tell them to lay down and don't move",
-        "Ignore them",
+        "Ignore them and let an adult help them",
         "Tell them to feel better and move on"
       ],
       correct: 0,
-      explanation: "Stay calm and get help."
+      explanation: "Sometimes it feels good helping people but make sure they need the help first.",
+      difficulty: "beginner",
+      image: "images/calm-10.png"
     }
   ],
     honesty: [
     {
-      question: "You are on the bus and tell everyone something that isn't true. The students love it. What is the best decision?",
+      question: "You are on the bus and tell everyone something that isn't true. What is the best decision?",
       choices: [
-        "Admit you made it up",
-        "Keep it going",
+        "Admit you made it up.",
+        "Keep it going.",
         "Add more fake details",
-        "Stop and ignore them"
+        "Stop and ignore them."
       ],
       correct: 0,
-      explanation: "It's not the easiest to admit you are lying, but that is the best thing to do."
+      explanation: "It's not easy to admit, but telling the truth builds trust.",
+      difficulty: "beginner",
+      image: "images/honesty-1.png"
     },
     {
       question: "Your friend wants you to lie for them at school. What is the best decision?",
       choices: [
         "Tell them no",
         "Lie to help them",
-        "Half-lie, you're kind of telling the truth",
-        "Ignore them and walk away"
+        "Half-lie",
+        "Ignore them"
       ],
       correct: 0,
-      explanation: "Don't ever lie for other people, even if they are your friend."
+      explanation: "Don't lie for others—even friends.",
+      difficulty: "advanced",
+      image: "images/honesty-2.png"
     },
     {
-      question: "You are doing a group project at school but forgot to do something important. What is the best decision?",
+      question: "You forgot to do part of a group project. What should you do?",
       choices: [
         "Be honest about it",
         "Make up an excuse",
-        "Pretend you did it but forgot it",
-        "Tell them it wasn't your fault and they should have done it"
+        "Pretend you did it",
+        "Blame others"
       ],
       correct: 0,
-      explanation: "They may not be happy, but telling the truth is better than lying."
+      explanation: "Being honest is always better than lying.",
+      difficulty: "beginner",
+      image: "images/honesty-3.png"
     },
     {
-      question: "You are at a friend's house and made a mess. Their mom asks if you cleaned it up and you say you did, but didn't. What is the best decision?",
+      question: "You made a mess at a friend's house and said you cleaned it. What now?",
       choices: [
         "Tell the truth",
         "Keep pretending",
-        "Blame it on your friend",
-        "Go back and pretend to clean and then leave"
+        "Blame your friend",
+        "Sneak back and fix it secretly"
       ],
       correct: 0,
-      explanation: "They probably already know. It's always best to tell the truth."
+      explanation: "They probably already know—just be honest.",
+      difficulty: "advanced",
+      image: "images/honesty-4.png"
     },
     {
-      question: "You are not home and find money that is not yours. What is the best decision?",
+      question: "You find money that isn't yours. What should you do?",
       choices: [
         "Turn it in or tell an adult",
         "Keep it",
         "Hide it",
-        "Tell someone you dropped it"
+        "Say it was yours"
       ],
       correct: 0,
-      explanation: "Just because you find money doesn't mean you can keep it."
+      explanation: "Just because you found it doesn't mean it's yours.",
+      difficulty: "beginner",
+      image: "images/honesty-5.png"
     },
     {
-      question: "You are at a friend's house and break something by accident. What is the best decision?",
+      question: "You accidentally break something. What should you do?",
       choices: [
         "Tell the truth",
-        "Hide it and say nothing",
+        "Hide it",
         "Blame someone else",
-        "Make it look like someone else broke it"
-      ],
-      correct: 0,
-      explanation: "Accidents happen. Always tell the truth."
-    },
-    {
-      question: "Your mom asks if you did a chore, and you say you did but didn't. What is the best decision?",
-      choices: [
-        "Tell her the truth and do your chore",
-        "Keep pretending",
-        "Blame it on someone else",
-        "Hide and hope she doesn't find out"
-      ],
-      correct: 0,
-      explanation: "Trust is built by being honest."
-    },
-    {
-      question: "In Science, you accidentally copied someone's answer on a test. What is the most honest choice?",
-      choices: [
-        "Tell your teacher",
-        "Pretend you didn't do it",
-        "Say they copied you",
         "Ignore it"
       ],
       correct: 0,
-      explanation: "It is always best to admit mistakes."
+      explanation: "Accidents happen—honesty matters.",
+      difficulty: "beginner",
+      image: "images/honesty-6.png"
     },
     {
-      question: "You take something that isn't yours and hide it. What is the best decision?",
+      question: "You told your mom you did a chore but didn't. What now?",
       choices: [
-        "Admit you made a mistake to your parents",
-        "Hide it and say nothing",
-        "Give it away so you can't get in trouble",
-        "Pretend you didn’t do it"
+        "Tell the truth and do it",
+        "Keep pretending",
+        "Blame someone else",
+        "Hide"
       ],
       correct: 0,
-      explanation: "Admitting is always better than hiding."
+      explanation: "Trust is built by telling the truth.",
+      difficulty: "beginner",
+      image: "images/honesty-7.png"
     },
     {
-      question: "You're not allowed to do something, but you do it anyway. What is the best decision?",
+      question: "You copied an answer on a test. What is the honest choice?",
       choices: [
-        "Apologize to whoever said no",
-        "Pretend you didn't do it",
-        "Ignore it",
-        "Lie and say someone made you"
+        "Tell your teacher",
+        "Pretend you didn't",
+        "Blame someone else",
+        "Ignore it"
       ],
       correct: 0,
-      explanation: "Doing things you're not supposed to hurts trust."
+      explanation: "Honesty builds trust even when it's hard.",
+      difficulty: "beginner",
+      image: "images/honesty-8.png"
     }
   ],
-    responsibility: [
+
+  responsibility: [
     {
-      question: "At lunch, you don't want to eat what is served and decide to throw a fit. What is a responsible thing to do?",
+      question: "You don't like your lunch and throw a fit. What is responsible?",
       choices: [
-        "Stop fighting and be respectful",
-        "Tell the lunch ladies you want something else",
-        "Ask other students to trade food with you",
-        "Keep throwing a fit and you'll get what you want"
+        "Stop and be respectful",
+        "Demand something else",
+        "Trade food without asking",
+        "Keep yelling"
       ],
       correct: 0,
-      explanation: "Just because you don't want something doesn't mean you should fight to get something else."
+      explanation: "Being respectful is responsible behavior.",
+      difficulty: "beginner",
+      image: "images/responsibility-1.png"
     },
     {
-      question: "Animals need fed but you don't feel like doing it. What is a responsible thing to do?",
+      question: "Animals need fed but you don't feel like it. What should you do?",
       choices: [
         "Take care of them",
-        "Forget about them",
+        "Ignore it",
         "Let someone else do it",
-        "Pretend to feed them"
+        "Pretend you did"
       ],
       correct: 0,
-      explanation: "Animals depend on you. If it's your job, do it."
+      explanation: "Animals rely on you.",
+      difficulty: "advanced",
+      image: "images/responsibility-2.png"
     },
     {
-      question: "You make a mess at lunch. What is the most responsible thing to do?",
+      question: "You made a mess at lunch. What now?",
       choices: [
         "Clean it up",
         "Leave it",
-        "Wait for someone to tell you",
-        "Ask someone else to do it"
+        "Wait to be told",
+        "Ask someone else"
       ],
       correct: 0,
-      explanation: "You make the mess, you clean it up."
+      explanation: "You make the mess, you clean it.",
+      difficulty: "beginner",
+      image: "images/responsibility-3.png"
     },
     {
-      question: "What should you do if you forgot your chores?",
+      question: "You forgot your chores. What should you do?",
       choices: [
-        "Own the mistake and try to fix it",
-        "Tell parents you had other things",
-        "Blame a sibling",
+        "Own it and fix it",
+        "Make excuses",
+        "Blame others",
         "Throw a fit"
       ],
       correct: 0,
-      explanation: "Admitting mistakes shows responsibility."
+      explanation: "Responsibility means owning mistakes.",
+      difficulty: "beginner",
+      image: "images/responsibility-4.png"
     },
     {
-      question: "If you commit to a sports team but want to quit, what should you do?",
+      question: "You want to quit a sports team early. What is responsible?",
       choices: [
         "Stick with it",
         "Demand to quit",
@@ -600,51 +503,22 @@ const allQuestions = {
         "Fake an injury"
       ],
       correct: 0,
-      explanation: "Responsibility means following through."
+      explanation: "Commitments matter.",
+      difficulty: "beginner",
+      image: "images/responsibility-5.png"
     },
     {
       question: "What does responsibility mean?",
       choices: [
-        "Doing what you are supposed to do without being told every time",
+        "Doing what you're supposed to do",
         "Doing whatever you want",
-        "Letting others do everything",
+        "Letting others do it",
         "Only doing things when you feel like it"
       ],
       correct: 0,
-      explanation: "Responsibility earns trust."
-    },
-    {
-      question: "Name one responsibility you have at home.",
-      choices: [
-        "Cleaning your room, feeding a pet, helping out",
-        "Watching TV all day",
-        "Making messes",
-        "Telling others what to do"
-      ],
-      correct: 0,
-      explanation: "Helping at home shows responsibility."
-    },
-    {
-      question: "What happens if you don’t have responsibilities?",
-      choices: [
-        "Things don’t get done and there may be consequences",
-        "Everything magically gets done",
-        "Nothing happens",
-        "You get rewarded anyway"
-      ],
-      correct: 0,
-      explanation: "Responsibilities keep things running."
-    },
-    {
-      question: "Is doing homework a responsibility?",
-      choices: [
-        "Yes, because it helps you learn",
-        "No, it’s just busy work",
-        "No, only adults have responsibilities",
-        "No, it doesn’t matter"
-      ],
-      correct: 0,
-      explanation: "Homework builds skills."
+      explanation: "Responsibility earns trust.",
+      difficulty: "beginner",
+      image: "images/responsibility-6.png"
     },
     {
       question: "If you make a mess, whose job is it to clean it?",
@@ -655,62 +529,22 @@ const allQuestions = {
         "Nobody"
       ],
       correct: 0,
-      explanation: "Responsibility = owning your actions."
-    },
-    {
-      question: "What does it mean to be responsible for your actions?",
-      choices: [
-        "Owning what you did and fixing it",
-        "Blaming your friend",
-        "Pretending it didn’t happen",
-        "Running away"
-      ],
-      correct: 0,
-      explanation: "Everyone makes mistakes—own them."
-    },
-    {
-      question: "How can you show responsibility without being asked?",
-      choices: [
-        "Do tasks on your own and help out",
-        "Ignore everything",
-        "Wait until yelled at",
-        "Do the opposite"
-      ],
-      correct: 0,
-      explanation: "Initiative shows responsibility."
+      explanation: "Clean up after yourself.",
+      difficulty: "beginner",
+      image: "images/responsibility-7.png"
     },
     {
       question: "Why is responsibility important?",
       choices: [
-        "It builds trust",
-        "It doesn’t matter",
-        "It makes life harder",
-        "Only adults need it"
+        "It builds trust and helps life run smoothly",
+        "It doesn't matter",
+        "It only matters for adults",
+        "It makes life harder"
       ],
       correct: 0,
-      explanation: "Trust is built through responsibility."
-    },
-    {
-      question: "Can someone be responsible but still make mistakes?",
-      choices: [
-        "Yes, they learn and fix them",
-        "No, responsible people are perfect",
-        "No, mistakes mean failure",
-        "No, mistakes don’t happen"
-      ],
-      correct: 0,
-      explanation: "Mistakes are part of learning."
-    },
-    {
-      question: "How can you improve responsibility?",
-      choices: [
-        "Follow through and stay organized",
-        "Ignore tasks",
-        "Avoid effort",
-        "Let others do it"
-      ],
-      correct: 0,
-      explanation: "Small habits build big responsibility."
+      explanation: "Trust is everything.",
+      difficulty: "advanced",
+      image: "images/responsibility-8.png"
     }
   ],
     teasing: [
@@ -723,7 +557,9 @@ const allQuestions = {
         "Ignoring everyone"
       ],
       correct: 0,
-      explanation: "If someone leaves feeling worse… that wasn’t a joke."
+      explanation: "If someone leaves feeling worse… yeah, that wasn’t a joke.",
+      difficulty: "beginner",
+      image: "images/teasing-1.png"
     },
     {
       question: "Is teasing always harmless?",
@@ -734,29 +570,35 @@ const allQuestions = {
         "Yes, it makes people stronger"
       ],
       correct: 0,
-      explanation: "If ‘harmless’ makes someone want to disappear, that’s a problem."
+      explanation: "If 'harmless' hurts someone… it's not harmless.",
+      difficulty: "beginner",
+      image: "images/teasing-2.png"
     },
     {
       question: "What should you do if someone teases you?",
       choices: [
         "Stay calm and tell a trusted adult or walk away",
         "Hit them",
-        "Yell as loud as possible",
+        "Yell loudly",
         "Tease them back worse"
       ],
       correct: 0,
-      explanation: "Winning isn’t hitting back—it’s staying in control."
+      explanation: "Winning isn’t hitting back—it’s not letting them control you.",
+      difficulty: "beginner",
+      image: "images/teasing-3.png"
     },
     {
       question: "What is a kind way to respond to teasing?",
       choices: [
-        "Ignore it or say “Please stop”",
+        "Ignore it or say 'Please stop'",
         "Call them names",
         "Push them",
         "Laugh at them"
       ],
       correct: 0,
-      explanation: "Calm is powerful. Chaos just makes it worse."
+      explanation: "Calm is powerful. Chaos is just loud.",
+      difficulty: "beginner",
+      image: "images/teasing-4.png"
     },
     {
       question: "Why is teasing hurtful?",
@@ -767,7 +609,9 @@ const allQuestions = {
         "It doesn’t matter"
       ],
       correct: 0,
-      explanation: "Words don’t leave bruises—but they stick."
+      explanation: "Words stick longer than bruises.",
+      difficulty: "beginner",
+      image: "images/teasing-5.png"
     },
     {
       question: "If you tease someone and they get upset, what should you do?",
@@ -775,10 +619,12 @@ const allQuestions = {
         "Apologize and stop",
         "Keep going",
         "Tell them to toughen up",
-        "Walk away and ignore it"
+        "Ignore it"
       ],
       correct: 0,
-      explanation: "Doubling down doesn’t make you funny."
+      explanation: "Doubling down doesn’t make you funny—it makes you the problem.",
+      difficulty: "beginner",
+      image: "images/teasing-6.png"
     },
     {
       question: "Is it okay to tease someone about how they look?",
@@ -789,43 +635,26 @@ const allQuestions = {
         "Yes, if they don’t say anything"
       ],
       correct: 0,
-      explanation: "If you wouldn’t want it said to you, don’t say it."
+      explanation: "If you wouldn’t want it said to you—don’t say it.",
+      difficulty: "beginner",
+      image: "images/teasing-7.png"
     },
     {
-      question: "If your friend is teasing someone, what should you do?",
+      question: "What is the difference between joking and teasing?",
       choices: [
-        "Tell them to stop or help the person being teased",
-        "Join in",
-        "Laugh at it",
-        "Ignore it"
+        "Joking is fun for everyone; teasing hurts someone",
+        "There is no difference",
+        "Teasing is always funny",
+        "Joking always hurts people"
       ],
       correct: 0,
-      explanation: "Being quiet doesn’t make you innocent."
-    },
-    {
-      question: "Is it okay to kick someone who teases you?",
-      choices: [
-        "No, it can make things worse and get you in trouble",
-        "Yes, they deserve it",
-        "Yes, it teaches them a lesson",
-        "Yes, if you’re mad"
-      ],
-      correct: 0,
-      explanation: "Now you’re the one in trouble."
-    },
-    {
-      question: "What shows real confidence in a teasing situation?",
-      choices: [
-        "Staying calm and not letting it control you",
-        "Winning the argument",
-        "Being the loudest",
-        "Getting revenge"
-      ],
-      correct: 0,
-      explanation: "Control is power."
+      explanation: "If only one person laughs, it’s not a joke.",
+      difficulty: "advanced",
+      image: "images/teasing-8.png"
     }
   ],
-    online: [
+
+  online: [
     {
       question: "What is personal information online?",
       choices: [
@@ -835,29 +664,35 @@ const allQuestions = {
         "A game score"
       ],
       correct: 0,
-      explanation: "If someone can use it to find you, it’s personal."
+      explanation: "If a stranger can use it to find you—it’s personal.",
+      difficulty: "beginner",
+      image: "images/online-1.png"
     },
     {
       question: "Is it safe to share your password with friends?",
       choices: [
         "No, passwords should stay private",
         "Yes, if you trust them",
-        "Yes, if they promise not to tell",
+        "Yes, if they promise",
         "Yes, if they are your best friend"
       ],
       correct: 0,
-      explanation: "Passwords stay yours. Always."
+      explanation: "Passwords are yours—period.",
+      difficulty: "beginner",
+      image: "images/online-2.png"
     },
     {
       question: "What should you do if a stranger messages you online?",
       choices: [
         "Do not respond and tell a trusted adult",
         "Answer politely",
-        "Give short answers",
-        "Ask them questions back"
+        "Ask them questions",
+        "Keep chatting"
       ],
       correct: 0,
-      explanation: "You don’t owe strangers a conversation."
+      explanation: "You don’t owe strangers a conversation.",
+      difficulty: "beginner",
+      image: "images/online-3.png"
     },
     {
       question: "Why is it dangerous to share your location online?",
@@ -868,73 +703,61 @@ const allQuestions = {
         "It makes things easier"
       ],
       correct: 0,
-      explanation: "Location + wrong person = bad situation."
+      explanation: "Location + wrong person = bad combo.",
+      difficulty: "beginner",
+      image: "images/online-4.png"
     },
     {
-      question: "Is everything you see online true?",
+      question: "Is everything online true?",
       choices: [
         "No, some things are fake or misleading",
         "Yes, everything is true",
         "Only videos are true",
-        "Only adults tell the truth online"
+        "Only adults tell the truth"
       ],
       correct: 0,
-      explanation: "The internet mixes facts with nonsense."
+      explanation: "The internet has facts—and fiction dressed as facts.",
+      difficulty: "beginner",
+      image: "images/online-5.png"
     },
     {
       question: "What should you do if someone asks for personal info online?",
       choices: [
         "Do not share it and tell an adult",
-        "Share a little bit",
-        "Ignore it and keep chatting",
-        "Ask why they want it"
+        "Share a little",
+        "Keep chatting",
+        "Ask why"
       ],
       correct: 0,
-      explanation: "If they need your info, they’re not your friend."
+      explanation: "If they need your info, they’re not your friend.",
+      difficulty: "beginner",
+      image: "images/online-6.png"
     },
     {
       question: "What is cyberbullying?",
       choices: [
         "Using the internet to hurt or embarrass someone",
-        "Playing games online",
+        "Playing games",
         "Talking to friends",
         "Posting pictures"
       ],
       correct: 0,
-      explanation: "Same bullying, different place."
+      explanation: "Same bullying, new location.",
+      difficulty: "beginner",
+      image: "images/online-7.png"
     },
     {
-      question: "Is it okay to post mean comments online?",
+      question: "What is the safest way to use social media?",
       choices: [
-        "No, it can hurt others and have consequences",
-        "Yes, it’s just words",
-        "Yes, if they started it",
-        "Yes, if it’s funny"
+        "Keep accounts private and share carefully",
+        "Accept all friend requests",
+        "Post everything",
+        "Share location often"
       ],
       correct: 0,
-      explanation: "Screenshots last forever."
-    },
-    {
-      question: "Why should you be careful what you post online?",
-      choices: [
-        "It can stay there forever",
-        "It disappears quickly",
-        "Only friends see it",
-        "It doesn’t matter"
-      ],
-      correct: 0,
-      explanation: "The internet doesn’t forget."
-    },
-    {
-      question: "Is it safe to meet someone from online in person?",
-      choices: [
-        "No, not without a trusted adult",
-        "Yes, if they seem nice",
-        "Yes, if you chat a lot",
-        "Yes, if they send pictures"
-      ],
-      correct: 0,
-      explanation: "“They seemed nice” is how bad stories start."
+      explanation: "Private isn’t perfect—but public is wide open.",
+      difficulty: "advanced",
+      image: "images/online-8.png"
     }
   ]
 };
