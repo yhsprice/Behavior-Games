@@ -198,12 +198,19 @@ function loadQuestion() {
       : "Next Question";
   }
 
-  q.choices.forEach((choice, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = choice;
-    btn.onclick = () => selectAnswer(i);
-    if (answerButtons) answerButtons.appendChild(btn);
-  });
+ const shuffledChoices = q.choices.map((choice, i) => ({
+  text: choice,
+  originalIndex: i
+}));
+
+shuffleArray(shuffledChoices);
+
+shuffledChoices.forEach((choiceObj) => {
+  const btn = document.createElement("button");
+  btn.textContent = choiceObj.text;
+  btn.onclick = () => selectAnswer(choiceObj.originalIndex);
+  if (answerButtons) answerButtons.appendChild(btn);
+});
 
   updateProgress();
 }
@@ -373,10 +380,11 @@ function showAccessDenied(showDenied) {
   box.textContent = showDenied ? "ACCESS DENIED" : "SMART CLICK";
   overlay.classList.remove("hidden");
 
-  setTimeout(() => {
-    overlay.classList.add("hidden");
-  }, 700);
-}
+  const displayTime = Math.max(4000, box.textContent.length * 70);
+
+setTimeout(() => {
+  overlay.classList.add("hidden");
+}, displayTime);
 
 // ---------------- BADGES ----------------
 
