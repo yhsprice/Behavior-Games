@@ -4,11 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Roxy's Reality Check</title>
-  <link rel="stylesheet" href="style.css?v=17" />
+  <link rel="stylesheet" href="style.css?v=18" />
 </head>
 
 <body>
   <canvas id="confetti-canvas"></canvas>
+
+  <div id="access-denied-overlay" class="access-denied-overlay hidden">
+    <div class="access-denied-box">ACCESS DENIED</div>
+  </div>
 
   <div class="page">
     <section class="card hero">
@@ -86,8 +90,14 @@
         <span id="score-text" class="score-pill">Score: 0</span>
       </div>
 
-      <div class="question-box">
+      <div id="question-box" class="question-box">
+        <div id="category-animation" class="category-animation">
+          <div id="animation-icon" class="animation-icon">⭐</div>
+          <div id="animation-label" class="animation-label">Choose wisely.</div>
+        </div>
+
         <h3 id="question-text">Question goes here</h3>
+
         <div id="answer-buttons" class="answer-buttons"></div>
         <div id="feedback-box" class="feedback-box"></div>
 
@@ -279,7 +289,7 @@
     </section>
   </div>
 
-  <script src="questions.js?v=17"></script>
-  <script src="script.js?v=17"></script>
+  <script src="questions.js?v=18"></script>
+  <script src="script.js?v=18"></script>
 </body>
 </html>
