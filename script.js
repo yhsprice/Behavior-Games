@@ -1,4 +1,4 @@
-const APP_VERSION = "17-manual-next-button";
+const APP_VERSION = "18-animations-real-confetti";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -6,6 +6,8 @@ let currentQuestionIndex = 0;
 let score = 0;
 let answered = false;
 let gameFinished = false;
+
+let confettiAnimationId = null;
 
 let bestScores = {
   interrupting: 0,
@@ -40,6 +42,52 @@ let trackerCategories = {
   honesty: { good: 0, bad: 0 },
   respect: { good: 0, bad: 0 },
   responsibility: { good: 0, bad: 0 }
+};
+
+const titleMap = {
+  interrupting: "Interrupting",
+  kindness: "Kindness",
+  calm: "Calm Reactions",
+  honesty: "Honesty",
+  respect: "Respect",
+  responsibility: "Responsibility",
+  teasing: "Teasing",
+  online: "Online Behavior"
+};
+
+const animationMap = {
+  interrupting: {
+    icon: "💬",
+    label: "Pause first. Your words can wait their turn."
+  },
+  kindness: {
+    icon: "💛",
+    label: "Kind choice loading... please do not be a gremlin."
+  },
+  calm: {
+    icon: "🫧",
+    label: "Breathe first. Exploding is not a strategy."
+  },
+  honesty: {
+    icon: "✅",
+    label: "Truth check: honesty builds trust."
+  },
+  respect: {
+    icon: "🤝",
+    label: "Respect means treating people like they matter."
+  },
+  responsibility: {
+    icon: "📋",
+    label: "Responsible mode: handle your stuff."
+  },
+  teasing: {
+    icon: "🛑",
+    label: "Stop sign says: funny should not hurt."
+  },
+  online: {
+    icon: "📱",
+    label: "Online safety mode: think before you click."
+  }
 };
 
 // ---------------- SCREEN CONTROL ----------------
@@ -87,19 +135,9 @@ function startGame(category) {
   currentQuestions = shuffleArray([...source]).slice(0, 10);
 
   hideAllScreens();
+
   const gameScreen = document.getElementById("game-screen");
   if (gameScreen) gameScreen.classList.remove("hidden");
-
-  const titleMap = {
-    interrupting: "Interrupting",
-    kindness: "Kindness",
-    calm: "Calm Reactions",
-    honesty: "Honesty",
-    respect: "Respect",
-    responsibility: "Responsibility",
-    teasing: "Teasing",
-    online: "Online Behavior"
-  };
 
   const gameTitle = document.getElementById("game-title");
   const scoreText = document.getElementById("score-text");
@@ -109,13 +147,17 @@ function startGame(category) {
 
   if (gameTitle) gameTitle.textContent = titleMap[category] || "Game";
   if (scoreText) scoreText.textContent = "Score: 0";
-  if (feedbackBox) feedbackBox.textContent = "";
+  if (feedbackBox) {
+    feedbackBox.textContent = "";
+    feedbackBox.className = "feedback-box";
+  }
   if (newHighScore) newHighScore.classList.add("hidden");
   if (nextBtn) {
     nextBtn.classList.add("hidden");
     nextBtn.textContent = "Next Question";
   }
 
+  updateCategoryAnimation(category);
   loadQuestion();
 }
 
@@ -134,10 +176,21 @@ function loadQuestion() {
   const answerButtons = document.getElementById("answer-buttons");
   const feedbackBox = document.getElementById("feedback-box");
   const nextBtn = document.getElementById("next-btn");
+  const questionBox = document.getElementById("question-box");
+
+  if (questionBox) {
+    questionBox.classList.remove("pop-question", "correct-glow", "wrong-shake");
+    void questionBox.offsetWidth;
+    questionBox.classList.add("pop-question");
+  }
 
   if (questionText) questionText.textContent = q.question;
-  if (feedbackBox) feedbackBox.textContent = "";
+  if (feedbackBox) {
+    feedbackBox.textContent = "";
+    feedbackBox.className = "feedback-box";
+  }
   if (answerButtons) answerButtons.innerHTML = "";
+
   if (nextBtn) {
     nextBtn.classList.add("hidden");
     nextBtn.textContent = currentQuestionIndex === currentQuestions.length - 1
@@ -164,6 +217,7 @@ function selectAnswer(index) {
   const feedbackBox = document.getElementById("feedback-box");
   const scoreText = document.getElementById("score-text");
   const nextBtn = document.getElementById("next-btn");
+  const questionBox = document.getElementById("question-box");
 
   buttons.forEach((btn, i) => {
     btn.disabled = true;
@@ -171,11 +225,29 @@ function selectAnswer(index) {
     if (i === index && i !== q.correct) btn.classList.add("wrong");
   });
 
+  if (questionBox) {
+    questionBox.classList.remove("correct-glow", "wrong-shake");
+    void questionBox.offsetWidth;
+  }
+
   if (index === q.correct) {
     score += 10;
-    if (feedbackBox) feedbackBox.textContent = "✅ Correct! " + q.explanation;
+
+    if (feedbackBox) {
+      feedbackBox.className = "feedback-box correct-feedback";
+      feedbackBox.textContent = "✅ Correct! " + q.explanation;
+    }
+
+    if (questionBox) questionBox.classList.add("correct-glow");
+    if (currentCategory === "online") showAccessDenied(false);
   } else {
-    if (feedbackBox) feedbackBox.textContent = "❌ Not quite. " + q.explanation;
+    if (feedbackBox) {
+      feedbackBox.className = "feedback-box wrong-feedback";
+      feedbackBox.textContent = "❌ Not quite. " + q.explanation;
+    }
+
+    if (questionBox) questionBox.classList.add("wrong-shake");
+    if (currentCategory === "online") showAccessDenied(true);
   }
 
   if (scoreText) scoreText.textContent = "Score: " + score;
@@ -239,6 +311,7 @@ function finishGame() {
   let message = "Nice work.";
   if (percent === 100) {
     message = "Perfect score. That was sharp.";
+    launchConfetti();
   } else if (percent >= 80) {
     message = "Great job. Strong round.";
   } else if (percent >= 60) {
@@ -272,6 +345,37 @@ function updateProgress() {
 
   if (progressText) progressText.textContent = "Question " + current + " of " + total;
   if (progressBar) progressBar.style.width = percent + "%";
+}
+
+function updateCategoryAnimation(category) {
+  const wrap = document.getElementById("category-animation");
+  const icon = document.getElementById("animation-icon");
+  const label = document.getElementById("animation-label");
+
+  if (!wrap || !icon || !label) return;
+
+  const info = animationMap[category] || {
+    icon: "⭐",
+    label: "Choose wisely."
+  };
+
+  wrap.className = "category-animation " + category;
+  icon.textContent = info.icon;
+  label.textContent = info.label;
+}
+
+function showAccessDenied(showDenied) {
+  const overlay = document.getElementById("access-denied-overlay");
+  const box = overlay ? overlay.querySelector(".access-denied-box") : null;
+
+  if (!overlay || !box) return;
+
+  box.textContent = showDenied ? "ACCESS DENIED" : "SMART CLICK";
+  overlay.classList.remove("hidden");
+
+  setTimeout(() => {
+    overlay.classList.add("hidden");
+  }, 700);
 }
 
 // ---------------- BADGES ----------------
@@ -617,30 +721,67 @@ function formatWeekKey(weekKey) {
   return parts[1] + "/" + parts[2] + "/" + parts[0];
 }
 
-// ---------------- CONFETTI ----------------
+// ---------------- REAL FALLING CONFETTI ----------------
 
 function launchConfetti() {
   const canvas = document.getElementById("confetti-canvas");
   if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const duration = 2600;
+  const start = performance.now();
 
-  for (let i = 0; i < 150; i++) {
-    ctx.fillStyle = ["#2f67ea", "#ffcc00", "#ff5f5f", "#42b883"][Math.floor(Math.random() * 4)];
-    ctx.fillRect(
-      Math.random() * canvas.width,
-      Math.random() * canvas.height,
-      8,
-      8
-    );
+  if (confettiAnimationId) {
+    cancelAnimationFrame(confettiAnimationId);
+    confettiAnimationId = null;
   }
 
-  setTimeout(() => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const pieces = Array.from({ length: 180 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * -canvas.height,
+    size: 6 + Math.random() * 8,
+    speed: 2 + Math.random() * 5,
+    rotation: Math.random() * 360,
+    rotationSpeed: -8 + Math.random() * 16,
+    drift: -2 + Math.random() * 4,
+    color: ["#2f67ea", "#ffcc00", "#ff5f5f", "#42b883", "#d97706"][Math.floor(Math.random() * 5)]
+  }));
+
+  function draw(now) {
+    const elapsed = now - start;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }, 1200);
+
+    pieces.forEach((piece) => {
+      piece.y += piece.speed;
+      piece.x += piece.drift;
+      piece.rotation += piece.rotationSpeed;
+
+      if (piece.y > canvas.height + 20) {
+        piece.y = -20;
+        piece.x = Math.random() * canvas.width;
+      }
+
+      ctx.save();
+      ctx.translate(piece.x, piece.y);
+      ctx.rotate((piece.rotation * Math.PI) / 180);
+      ctx.fillStyle = piece.color;
+      ctx.fillRect(-piece.size / 2, -piece.size / 2, piece.size, piece.size * 0.6);
+      ctx.restore();
+    });
+
+    if (elapsed < duration) {
+      confettiAnimationId = requestAnimationFrame(draw);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiAnimationId = null;
+    }
+  }
+
+  confettiAnimationId = requestAnimationFrame(draw);
 }
 
 // ---------------- UTIL ----------------
