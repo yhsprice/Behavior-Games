@@ -211,11 +211,11 @@ button:disabled {
 }
 
 .question-box.correct-glow {
-  animation: correctGlow 0.85s ease;
+  animation: correctGlow 2.2s ease;
 }
 
 .question-box.wrong-shake {
-  animation: wrongShake 0.45s ease;
+  animation: wrongShake 0.9s ease;
 }
 
 .category-animation {
