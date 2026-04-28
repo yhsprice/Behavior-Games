@@ -1,4 +1,4 @@
-const APP_VERSION = "FINAL-STABLE-FIXED";
+const APP_VERSION = "FINAL-FEATURES";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -67,12 +67,11 @@ function showScreen(screen) {
   const el = document.getElementById(screen + "-screen");
   if (el) el.classList.remove("hidden");
 
-  if (screen === "tracker") {
-    updateTrackerDisplay();
-  }
+  if (screen === "tracker") updateTrackerDisplay();
 }
 
 function goHome() {
+  window.speechSynthesis.cancel();
   showScreen("home");
 }
 
@@ -80,7 +79,7 @@ function goHome() {
 
 function startGame(category) {
   if (typeof allQuestions === "undefined") {
-    alert("questions.js is not loading. Check that questions.js exists and is above script.js in index.html.");
+    alert("questions.js is not loading. Check that questions.js is above script.js in index.html.");
     return;
   }
 
@@ -94,9 +93,24 @@ function startGame(category) {
   score = 0;
   answered = false;
 
-  currentQuestions = shuffleArray([...allQuestions[category]]).slice(0, 10);
+  const difficulty = document.getElementById("difficulty-select")?.value || "all";
 
-  document.getElementById("game-title").textContent = formatCategoryName(category);
+  let questionPool = [...allQuestions[category]];
+
+  if (difficulty !== "all") {
+    questionPool = questionPool.filter(q => q.difficulty === difficulty);
+  }
+
+  if (questionPool.length === 0) {
+    alert("No " + difficulty + " questions found for this category.");
+    return;
+  }
+
+  currentQuestions = shuffleArray(questionPool).slice(0, 10);
+
+  document.getElementById("game-title").textContent =
+    formatCategoryName(category) + " - " + formatCategoryName(difficulty);
+
   document.getElementById("score-text").textContent = "Score: 0";
 
   showScreen("game");
@@ -107,13 +121,24 @@ function startGame(category) {
 
 function loadQuestion() {
   const q = currentQuestions[currentQuestionIndex];
+  if (!q) return;
 
   answered = false;
+  window.speechSynthesis.cancel();
 
   const questionBox = document.getElementById("question-box");
   questionBox.classList.remove("correct-glow", "wrong-shake");
 
   document.getElementById("question-text").textContent = q.question;
+
+  const questionImage = document.getElementById("question-image");
+
+  if (questionImage && q.image) {
+    questionImage.src = q.image;
+    questionImage.classList.remove("hidden");
+  } else if (questionImage) {
+    questionImage.classList.add("hidden");
+  }
 
   const progressPercent = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
   document.getElementById("game-progress-bar").style.width = progressPercent + "%";
@@ -152,6 +177,8 @@ function selectAnswer(selectedIndex, clickedButton) {
   if (answered) return;
   answered = true;
 
+  window.speechSynthesis.cancel();
+
   const q = currentQuestions[currentQuestionIndex];
   const buttons = document.querySelectorAll("#answer-buttons button");
   const feedbackBox = document.getElementById("feedback-box");
@@ -159,11 +186,8 @@ function selectAnswer(selectedIndex, clickedButton) {
 
   buttons.forEach(btn => {
     btn.disabled = true;
-  });
 
-  buttons.forEach(btn => {
-    const answerText = btn.textContent;
-    if (answerText === q.choices[q.correct]) {
+    if (btn.textContent === q.choices[q.correct]) {
       btn.classList.add("correct");
     }
   });
@@ -195,12 +219,38 @@ function selectAnswer(selectedIndex, clickedButton) {
   document.getElementById("next-btn").classList.remove("hidden");
 }
 
+// ---------------- VOICE READING ----------------
+
+function readQuestionAloud() {
+  const q = currentQuestions[currentQuestionIndex];
+  if (!q) return;
+
+  window.speechSynthesis.cancel();
+
+  const buttons = Array.from(document.querySelectorAll("#answer-buttons button"));
+
+  const answerText = buttons
+    .map((btn, index) => {
+      return "Answer " + String.fromCharCode(65 + index) + ": " + btn.textContent + ".";
+    })
+    .join(" ");
+
+  const textToRead = q.question + ". " + answerText;
+
+  const speech = new SpeechSynthesisUtterance(textToRead);
+  speech.rate = 0.82;
+  speech.pitch = 1;
+  speech.volume = 1;
+
+  window.speechSynthesis.speak(speech);
+}
+
 // ---------------- NEXT QUESTION ----------------
 
 function nextQuestion() {
   currentQuestionIndex++;
-
   showAccessDenied(false);
+  window.speechSynthesis.cancel();
 
   if (currentQuestionIndex >= currentQuestions.length) {
     finishGame();
@@ -226,7 +276,6 @@ function finishGame() {
   document.getElementById("results-streak").textContent = "Current Streak: " + streak;
 
   saveBestScore(currentCategory, score);
-
   launchConfetti();
 }
 
@@ -241,7 +290,8 @@ function restartCurrentGame() {
 // ---------------- SCORES ----------------
 
 function saveBestScore(category, newScore) {
-  const key = "best-" + category;
+  const difficulty = document.getElementById("difficulty-select")?.value || "all";
+  const key = "best-" + category + "-" + difficulty;
   const oldScore = Number(localStorage.getItem(key) || 0);
 
   const highScoreBox = document.getElementById("new-high-score");
@@ -270,9 +320,15 @@ function updateBestScores() {
 
   categories.forEach(category => {
     const el = document.getElementById("best-" + category);
-    if (el) {
-      el.textContent = "Best Score: " + Number(localStorage.getItem("best-" + category) || 0);
-    }
+    if (!el) return;
+
+    const allBest = Number(localStorage.getItem("best-" + category + "-all") || 0);
+    const beginnerBest = Number(localStorage.getItem("best-" + category + "-beginner") || 0);
+    const advancedBest = Number(localStorage.getItem("best-" + category + "-advanced") || 0);
+
+    const best = Math.max(allBest, beginnerBest, advancedBest);
+
+    el.textContent = "Best Score: " + best;
   });
 }
 
@@ -395,6 +451,7 @@ function showAccessDenied(show) {
 
   if (show) {
     overlay.classList.remove("hidden");
+
     setTimeout(() => {
       overlay.classList.add("hidden");
     }, 4000);
@@ -466,6 +523,9 @@ function setWidth(id, width) {
 
 function formatCategoryName(category) {
   const names = {
+    all: "All",
+    beginner: "Beginner",
+    advanced: "Advanced",
     interrupting: "Interrupting",
     kindness: "Kindness",
     calm: "Calm Reactions",
