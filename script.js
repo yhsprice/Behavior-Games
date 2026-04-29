@@ -318,6 +318,7 @@ function finishGame() {
  launchConfetti();
 
 if (score === maxScore) {
+  celebrateRaceCar();
   setTimeout(() => launchConfetti(), 500);
   setTimeout(() => launchConfetti(), 1000);
 }
