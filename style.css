@@ -819,3 +819,26 @@ button:disabled {
   font-size: 16px;
   font-weight: 700;
 }
+.race-track {
+  position: relative;
+  height: 45px;
+  background: #e8eef8;
+  border-radius: 999px;
+  margin: 15px 0;
+  overflow: hidden;
+}
+
+#race-car {
+  position: absolute;
+  left: 0%;
+  top: 6px;
+  font-size: 28px;
+  transition: left 0.6s ease;
+}
+
+.finish-line {
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  font-size: 28px;
+}
