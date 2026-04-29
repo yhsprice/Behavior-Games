@@ -1,4 +1,4 @@
-const APP_VERSION = "FINAL-CLEAN-AUTOREAD";
+const APP_VERSION = "FINAL-CLEAN-QUESTION-ONLY-READ";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -89,6 +89,8 @@ function startGame(category) {
     return;
   }
 
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+
   currentCategory = category;
   currentQuestionIndex = 0;
   score = 0;
@@ -168,7 +170,7 @@ function loadQuestion() {
   feedbackBox.className = "feedback-box";
   feedbackBox.textContent = "";
 
-   document.getElementById("next-btn").classList.add("hidden");
+  document.getElementById("next-btn").classList.add("hidden");
 
   updateAnimationLabel();
 
@@ -177,24 +179,8 @@ function loadQuestion() {
   }
 }
 
-function autoReadQuestion() {
-  if (!("speechSynthesis" in window)) return;
+// ---------------- READ ALOUD ----------------
 
-  const q = currentQuestions[currentQuestionIndex];
-  if (!q) return;
-
-  window.speechSynthesis.cancel();
-
-  const speech = new SpeechSynthesisUtterance(q.question);
-  speech.lang = "en-US";
-  speech.rate = 0.78;
-  speech.pitch = 1;
-  speech.volume = 1;
-
-  setTimeout(() => {
-    window.speechSynthesis.speak(speech);
-  }, 400);
-}
 function toggleReadAloud() {
   readAloudOn = !readAloudOn;
 
@@ -218,13 +204,34 @@ function readQuestionAloud() {
 
   window.speechSynthesis.cancel();
 
-  // ONLY reads the question text, not answers
-  const speech = new SpeechSynthesisUtterance(questionText.innerText);
+  const speech = new SpeechSynthesisUtterance(questionText.textContent);
+  speech.lang = "en-US";
   speech.rate = 0.82;
   speech.pitch = 1;
   speech.volume = 1;
 
   window.speechSynthesis.speak(speech);
+}
+
+function autoReadQuestion() {
+  if (!("speechSynthesis" in window)) return;
+
+  const q = currentQuestions[currentQuestionIndex];
+  if (!q) return;
+
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(q.question);
+  speech.lang = "en-US";
+  speech.rate = 0.78;
+  speech.pitch = 1;
+  speech.volume = 1;
+
+  setTimeout(() => {
+    if (readAloudOn) {
+      window.speechSynthesis.speak(speech);
+    }
+  }, 500);
 }
 
 // ---------------- SELECT ANSWER ----------------
@@ -255,7 +262,7 @@ function selectAnswer(selectedIndex, clickedButton) {
     feedbackBox.className = "feedback-box correct-feedback";
     feedbackBox.textContent = "✅ Correct! " + q.explanation;
 
-    questionBox.classList.add("correct-glow");
+    if (questionBox) questionBox.classList.add("correct-glow");
   } else {
     playSound("wrong");
 
@@ -264,7 +271,7 @@ function selectAnswer(selectedIndex, clickedButton) {
     feedbackBox.className = "feedback-box wrong-feedback";
     feedbackBox.textContent = "❌ Not quite. " + q.explanation;
 
-    questionBox.classList.add("wrong-shake");
+    if (questionBox) questionBox.classList.add("wrong-shake");
 
     if (currentCategory === "online") {
       showAccessDenied(true);
@@ -275,40 +282,9 @@ function selectAnswer(selectedIndex, clickedButton) {
   document.getElementById("next-btn").classList.remove("hidden");
 }
 
-// ---------------- AUTO READ ----------------
-
-function autoReadQuestion() {
-  if (!("speechSynthesis" in window)) return;
-
-  const q = currentQuestions[currentQuestionIndex];
-  if (!q) return;
-
-  window.speechSynthesis.cancel();
-
-  const buttons = Array.from(document.querySelectorAll("#answer-buttons button"));
-
-  let textToRead = q.question + ". ";
-
-  buttons.forEach((btn, index) => {
-    textToRead += "Answer " + String.fromCharCode(65 + index) + ": " + btn.textContent + ". ";
-  });
-
-  const speech = new SpeechSynthesisUtterance(textToRead);
-  speech.lang = "en-US";
-  speech.rate = 0.78;
-  speech.pitch = 1;
-  speech.volume = 1;
-
-  setTimeout(() => {
-    window.speechSynthesis.speak(speech);
-  }, 500);
-}
-
 // ---------------- NEXT QUESTION ----------------
 
 function nextQuestion() {
-
-  // 🔊 STOP any speaking FIRST
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 
   currentQuestionIndex++;
@@ -324,6 +300,8 @@ function nextQuestion() {
 // ---------------- FINISH GAME ----------------
 
 function finishGame() {
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+
   const maxScore = currentQuestions.length * 10;
   const percent = Math.round((score / maxScore) * 100);
 
@@ -537,7 +515,8 @@ function launchConfetti() {
     y: Math.random() * -canvas.height,
     size: 6 + Math.random() * 6,
     speed: 1 + Math.random() * 3,
-    drift: -1 + Math.random() * 2
+    drift: -1 + Math.random() * 2,
+    color: ["#2f67ea", "#ffcc00", "#ff5f5f", "#42b883"][Math.floor(Math.random() * 4)]
   }));
 
   const duration = 5000;
@@ -553,6 +532,7 @@ function launchConfetti() {
 
       if (p.y > canvas.height) p.y = -10;
 
+      ctx.fillStyle = p.color;
       ctx.fillRect(p.x, p.y, p.size, p.size);
     });
 
@@ -671,16 +651,5 @@ window.addGoodChoice = addGoodChoice;
 window.addNeedsWork = addNeedsWork;
 window.addCategoryChoice = addCategoryChoice;
 window.resetTracker = resetTracker;
-function readQuestionAloud() {
-  const questionText = document.getElementById("question-text");
-  if (!questionText) return;
-
-  window.speechSynthesis.cancel();
-
-  const speech = new SpeechSynthesisUtterance(questionText.textContent);
-  speech.rate = 0.85;
-  speech.pitch = 1;
-  speech.volume = 1;
-
-  window.speechSynthesis.speak(speech);
-}
+window.toggleReadAloud = toggleReadAloud;
+window.readQuestionAloud = readQuestionAloud;
