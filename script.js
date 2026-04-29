@@ -1,4 +1,4 @@
-const APP_VERSION = "FINAL-QUESTION-COUNT-MIXED-FIXED";
+const APP_VERSION = "FINAL-V27-TEST";
 
 let currentCategory = "";
 let currentQuestions = [];
