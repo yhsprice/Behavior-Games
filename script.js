@@ -87,18 +87,15 @@ console.log("QUESTIONS:", questionPool);
   
  const shuffledPool = shuffleArray([...questionPool]);
 
-// ALWAYS use all questions for categories
-if (category === "mixed") {
-  const questionCountValue =
-    document.getElementById("question-count-select")?.value || "10";
+const questionCountValue =
+  document.getElementById("question-count-select")?.value || "10";
 
-  if (questionCountValue === "all") {
-    currentQuestions = shuffledPool;
-  } else {
-    currentQuestions = shuffledPool.slice(0, Number(questionCountValue));
-  }
-} else {
+const shuffledPool = shuffleArray([...questionPool]);
+
+if (questionCountValue === "all") {
   currentQuestions = shuffledPool;
+} else {
+  currentQuestions = shuffledPool.slice(0, Number(questionCountValue));
 }
   
   document.getElementById("game-title").textContent = formatCategoryName(category);
