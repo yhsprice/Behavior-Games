@@ -81,18 +81,26 @@ function startGame(category) {
   } else {
     questionPool = [...allQuestions[category]];
   }
+console.log("CATEGORY:", category);
+console.log("QUESTION COUNT:", questionPool.length);
+console.log("QUESTIONS:", questionPool);
+  
+ const shuffledPool = shuffleArray([...questionPool]);
 
+// ALWAYS use all questions for categories
+if (category === "mixed") {
   const questionCountValue =
     document.getElementById("question-count-select")?.value || "10";
-
-  const shuffledPool = shuffleArray([...questionPool]);
 
   if (questionCountValue === "all") {
     currentQuestions = shuffledPool;
   } else {
     currentQuestions = shuffledPool.slice(0, Number(questionCountValue));
   }
-
+} else {
+  currentQuestions = shuffledPool;
+}
+  
   document.getElementById("game-title").textContent = formatCategoryName(category);
   document.getElementById("score-text").textContent = "Score: 0";
 
