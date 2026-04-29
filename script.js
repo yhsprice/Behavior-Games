@@ -68,14 +68,23 @@ function startGame(category) {
     questionPool = [...allQuestions[category]];
   }
 
-const questionCountValue = document.getElementById("question-count-select")?.value || "10";
+  const questionCountValue =
+    document.getElementById("question-count-select")?.value || "10";
 
-if (questionCountValue === "all") {
-  currentQuestions = shuffleArray(questionPool);
-} else {
-  currentQuestions = shuffleArray(questionPool).slice(0, Number(questionCountValue));
+  const shuffledPool = shuffleArray(questionPool);
+
+  if (questionCountValue === "all") {
+    currentQuestions = shuffledPool;
+  } else {
+    currentQuestions = shuffledPool.slice(0, Number(questionCountValue));
+  }
+
+  document.getElementById("game-title").textContent = formatCategoryName(category);
+  document.getElementById("score-text").textContent = "Score: 0";
+
+  showScreen("game");
+  loadQuestion();
 }
-
 function loadQuestion() {
   const q = currentQuestions[currentQuestionIndex];
   if (!q) return;
