@@ -495,7 +495,17 @@ function launchConfetti() {
 
   requestAnimationFrame(draw);
 }
+function celebrateRaceCar() {
+  const raceCar = document.getElementById("race-car");
+  if (!raceCar) return;
 
+  raceCar.classList.remove("car-celebrate");
+
+  // this line forces the animation to restart every time
+  void raceCar.offsetWidth;
+
+  raceCar.classList.add("car-celebrate");
+}
 function moveRaceCar() {
   const raceCar = document.getElementById("race-car");
   if (!raceCar) return;
