@@ -175,6 +175,7 @@ function loadQuestion() {
   document.getElementById("next-btn").classList.add("hidden");
 
   updateAnimationLabel();
+  autoReadQuestion();
 }
 
 // ---------------- SELECT ANSWER ----------------
@@ -225,22 +226,13 @@ function selectAnswer(selectedIndex, clickedButton) {
   document.getElementById("next-btn").classList.remove("hidden");
 }
 
-// ---------------- VOICE READING ----------------
-
-function readQuestionAloud() {
-  if (!("speechSynthesis" in window)) {
-    alert("Voice reading is not supported in this browser.");
-    return;
-  }
+function autoReadQuestion() {
+  if (!("speechSynthesis" in window)) return;
 
   const q = currentQuestions[currentQuestionIndex];
+  if (!q) return;
 
-  if (!q) {
-    alert("No question loaded yet.");
-    return;
-  }
-
-  // Stop anything already talking
+  // Stop anything already speaking
   window.speechSynthesis.cancel();
 
   const buttons = Array.from(document.querySelectorAll("#answer-buttons button"));
@@ -253,11 +245,16 @@ function readQuestionAloud() {
 
   const speech = new SpeechSynthesisUtterance(textToRead);
   speech.lang = "en-US";
-  speech.rate = 0.8;
+  speech.rate = 0.78; // slower for kids
   speech.pitch = 1;
 
-  window.speechSynthesis.speak(speech);
+  // Delay helps browser allow speech
+  setTimeout(() => {
+    window.speechSynthesis.speak(speech);
+  }, 400);
 }
+ }
+
 // ---------------- NEXT QUESTION ----------------
 
 function nextQuestion() {
