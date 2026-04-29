@@ -90,6 +90,9 @@ console.log("QUESTIONS:", questionPool);
 const questionCountValue =
   document.getElementById("question-count-select")?.value || "10";
 
+const questionCountValue =
+  document.getElementById("question-count-select")?.value || "10";
+
 const shuffledPool = shuffleArray([...questionPool]);
 
 if (questionCountValue === "all") {
