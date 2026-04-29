@@ -253,7 +253,6 @@ function autoReadQuestion() {
     window.speechSynthesis.speak(speech);
   }, 400);
 }
- }
 
 // ---------------- NEXT QUESTION ----------------
 
