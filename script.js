@@ -609,3 +609,13 @@ document.addEventListener("DOMContentLoaded", () => {
   goHome();
   console.log(APP_VERSION);
 });
+
+window.startGame = startGame;
+window.showScreen = showScreen;
+window.goHome = goHome;
+window.nextQuestion = nextQuestion;
+window.restartCurrentGame = restartCurrentGame;
+window.addGoodChoice = addGoodChoice;
+window.addNeedsWork = addNeedsWork;
+window.addCategoryChoice = addCategoryChoice;
+window.resetTracker = resetTracker;
