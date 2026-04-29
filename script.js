@@ -71,7 +71,7 @@ function startGame(category) {
 
   currentCategory = category;
   currentQuestionIndex = 0;
-  score = 0;
+  moveRaceCar();
   answered = false;
 
   let questionPool = [];
@@ -133,12 +133,6 @@ function loadQuestion() {
   document.getElementById("game-progress-bar").style.width = progressPercent + "%";
   document.getElementById("progress-text").textContent =
     "Question " + (currentQuestionIndex + 1) + " of " + currentQuestions.length;
-
- const raceCar = document.getElementById("race-car");
-if (raceCar) {
-  const percent = ((currentQuestionIndex + 1) / currentQuestions.length) * 85;
-  raceCar.style.left = percent + "%";
-}
 
   const answerButtons = document.getElementById("answer-buttons");
   answerButtons.innerHTML = "";
@@ -264,7 +258,7 @@ function selectAnswer(selectedIndex, clickedButton) {
 
   if (selectedIndex === q.correct) {
     playSound("correct");
-    score += 10;
+    score += 10; moveRaceCar();
 
     feedbackBox.className = "feedback-box correct-feedback";
     feedbackBox.textContent = "✅ Correct! " + q.explanation;
@@ -490,6 +484,16 @@ function launchConfetti() {
   }
 
   requestAnimationFrame(draw);
+}
+
+function moveRaceCar() {
+  const raceCar = document.getElementById("race-car");
+  if (!raceCar) return;
+
+  const maxScore = currentQuestions.length * 10;
+  const percent = maxScore === 0 ? 0 : (score / maxScore) * 85;
+
+  raceCar.style.left = percent + "%";
 }
 
 function shuffleArray(arr) {
