@@ -30,6 +30,17 @@
       <h2>Game Categories</h2>
       <p>Pick a category and answer real-life questions.</p>
 
+      <div class="game-setting-box">
+  <label for="question-count-select"><strong>How many questions?</strong></label>
+  <select id="question-count-select">
+    <option value="5">5 Questions</option>
+    <option value="10" selected>10 Questions</option>
+    <option value="15">15 Questions</option>
+    <option value="20">20 Questions</option>
+    <option value="all">All Questions</option>
+  </select>
+</div>
+
       <div class="category-grid">
         <button class="category-btn" onclick="startGame('interrupting')">
           <span class="category-name">Interrupting</span>
