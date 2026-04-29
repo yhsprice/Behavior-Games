@@ -302,14 +302,24 @@ function finishGame() {
 
   document.getElementById("results-score").textContent = "Score: " + score + "/" + maxScore;
   document.getElementById("results-badge").textContent = "Badge: " + getBadge(percent);
-  document.getElementById("results-message").textContent = getResultsMessage(percent);
+  if (perfect) {
+  document.getElementById("results-message").textContent =
+    "🚗💨 PERFECT RUN! You made every right choice. That was awesome!";
+} else {
+  document.getElementById("results-message").textContent =
+    getResultsMessage(percent);
+}
 
   const streak = Number(localStorage.getItem("roxyStreak") || 0) + 1;
   localStorage.setItem("roxyStreak", streak);
   document.getElementById("results-streak").textContent = "Current Streak: " + streak;
 
   saveBestScore(currentCategory, score);
-  launchConfetti();
+ launchConfetti();
+
+if (score === maxScore) {
+  setTimeout(() => launchConfetti(), 500);
+  setTimeout(() => launchConfetti(), 1000);
 }
 
 function restartCurrentGame() {
@@ -413,6 +423,7 @@ function updateTrackerDisplay() {
   const bad = trackerData.bad || 0;
   const total = good + bad;
   const percent = total === 0 ? 0 : Math.round((good / total) * 100);
+  const perfect = score === maxScore;
 
   setText("good-count", good);
   setText("bad-count", bad);
@@ -489,7 +500,7 @@ function moveRaceCar() {
   if (!raceCar) return;
 
   const maxScore = currentQuestions.length * 10;
-  const percent = maxScore === 0 ? 0 : (score / maxScore) * 85;
+  const percent = maxScore === 0 ? 0 : (score / maxScore) * 95;
 
   raceCar.style.left = percent + "%";
 }
