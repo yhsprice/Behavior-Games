@@ -134,9 +134,9 @@ function loadQuestion() {
   document.getElementById("progress-text").textContent =
     "Question " + (currentQuestionIndex + 1) + " of " + currentQuestions.length;
 
-  const raceCar = document.getElementById("race-car");
+ const raceCar = document.getElementById("race-car");
 if (raceCar) {
-  const percent = (currentQuestionIndex / currentQuestions.length) * 95;
+  const percent = ((currentQuestionIndex + 1) / currentQuestions.length) * 85;
   raceCar.style.left = percent + "%";
 }
 
