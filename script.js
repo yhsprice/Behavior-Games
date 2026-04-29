@@ -68,13 +68,12 @@ function startGame(category) {
     questionPool = [...allQuestions[category]];
   }
 
+const questionCountValue = document.getElementById("question-count-select")?.value || "10";
+
+if (questionCountValue === "all") {
   currentQuestions = shuffleArray(questionPool);
-
-  document.getElementById("game-title").textContent = formatCategoryName(category);
-  document.getElementById("score-text").textContent = "Score: 0";
-
-  showScreen("game");
-  loadQuestion();
+} else {
+  currentQuestions = shuffleArray(questionPool).slice(0, Number(questionCountValue));
 }
 
 function loadQuestion() {
