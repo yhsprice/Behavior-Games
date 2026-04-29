@@ -71,8 +71,6 @@ function startGame(category) {
   const questionCountValue =
     document.getElementById("question-count-select")?.value || "10";
 
-  const shuffledPool = shuffleArray(questionPool);
-
   if (questionCountValue === "all") {
     currentQuestions = shuffledPool;
   } else {
