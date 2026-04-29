@@ -842,3 +842,24 @@ button:disabled {
   top: 7px;
   font-size: 28px;
 }
+.car-celebrate {
+  animation: carCelebrate 0.8s ease-in-out 3;
+}
+
+@keyframes carCelebrate {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-8px) scale(1.15);
+  }
+  50% {
+    transform: translateY(0) scale(1);
+  }
+  75% {
+    transform: translateY(-5px) scale(1.1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
