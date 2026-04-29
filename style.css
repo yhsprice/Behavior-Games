@@ -767,3 +767,35 @@ button:disabled {
     font-size: 15px;
   }
 }
+/* ---------------- QUESTION IMAGE ---------------- */
+
+.question-image {
+  width: 100%;
+  max-width: 420px;
+  max-height: 260px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 16px auto;
+  border-radius: 18px;
+}
+
+/* ---------------- DIFFICULTY SELECT ---------------- */
+
+.difficulty-box {
+  margin: 16px 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+.difficulty-box select {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+}
+
+/* ---------------- READ BUTTON ---------------- */
+
+#read-btn {
+  margin-bottom: 12px;
+}
