@@ -5,6 +5,7 @@ let currentQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let answered = false;
+let readAloudOn = false;
 
 let trackerData = JSON.parse(localStorage.getItem("roxyTrackerData")) || {
   good: 0,
@@ -171,6 +172,38 @@ function loadQuestion() {
 
   updateAnimationLabel();
   autoReadQuestion();
+}
+
+function toggleReadAloud() {
+  readAloudOn = !readAloudOn;
+
+  const btn = document.getElementById("read-toggle-btn");
+  if (btn) {
+    btn.textContent = readAloudOn ? "🔊 Read Aloud: ON" : "🔇 Read Aloud: OFF";
+  }
+
+  if (readAloudOn) {
+    readQuestionAloud();
+  } else if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+function readQuestionAloud() {
+  const questionText = document.getElementById("question-text");
+  if (!questionText || !("speechSynthesis" in window)) return;
+
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(questionText.textContent);
+  speech.rate = 0.85;
+  speech.pitch = 1;
+  speech.volume = 1;
+
+  window.speechSynthesis.speak(speech);
+  if (readAloudOn) {
+  setTimeout(readQuestionAloud, 400);
+}
 }
 
 // ---------------- SELECT ANSWER ----------------
