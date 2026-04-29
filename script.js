@@ -222,29 +222,36 @@ function selectAnswer(selectedIndex, clickedButton) {
 // ---------------- VOICE READING ----------------
 
 function readQuestionAloud() {
-  const q = currentQuestions[currentQuestionIndex];
-  if (!q) return;
+  if (!("speechSynthesis" in window)) {
+    alert("Voice reading is not supported in this browser.");
+    return;
+  }
 
+  const q = currentQuestions[currentQuestionIndex];
+
+  if (!q) {
+    alert("No question loaded yet.");
+    return;
+  }
+
+  // Stop anything already talking
   window.speechSynthesis.cancel();
 
   const buttons = Array.from(document.querySelectorAll("#answer-buttons button"));
 
-  const answerText = buttons
-    .map((btn, index) => {
-      return "Answer " + String.fromCharCode(65 + index) + ": " + btn.textContent + ".";
-    })
-    .join(" ");
+  let textToRead = q.question + ". ";
 
-  const textToRead = q.question + ". " + answerText;
+  buttons.forEach((btn, index) => {
+    textToRead += "Answer " + String.fromCharCode(65 + index) + ": " + btn.textContent + ". ";
+  });
 
   const speech = new SpeechSynthesisUtterance(textToRead);
-  speech.rate = 0.82;
+  speech.lang = "en-US";
+  speech.rate = 0.8;
   speech.pitch = 1;
-  speech.volume = 1;
 
   window.speechSynthesis.speak(speech);
 }
-
 // ---------------- NEXT QUESTION ----------------
 
 function nextQuestion() {
