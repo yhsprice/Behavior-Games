@@ -1,4 +1,4 @@
-const APP_VERSION = "FINAL-V27-TEST";
+const APP_VERSION = "FINAL-V111-CLEAN";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -71,7 +71,7 @@ function startGame(category) {
 
   currentCategory = category;
   currentQuestionIndex = 0;
-  moveRaceCar();
+  score = 0;
   answered = false;
 
   let questionPool = [];
@@ -81,30 +81,27 @@ function startGame(category) {
   } else {
     questionPool = [...allQuestions[category]];
   }
-console.log("CATEGORY:", category);
-console.log("QUESTION COUNT:", questionPool.length);
-console.log("QUESTIONS:", questionPool);
-  
- const shuffledPool = shuffleArray([...questionPool]);
 
-const questionCountValue =
-  document.getElementById("question-count-select")?.value || "10";
+  console.log("CATEGORY:", category);
+  console.log("QUESTION COUNT:", questionPool.length);
+  console.log("QUESTIONS:", questionPool);
 
-const questionCountValue =
-  document.getElementById("question-count-select")?.value || "10";
+  const questionCountValue =
+    document.getElementById("question-count-select")?.value || "10";
 
-const shuffledPool = shuffleArray([...questionPool]);
+  const shuffledPool = shuffleArray([...questionPool]);
 
-if (questionCountValue === "all") {
-  currentQuestions = shuffledPool;
-} else {
-  currentQuestions = shuffledPool.slice(0, Number(questionCountValue));
-}
-  
+  if (questionCountValue === "all") {
+    currentQuestions = shuffledPool;
+  } else {
+    currentQuestions = shuffledPool.slice(0, Number(questionCountValue));
+  }
+
   document.getElementById("game-title").textContent = formatCategoryName(category);
   document.getElementById("score-text").textContent = "Score: 0";
 
   showScreen("game");
+  moveRaceCar();
   loadQuestion();
 }
 
@@ -258,7 +255,8 @@ function selectAnswer(selectedIndex, clickedButton) {
 
   if (selectedIndex === q.correct) {
     playSound("correct");
-    score += 10; moveRaceCar();
+    score += 10;
+    moveRaceCar();
 
     feedbackBox.className = "feedback-box correct-feedback";
     feedbackBox.textContent = "✅ Correct! " + q.explanation;
