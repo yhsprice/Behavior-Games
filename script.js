@@ -84,10 +84,10 @@ function startGame(category) {
     return;
   }
 
-  if (!allQuestions[category]) {
-    alert("No questions found for: " + category);
-    return;
-  }
+  if (category !== "mixed" && !allQuestions[category]) {
+  alert("No questions found for: " + category);
+  return;
+}
 
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 
@@ -98,17 +98,12 @@ function startGame(category) {
 
  const difficulty = "all";
 
-let questionPool = [...allQuestions[category]];
+let questionPool = [];
 
-  currentQuestions = shuffleArray(questionPool).slice(0, 10);
-
-  document.getElementById("game-title").textContent =
-    formatCategoryName(category) + " - " + formatCategoryName(difficulty);
-
-  document.getElementById("score-text").textContent = "Score: 0";
-
-  showScreen("game");
-  loadQuestion();
+if (category === "mixed") {
+  questionPool = Object.values(allQuestions).flat();
+} else {
+  questionPool = [...allQuestions[category]];
 }
 
 // ---------------- LOAD QUESTION ----------------
@@ -339,6 +334,7 @@ function saveBestScore(category, newScore) {
 
 function updateBestScores() {
   const categories = [
+    "mixed",
     "interrupting",
     "kindness",
     "calm",
@@ -555,6 +551,7 @@ function setWidth(id, width) {
 
 function formatCategoryName(category) {
   const names = {
+    mixed: "Mixed Practice",
     all: "All",
     beginner: "Beginner",
     advanced: "Advanced",
