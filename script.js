@@ -96,18 +96,9 @@ function startGame(category) {
   score = 0;
   answered = false;
 
-  const difficulty = document.getElementById("difficulty-select")?.value || "all";
+ const difficulty = "all";
 
-  let questionPool = [...allQuestions[category]];
-
-  if (difficulty !== "all") {
-    questionPool = questionPool.filter(q => q.difficulty === difficulty);
-  }
-
-  if (questionPool.length === 0) {
-    alert("No " + difficulty + " questions found for this category.");
-    return;
-  }
+let questionPool = [...allQuestions[category]];
 
   currentQuestions = shuffleArray(questionPool).slice(0, 10);
 
