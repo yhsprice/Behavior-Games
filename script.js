@@ -1,4 +1,4 @@
-const APP_VERSION = "FINAL-MIXED-FIXED";
+const APP_VERSION = "FINAL-QUESTION-COUNT-MIXED-FIXED";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -9,7 +9,8 @@ let readAloudOn = false;
 
 let trackerData = JSON.parse(localStorage.getItem("roxyTrackerData")) || {
   good: 0,
-  bad: {
+  bad: 0,
+  categories: {
     listening: { good: 0, bad: 0 },
     kindness: { good: 0, bad: 0 },
     calmBody: { good: 0, bad: 0 },
@@ -18,6 +19,17 @@ let trackerData = JSON.parse(localStorage.getItem("roxyTrackerData")) || {
     responsibility: { good: 0, bad: 0 }
   }
 };
+
+if (!trackerData.categories) {
+  trackerData.categories = {
+    listening: { good: 0, bad: 0 },
+    kindness: { good: 0, bad: 0 },
+    calmBody: { good: 0, bad: 0 },
+    honesty: { good: 0, bad: 0 },
+    respect: { good: 0, bad: 0 },
+    responsibility: { good: 0, bad: 0 }
+  };
+}
 
 function hideAllScreens() {
   ["home-screen", "game-screen", "results-screen", "tracker-screen"].forEach(id => {
@@ -29,7 +41,9 @@ function hideAllScreens() {
 function showScreen(screen) {
   hideAllScreens();
 
-  if (screen === "game" && !currentCategory) screen = "home";
+  if (screen === "game" && !currentCategory) {
+    screen = "home";
+  }
 
   const el = document.getElementById(screen + "-screen");
   if (el) el.classList.remove("hidden");
@@ -71,6 +85,8 @@ function startGame(category) {
   const questionCountValue =
     document.getElementById("question-count-select")?.value || "10";
 
+  const shuffledPool = shuffleArray([...questionPool]);
+
   if (questionCountValue === "all") {
     currentQuestions = shuffledPool;
   } else {
@@ -83,6 +99,7 @@ function startGame(category) {
   showScreen("game");
   loadQuestion();
 }
+
 function loadQuestion() {
   const q = currentQuestions[currentQuestionIndex];
   if (!q) return;
@@ -234,15 +251,21 @@ function selectAnswer(selectedIndex, clickedButton) {
   if (selectedIndex === q.correct) {
     playSound("correct");
     score += 10;
+
     feedbackBox.className = "feedback-box correct-feedback";
     feedbackBox.textContent = "✅ Correct! " + q.explanation;
+
     if (questionBox) questionBox.classList.add("correct-glow");
   } else {
     playSound("wrong");
+
     if (clickedButton) clickedButton.classList.add("wrong");
+
     feedbackBox.className = "feedback-box wrong-feedback";
     feedbackBox.textContent = "❌ Not quite. " + q.explanation;
+
     if (questionBox) questionBox.classList.add("wrong-shake");
+
     if (currentCategory === "online") showAccessDenied(true);
   }
 
@@ -319,7 +342,9 @@ function updateBestScores() {
   categories.forEach(category => {
     const el = document.getElementById("best-" + category);
     if (!el) return;
-    el.textContent = "Best Score: " + Number(localStorage.getItem("best-" + category) || 0);
+
+    el.textContent =
+      "Best Score: " + Number(localStorage.getItem("best-" + category) || 0);
   });
 }
 
@@ -341,7 +366,9 @@ function addNeedsWork() {
 
 function addCategoryChoice(category, isGood) {
   if (!trackerData.categories) trackerData.categories = {};
-  if (!trackerData.categories[category]) trackerData.categories[category] = { good: 0, bad: 0 };
+  if (!trackerData.categories[category]) {
+    trackerData.categories[category] = { good: 0, bad: 0 };
+  }
 
   if (isGood) {
     trackerData.categories[category].good++;
@@ -393,6 +420,11 @@ function updateTrackerDisplay() {
   setText("tracker-badge", getBadge(percent));
   setText("tracker-message", getTrackerMessage(percent));
   setText("tracker-week-text", getWeekText());
+
+  Object.keys(trackerData.categories || {}).forEach(category => {
+    setText(category + "-good", "Good: " + trackerData.categories[category].good);
+    setText(category + "-bad", "Needs Work: " + trackerData.categories[category].bad);
+  });
 }
 
 function showAccessDenied(show) {
@@ -471,7 +503,8 @@ function formatCategoryName(category) {
     responsibility: "Responsibility",
     teasing: "Teasing",
     online: "Online Behavior",
-    listening: "Listening"
+    listening: "Listening",
+    calmBody: "Calm Body"
   };
 
   return names[category] || category;
