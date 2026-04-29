@@ -6,6 +6,12 @@ let currentQuestionIndex = 0;
 let score = 0;
 let answered = false;
 
+document.addEventListener("click", () => {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.resume();
+  }
+});
+
 let trackerData = JSON.parse(localStorage.getItem("roxyTrackerData")) || {
   good: 0,
   bad: 0,
