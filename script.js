@@ -168,12 +168,33 @@ function loadQuestion() {
   feedbackBox.className = "feedback-box";
   feedbackBox.textContent = "";
 
-  document.getElementById("next-btn").classList.add("hidden");
+   document.getElementById("next-btn").classList.add("hidden");
 
   updateAnimationLabel();
-  autoReadQuestion();
+
+  if (readAloudOn) {
+    autoReadQuestion();
+  }
 }
 
+function autoReadQuestion() {
+  if (!("speechSynthesis" in window)) return;
+
+  const q = currentQuestions[currentQuestionIndex];
+  if (!q) return;
+
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(q.question);
+  speech.lang = "en-US";
+  speech.rate = 0.78;
+  speech.pitch = 1;
+  speech.volume = 1;
+
+  setTimeout(() => {
+    window.speechSynthesis.speak(speech);
+  }, 400);
+}
 function toggleReadAloud() {
   readAloudOn = !readAloudOn;
 
@@ -190,20 +211,20 @@ function toggleReadAloud() {
 }
 
 function readQuestionAloud() {
+  if (!("speechSynthesis" in window)) return;
+
   const questionText = document.getElementById("question-text");
-  if (!questionText || !("speechSynthesis" in window)) return;
+  if (!questionText) return;
 
   window.speechSynthesis.cancel();
 
-  const speech = new SpeechSynthesisUtterance(questionText.textContent);
-  speech.rate = 0.85;
+  // ONLY reads the question text, not answers
+  const speech = new SpeechSynthesisUtterance(questionText.innerText);
+  speech.rate = 0.82;
   speech.pitch = 1;
   speech.volume = 1;
 
   window.speechSynthesis.speak(speech);
-  if (readAloudOn) {
-  setTimeout(readQuestionAloud, 400);
-}
 }
 
 // ---------------- SELECT ANSWER ----------------
