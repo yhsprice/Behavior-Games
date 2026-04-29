@@ -1,16 +1,10 @@
-const APP_VERSION = "FINAL-FEATURES";
+const APP_VERSION = "FINAL-CLEAN-AUTOREAD";
 
 let currentCategory = "";
 let currentQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let answered = false;
-
-document.addEventListener("click", () => {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.resume();
-  }
-});
 
 let trackerData = JSON.parse(localStorage.getItem("roxyTrackerData")) || {
   good: 0,
@@ -77,7 +71,7 @@ function showScreen(screen) {
 }
 
 function goHome() {
-  window.speechSynthesis.cancel();
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
   showScreen("home");
 }
 
@@ -130,10 +124,11 @@ function loadQuestion() {
   if (!q) return;
 
   answered = false;
-  window.speechSynthesis.cancel();
+
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 
   const questionBox = document.getElementById("question-box");
-  questionBox.classList.remove("correct-glow", "wrong-shake");
+  if (questionBox) questionBox.classList.remove("correct-glow", "wrong-shake");
 
   document.getElementById("question-text").textContent = q.question;
 
@@ -184,7 +179,7 @@ function selectAnswer(selectedIndex, clickedButton) {
   if (answered) return;
   answered = true;
 
-  window.speechSynthesis.cancel();
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 
   const q = currentQuestions[currentQuestionIndex];
   const buttons = document.querySelectorAll("#answer-buttons button");
@@ -220,9 +215,13 @@ function selectAnswer(selectedIndex, clickedButton) {
     if (currentCategory === "online") {
       showAccessDenied(true);
     }
+  }
+
   document.getElementById("score-text").textContent = "Score: " + score;
   document.getElementById("next-btn").classList.remove("hidden");
 }
+
+// ---------------- AUTO READ ----------------
 
 function autoReadQuestion() {
   if (!("speechSynthesis" in window)) return;
@@ -230,7 +229,6 @@ function autoReadQuestion() {
   const q = currentQuestions[currentQuestionIndex];
   if (!q) return;
 
-  // Stop anything already speaking
   window.speechSynthesis.cancel();
 
   const buttons = Array.from(document.querySelectorAll("#answer-buttons button"));
@@ -243,13 +241,13 @@ function autoReadQuestion() {
 
   const speech = new SpeechSynthesisUtterance(textToRead);
   speech.lang = "en-US";
-  speech.rate = 0.78; // slower for kids
+  speech.rate = 0.78;
   speech.pitch = 1;
+  speech.volume = 1;
 
-  // Delay helps browser allow speech
   setTimeout(() => {
     window.speechSynthesis.speak(speech);
-  }, 400);
+  }, 500);
 }
 
 // ---------------- NEXT QUESTION ----------------
@@ -257,7 +255,8 @@ function autoReadQuestion() {
 function nextQuestion() {
   currentQuestionIndex++;
   showAccessDenied(false);
-  window.speechSynthesis.cancel();
+
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 
   if (currentQuestionIndex >= currentQuestions.length) {
     finishGame();
@@ -334,7 +333,6 @@ function updateBestScores() {
     const advancedBest = Number(localStorage.getItem("best-" + category + "-advanced") || 0);
 
     const best = Math.max(allBest, beginnerBest, advancedBest);
-
     el.textContent = "Best Score: " + best;
   });
 }
@@ -607,6 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log(APP_VERSION);
 });
 
+// Make functions available to HTML buttons
 window.startGame = startGame;
 window.showScreen = showScreen;
 window.goHome = goHome;
