@@ -220,8 +220,6 @@ function selectAnswer(selectedIndex, clickedButton) {
     if (currentCategory === "online") {
       showAccessDenied(true);
     }
-  }
-
   document.getElementById("score-text").textContent = "Score: " + score;
   document.getElementById("next-btn").classList.remove("hidden");
 }
