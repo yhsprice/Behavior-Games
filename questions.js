@@ -54,34 +54,96 @@ const allQuestions = {
     }
   ],
 
-  interrupting: [
-    {
-      question: "Your friend is telling a long story. What should you do?",
-      choices: [
-        "Wait for a pause",
-        "Glare at them to hurry up",
-        "Interrupt them",
-        "Ignore them and talk anyway"
-      ],
-      correct: 0,
-      explanation: "Everyone deserves their chance to speak.",
-      difficulty: "beginner",
-      image: "images/interrupting-1.png"
-    },
-    {
-      question: "You see a small fire in a trash can. What should you do?",
-      choices: [
-        "Interrupt immediately!",
-        "Wait until everyone finishes talking",
-        "Ignore it",
-        "Tell your friends first"
-      ],
-      correct: 0,
-      explanation: "Safety emergencies always come first.",
-      difficulty: "advanced",
-      image: "images/interrupting-2.png"
-    }
-  ],
+interrupting: [
+  {
+    question: "Your friend is telling a long story about their cat, and you want to tell them about your dog.",
+    choices: [
+      "Wait (If it's not urgent, wait for a pause!).",
+      "Glare at them to hurry up",
+      "Tell them to hurry up because you have something to say",
+      "Ignore them and tell them your story"
+    ],
+    correct: 0,
+    explanation: "Everyone deserves their chance to tell a story. Be patient and wait until they are done."
+  },
+  {
+    question: "You see a small fire in the trash can.",
+    choices: [
+      "Interrupt immediately!",
+      "Wait until everyone is done talking.",
+      "Ignore it",
+      "Tell your friends and see how they react"
+    ],
+    correct: 0,
+    explanation: "Safety emergencies come first."
+  },
+  {
+    question: "The teacher is talking, and you forgot to ask for a pencil.",
+    choices: [
+      "Wait and raise your hand slightly",
+      "Interrupt your teacher",
+      "Ask one of your friends for a pencil",
+      "Just grab one from someone"
+    ],
+    correct: 0,
+    explanation: "Be patient and wait until it is your turn."
+  },
+  {
+    question: "A student is hurt on the playground and crying.",
+    choices: [
+      "Go find an adult",
+      "Tell them to get up and stop crying",
+      "Ignore them",
+      "Tell your friends"
+    ],
+    correct: 0,
+    explanation: "Check on them first and then tell an adult."
+  },
+  {
+    question: "Your friend is talking, but you just remembered a funny joke.",
+    choices: [
+      "Wait (Wait for a break in the conversation)",
+      "Interrupt them, your joke is funny",
+      "Tell another friend listening, they won't mind",
+      "Tell them to hurry up"
+    ],
+    correct: 0,
+    explanation: "Jokes can wait. People usually like jokes more when they are not interrupted."
+  },
+  {
+    question: "You have to go to the bathroom very badly.",
+    choices: [
+      "Interrupt politely",
+      "Leave the room and go to the bathroom",
+      "Yell at the teacher you need to go",
+      "Tell your friends and see if they will ask the teacher for you"
+    ],
+    correct: 0,
+    explanation: "It's usually okay to interrupt sometimes, but try to wait for a pause if possible."
+  },
+  {
+    question: "The teacher is talking to another teacher, and you want to ask a question.",
+    choices: [
+      "Wait until they are finished",
+      "Tug on their arm to get their attention",
+      "Interrupt them",
+      "Yell at them so they can hear you"
+    ],
+    correct: 0,
+    explanation: "Wait until they are finished speaking if you can."
+  },
+  {
+    question: "How should you interrupt if needed?",
+    choices: [
+      "All of the above",
+      "Wait for a pause",
+      "Walk up politely and say excuse me",
+      "Wait for them to look at you"
+    ],
+    correct: 0,
+    explanation: "Always ask yourself if this is a time when interruption is needed, not just wanted."
+  }
+],
     kindness: [
     {
       question: "You see someone sitting alone at lunch. A kind action is:",
