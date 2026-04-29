@@ -253,10 +253,12 @@ function autoReadQuestion() {
 // ---------------- NEXT QUESTION ----------------
 
 function nextQuestion() {
+
+  // 🔊 STOP any speaking FIRST
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+
   currentQuestionIndex++;
   showAccessDenied(false);
-
-  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 
   if (currentQuestionIndex >= currentQuestions.length) {
     finishGame();
@@ -615,3 +617,16 @@ window.addGoodChoice = addGoodChoice;
 window.addNeedsWork = addNeedsWork;
 window.addCategoryChoice = addCategoryChoice;
 window.resetTracker = resetTracker;
+function readQuestionAloud() {
+  const questionText = document.getElementById("question-text");
+  if (!questionText) return;
+
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(questionText.textContent);
+  speech.rate = 0.85;
+  speech.pitch = 1;
+  speech.volume = 1;
+
+  window.speechSynthesis.speak(speech);
+}
