@@ -1,4 +1,4 @@
-const APP_VERSION = "FINAL-CLEAN-QUESTION-ONLY-READ";
+const APP_VERSION = "FINAL-MIXED-FIXED";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -9,8 +9,7 @@ let readAloudOn = false;
 
 let trackerData = JSON.parse(localStorage.getItem("roxyTrackerData")) || {
   good: 0,
-  bad: 0,
-  categories: {
+  bad: {
     listening: { good: 0, bad: 0 },
     kindness: { good: 0, bad: 0 },
     calmBody: { good: 0, bad: 0 },
@@ -19,37 +18,6 @@ let trackerData = JSON.parse(localStorage.getItem("roxyTrackerData")) || {
     responsibility: { good: 0, bad: 0 }
   }
 };
-
-// ---------------- SOUND ----------------
-
-function playSound(type) {
-  try {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    oscillator.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    if (type === "correct") {
-      oscillator.frequency.setValueAtTime(700, audioCtx.currentTime);
-      oscillator.frequency.setValueAtTime(950, audioCtx.currentTime + 0.12);
-    } else {
-      oscillator.frequency.setValueAtTime(180, audioCtx.currentTime);
-      oscillator.frequency.setValueAtTime(120, audioCtx.currentTime + 0.12);
-    }
-
-    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.35);
-  } catch (e) {
-    console.log("Sound skipped:", e);
-  }
-}
-
-// ---------------- SCREEN CONTROL ----------------
 
 function hideAllScreens() {
   ["home-screen", "game-screen", "results-screen", "tracker-screen"].forEach(id => {
@@ -61,9 +29,7 @@ function hideAllScreens() {
 function showScreen(screen) {
   hideAllScreens();
 
-  if (screen === "game" && !currentCategory) {
-    screen = "home";
-  }
+  if (screen === "game" && !currentCategory) screen = "home";
 
   const el = document.getElementById(screen + "-screen");
   if (el) el.classList.remove("hidden");
@@ -76,18 +42,16 @@ function goHome() {
   showScreen("home");
 }
 
-// ---------------- GAME START ----------------
-
 function startGame(category) {
   if (typeof allQuestions === "undefined") {
-    alert("questions.js is not loading. Check that questions.js is above script.js in index.html.");
+    alert("questions.js is not loading.");
     return;
   }
 
   if (category !== "mixed" && !allQuestions[category]) {
-  alert("No questions found for: " + category);
-  return;
-}
+    alert("No questions found for: " + category);
+    return;
+  }
 
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 
@@ -96,17 +60,22 @@ function startGame(category) {
   score = 0;
   answered = false;
 
- const difficulty = "all";
+  let questionPool = [];
 
-let questionPool = [];
+  if (category === "mixed") {
+    questionPool = Object.values(allQuestions).flat();
+  } else {
+    questionPool = [...allQuestions[category]];
+  }
 
-if (category === "mixed") {
-  questionPool = Object.values(allQuestions).flat();
-} else {
-  questionPool = [...allQuestions[category]];
+  currentQuestions = shuffleArray(questionPool);
+
+  document.getElementById("game-title").textContent = formatCategoryName(category);
+  document.getElementById("score-text").textContent = "Score: 0";
+
+  showScreen("game");
+  loadQuestion();
 }
-
-// ---------------- LOAD QUESTION ----------------
 
 function loadQuestion() {
   const q = currentQuestions[currentQuestionIndex];
@@ -122,7 +91,6 @@ function loadQuestion() {
   document.getElementById("question-text").textContent = q.question;
 
   const questionImage = document.getElementById("question-image");
-
   if (questionImage && q.image) {
     questionImage.src = q.image;
     questionImage.classList.remove("hidden");
@@ -160,12 +128,8 @@ function loadQuestion() {
 
   updateAnimationLabel();
 
-  if (readAloudOn) {
-    autoReadQuestion();
-  }
+  if (readAloudOn) autoReadQuestion();
 }
-
-// ---------------- READ ALOUD ----------------
 
 function toggleReadAloud() {
   readAloudOn = !readAloudOn;
@@ -214,13 +178,36 @@ function autoReadQuestion() {
   speech.volume = 1;
 
   setTimeout(() => {
-    if (readAloudOn) {
-      window.speechSynthesis.speak(speech);
-    }
+    if (readAloudOn) window.speechSynthesis.speak(speech);
   }, 500);
 }
 
-// ---------------- SELECT ANSWER ----------------
+function playSound(type) {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === "correct") {
+      oscillator.frequency.setValueAtTime(700, audioCtx.currentTime);
+      oscillator.frequency.setValueAtTime(950, audioCtx.currentTime + 0.12);
+    } else {
+      oscillator.frequency.setValueAtTime(180, audioCtx.currentTime);
+      oscillator.frequency.setValueAtTime(120, audioCtx.currentTime + 0.12);
+    }
+
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.35);
+  } catch (e) {
+    console.log("Sound skipped:", e);
+  }
+}
 
 function selectAnswer(selectedIndex, clickedButton) {
   if (answered) return;
@@ -235,40 +222,27 @@ function selectAnswer(selectedIndex, clickedButton) {
 
   buttons.forEach(btn => {
     btn.disabled = true;
-
-    if (btn.textContent === q.choices[q.correct]) {
-      btn.classList.add("correct");
-    }
+    if (btn.textContent === q.choices[q.correct]) btn.classList.add("correct");
   });
 
   if (selectedIndex === q.correct) {
     playSound("correct");
     score += 10;
-
     feedbackBox.className = "feedback-box correct-feedback";
     feedbackBox.textContent = "✅ Correct! " + q.explanation;
-
     if (questionBox) questionBox.classList.add("correct-glow");
   } else {
     playSound("wrong");
-
     if (clickedButton) clickedButton.classList.add("wrong");
-
     feedbackBox.className = "feedback-box wrong-feedback";
     feedbackBox.textContent = "❌ Not quite. " + q.explanation;
-
     if (questionBox) questionBox.classList.add("wrong-shake");
-
-    if (currentCategory === "online") {
-      showAccessDenied(true);
-    }
+    if (currentCategory === "online") showAccessDenied(true);
   }
 
   document.getElementById("score-text").textContent = "Score: " + score;
   document.getElementById("next-btn").classList.remove("hidden");
 }
-
-// ---------------- NEXT QUESTION ----------------
 
 function nextQuestion() {
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
@@ -282,8 +256,6 @@ function nextQuestion() {
     loadQuestion();
   }
 }
-
-// ---------------- FINISH GAME ----------------
 
 function finishGame() {
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
@@ -306,20 +278,13 @@ function finishGame() {
 }
 
 function restartCurrentGame() {
-  if (currentCategory) {
-    startGame(currentCategory);
-  } else {
-    goHome();
-  }
+  if (currentCategory) startGame(currentCategory);
+  else goHome();
 }
 
-// ---------------- SCORES ----------------
-
 function saveBestScore(category, newScore) {
-  const difficulty = document.getElementById("difficulty-select")?.value || "all";
-  const key = "best-" + category + "-" + difficulty;
+  const key = "best-" + category;
   const oldScore = Number(localStorage.getItem(key) || 0);
-
   const highScoreBox = document.getElementById("new-high-score");
 
   if (newScore > oldScore) {
@@ -348,17 +313,9 @@ function updateBestScores() {
   categories.forEach(category => {
     const el = document.getElementById("best-" + category);
     if (!el) return;
-
-    const allBest = Number(localStorage.getItem("best-" + category + "-all") || 0);
-    const beginnerBest = Number(localStorage.getItem("best-" + category + "-beginner") || 0);
-    const advancedBest = Number(localStorage.getItem("best-" + category + "-advanced") || 0);
-
-    const best = Math.max(allBest, beginnerBest, advancedBest);
-    el.textContent = "Best Score: " + best;
+    el.textContent = "Best Score: " + Number(localStorage.getItem("best-" + category) || 0);
   });
 }
-
-// ---------------- TRACKER ----------------
 
 function saveTracker() {
   localStorage.setItem("roxyTrackerData", JSON.stringify(trackerData));
@@ -377,9 +334,8 @@ function addNeedsWork() {
 }
 
 function addCategoryChoice(category, isGood) {
-  if (!trackerData.categories[category]) {
-    trackerData.categories[category] = { good: 0, bad: 0 };
-  }
+  if (!trackerData.categories) trackerData.categories = {};
+  if (!trackerData.categories[category]) trackerData.categories[category] = { good: 0, bad: 0 };
 
   if (isGood) {
     trackerData.categories[category].good++;
@@ -414,8 +370,8 @@ function resetTracker() {
 }
 
 function updateTrackerDisplay() {
-  const good = trackerData.good;
-  const bad = trackerData.bad;
+  const good = trackerData.good || 0;
+  const bad = trackerData.bad || 0;
   const total = good + bad;
   const percent = total === 0 ? 0 : Math.round((good / total) * 100);
 
@@ -431,45 +387,7 @@ function updateTrackerDisplay() {
   setText("tracker-badge", getBadge(percent));
   setText("tracker-message", getTrackerMessage(percent));
   setText("tracker-week-text", getWeekText());
-
-  Object.keys(trackerData.categories).forEach(category => {
-    setText(category + "-good", "Good: " + trackerData.categories[category].good);
-    setText(category + "-bad", "Needs Work: " + trackerData.categories[category].bad);
-  });
-
-  updateTrackerSummary();
 }
-
-function updateTrackerSummary() {
-  let bestArea = "--";
-  let focusArea = "--";
-  let bestScore = -1;
-  let worstScore = 999;
-
-  Object.keys(trackerData.categories).forEach(category => {
-    const data = trackerData.categories[category];
-    const total = data.good + data.bad;
-
-    if (total > 0) {
-      const percent = Math.round((data.good / total) * 100);
-
-      if (percent > bestScore) {
-        bestScore = percent;
-        bestArea = formatCategoryName(category);
-      }
-
-      if (percent < worstScore) {
-        worstScore = percent;
-        focusArea = formatCategoryName(category);
-      }
-    }
-  });
-
-  setText("most-improved", bestArea);
-  setText("focus-area", focusArea);
-}
-
-// ---------------- ACCESS DENIED ----------------
 
 function showAccessDenied(show) {
   const overlay = document.getElementById("access-denied-overlay");
@@ -477,23 +395,17 @@ function showAccessDenied(show) {
 
   if (show) {
     overlay.classList.remove("hidden");
-
-    setTimeout(() => {
-      overlay.classList.add("hidden");
-    }, 4000);
+    setTimeout(() => overlay.classList.add("hidden"), 4000);
   } else {
     overlay.classList.add("hidden");
   }
 }
-
-// ---------------- CONFETTI ----------------
 
 function launchConfetti() {
   const canvas = document.getElementById("confetti-canvas");
   if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
-
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
@@ -516,24 +428,17 @@ function launchConfetti() {
     pieces.forEach(p => {
       p.y += p.speed;
       p.x += p.drift;
-
       if (p.y > canvas.height) p.y = -10;
-
       ctx.fillStyle = p.color;
       ctx.fillRect(p.x, p.y, p.size, p.size);
     });
 
-    if (elapsed < duration) {
-      requestAnimationFrame(draw);
-    } else {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+    if (elapsed < duration) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
   requestAnimationFrame(draw);
 }
-
-// ---------------- HELPERS ----------------
 
 function shuffleArray(arr) {
   return arr.sort(() => Math.random() - 0.5);
@@ -552,13 +457,9 @@ function setWidth(id, width) {
 function formatCategoryName(category) {
   const names = {
     mixed: "Mixed Practice",
-    all: "All",
-    beginner: "Beginner",
-    advanced: "Advanced",
     interrupting: "Interrupting",
     kindness: "Kindness",
     calm: "Calm Reactions",
-    calmBody: "Calm Body",
     honesty: "Honesty",
     respect: "Respect",
     responsibility: "Responsibility",
@@ -593,17 +494,16 @@ function getTrackerMessage(percent) {
 }
 
 function getWeekText() {
-  const today = new Date();
-  return today.toLocaleDateString();
+  return new Date().toLocaleDateString();
 }
 
 function updateAnimationLabel() {
   const icon = document.getElementById("animation-icon");
   const label = document.getElementById("animation-label");
-
   if (!icon || !label) return;
 
   const map = {
+    mixed: ["🎲", "Mixed practice."],
     interrupting: ["🤐", "Wait your turn."],
     kindness: ["💛", "Choose kindness."],
     calm: ["🧘", "Stay calm."],
@@ -615,12 +515,9 @@ function updateAnimationLabel() {
   };
 
   const selected = map[currentCategory] || ["⭐", "Choose wisely."];
-
   icon.textContent = selected[0];
   label.textContent = selected[1];
 }
-
-// ---------------- INIT ----------------
 
 document.addEventListener("DOMContentLoaded", () => {
   updateBestScores();
@@ -629,7 +526,6 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log(APP_VERSION);
 });
 
-// Make functions available to HTML buttons
 window.startGame = startGame;
 window.showScreen = showScreen;
 window.goHome = goHome;
