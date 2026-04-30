@@ -469,6 +469,39 @@ function updateTrackerDisplay() {
     setText(category + "-good", "Good: " + trackerData.categories[category].good);
     setText(category + "-bad", "Needs Work: " + trackerData.categories[category].bad);
   });
+  let focusArea = "--";
+let mostNeeds = -1;
+
+Object.keys(trackerData.categories || {}).forEach(category => {
+  const badCount = trackerData.categories[category].bad || 0;
+
+  if (badCount > mostNeeds) {
+    mostNeeds = badCount;
+    focusArea = formatCategoryName(category);
+  }
+});
+
+setText("focus-area", focusArea);
+
+let bestArea = "--";
+let bestPercent = -1;
+
+Object.keys(trackerData.categories || {}).forEach(category => {
+  const goodCount = trackerData.categories[category].good || 0;
+  const badCount = trackerData.categories[category].bad || 0;
+  const total = goodCount + badCount;
+
+  if (total > 0) {
+    const areaPercent = goodCount / total;
+
+    if (areaPercent > bestPercent) {
+      bestPercent = areaPercent;
+      bestArea = formatCategoryName(category);
+    }
+  }
+});
+
+setText("most-improved", bestArea);
 }
 
 function showAccessDenied(show) {
