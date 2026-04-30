@@ -6,6 +6,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let answered = false;
 let readAloudOn = false;
+let categoryMistakes = {};
 
 let trackerData = JSON.parse(localStorage.getItem("roxyTrackerData")) || {
   good: 0,
@@ -61,6 +62,8 @@ function startGame(category) {
     alert("questions.js is not loading.");
     return;
   }
+  
+  categoryMistakes = {};
 
   if (category !== "mixed" && !allQuestions[category]) {
     alert("No questions found for: " + category);
@@ -262,6 +265,13 @@ function selectAnswer(selectedIndex, clickedButton) {
     playSound("wrong");
 
     if (clickedButton) clickedButton.classList.add("wrong");
+    
+    const questionKey = q.question;
+
+if (!categoryMistakes[questionKey]) {
+  categoryMistakes[questionKey] = 0;
+}
+categoryMistakes[questionKey]++;
 
     feedbackBox.className = "feedback-box wrong-feedback";
     feedbackBox.textContent = "❌ Not quite. " + q.explanation;
@@ -324,6 +334,20 @@ function finishGame() {
     setTimeout(() => launchConfetti(), 500);
     setTimeout(() => launchConfetti(), 1000);
   }
+  let worstCategory = null;
+let highestMistakes = 0;
+
+for (let cat in categoryMistakes) {
+  if (categoryMistakes[cat] > highestMistakes) {
+    highestMistakes = categoryMistakes[cat];
+    worstCategory = cat;
+  }
+}
+
+if (worstCategory && highestMistakes > 0) {
+  document.getElementById("results-message").textContent +=
+    " Focus Area: Review this situation: " + worstCategory;
+}
 }
 
 function restartCurrentGame() {
