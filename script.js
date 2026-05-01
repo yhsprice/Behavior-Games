@@ -923,34 +923,42 @@ let conversationData = [
     }
   }
 ];
-
 let currentScenario = null;
-let currentStep = 0;
+let currentStep = "";
 let respectScore = 50;
 
 function startConversationPractice() {
   showScreen("conversation");
 
-  currentScenario = conversationData[0]; // later randomize
-  currentStep = 0;
+  currentScenario = conversationData[0];
+  currentStep = currentScenario.start;
   respectScore = 50;
 
   updateConversation();
 }
 
 function updateConversation() {
-  let step = currentScenario.steps[currentStep];
+  const step = currentScenario.steps[currentStep];
 
   document.getElementById("scenarioTitle").innerText = currentScenario.title;
-  document.getElementById("speakerBox").innerText = step.speaker;
-  document.getElementById("conversationText").innerText = step.text;
+  document.getElementById("speakerBox").innerText = step.player;
+  document.getElementById("conversationText").innerText = step.prompt;
   document.getElementById("respectMeter").innerText = respectScore;
 
-  let choicesBox = document.getElementById("choicesBox");
+  const choicesBox = document.getElementById("choicesBox");
+  const feedbackBox = document.getElementById("feedbackBox");
+
   choicesBox.innerHTML = "";
+  feedbackBox.innerText = "";
+
+  if (!step.choices || step.choices.length === 0) {
+    choicesBox.innerHTML =
+      '<button class="primary-btn" onclick="startConversationPractice()">Try Again</button>';
+    return;
+  }
 
   step.choices.forEach((choice, index) => {
-    let btn = document.createElement("button");
+    const btn = document.createElement("button");
     btn.innerText = choice.text;
     btn.onclick = () => chooseConversationAnswer(index);
     choicesBox.appendChild(btn);
@@ -958,21 +966,19 @@ function updateConversation() {
 }
 
 function chooseConversationAnswer(index) {
-  let step = currentScenario.steps[currentStep];
-  let choice = step.choices[index];
+  const step = currentScenario.steps[currentStep];
+  const choice = step.choices[index];
 
   respectScore += choice.effect;
-
+  document.getElementById("respectMeter").innerText = respectScore;
   document.getElementById("feedbackBox").innerText = choice.feedback;
 
-  if (choice.next !== null) {
-    currentStep = choice.next;
-    setTimeout(updateConversation, 1500);
-  } else {
-    document.getElementById("conversationText").innerText =
-      "Conversation ended. Final Respect Score: " + respectScore;
-    document.getElementById("choicesBox").innerHTML = "";
-  }
+  currentStep = choice.next;
+
+  setTimeout(updateConversation, 1800);
 }
+
 window.startConversationPractice = startConversationPractice;
 window.chooseConversationAnswer = chooseConversationAnswer;
+
+onversationAnswer = chooseConversationAnswer;
