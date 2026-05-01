@@ -1082,7 +1082,7 @@ let respectScore = 50;
 function startConversationPractice() {
   showScreen("conversation");
 
-  currentScenario = conversationData[0];
+  currentScenario = conversationData[Math.floor(Math.random() * conversationData.length)];
   currentStep = currentScenario.start;
   respectScore = 50;
 
