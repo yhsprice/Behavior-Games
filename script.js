@@ -921,7 +921,159 @@ let conversationData = [
         choices: []
       }
     }
+  },
+
+  {
+  title: "But THEY get to do it!",
+  start: "parent_start",
+  steps: {
+    parent_start: {
+      player: "Player 1 - Parent",
+      prompt: "Your child says: “But THEY get to do it!” What should the parent say?",
+      choices: [
+        {
+          text: "I understand that feels unfair, but different families have different rules.",
+          effect: 10,
+          next: "kid_response",
+          feedback: "Good response. It acknowledges feelings without changing the rule."
+        },
+        {
+          text: "I don’t care what they get to do.",
+          effect: -15,
+          next: "end_bad",
+          feedback: "This shuts the conversation down immediately."
+        },
+        {
+          text: "That’s not our house.",
+          effect: -5,
+          next: "kid_response",
+          feedback: "This is true, but not very helpful."
+        }
+      ]
+    },
+
+    kid_response: {
+      player: "Player 2 - Kid",
+      prompt: "How does the kid respond?",
+      choices: [
+        {
+          text: "That’s still not fair.",
+          effect: -5,
+          next: "parent_follow",
+          feedback: "Keeps the argument going."
+        },
+        {
+          text: "Why is it different for me?",
+          effect: 10,
+          next: "parent_follow",
+          feedback: "Good question. This opens learning."
+        },
+        {
+          text: "Whatever.",
+          effect: -5,
+          next: "end_neutral",
+          feedback: "Shuts things down without solving anything."
+        }
+      ]
+    },
+
+    parent_follow: {
+      player: "Player 1 - Parent",
+      prompt: "What should the parent say next?",
+      choices: [
+        {
+          text: "Because I want you to earn trust first.",
+          effect: 10,
+          next: "end_good",
+          feedback: "Clear and connected to behavior."
+        },
+        {
+          text: "Because I said so.",
+          effect: -10,
+          next: "end_bad",
+          feedback: "Ends conversation, no learning."
+        }
+      ]
+    },
+
+    {
+  title: "But THEY get to do it!",
+  start: "parent_start",
+  steps: {
+    parent_start: {
+      player: "Player 1 - Parent",
+      prompt: "Your child says: “But THEY get to do it!” What should the parent say?",
+      choices: [
+        {
+          text: "I understand that feels unfair, but different families have different rules.",
+          effect: 10,
+          next: "kid_response",
+          feedback: "Good response. It acknowledges feelings without changing the rule."
+        },
+        {
+          text: "I don’t care what they get to do.",
+          effect: -15,
+          next: "end_bad",
+          feedback: "This shuts the conversation down immediately."
+        },
+        {
+          text: "That’s not our house.",
+          effect: -5,
+          next: "kid_response",
+          feedback: "This is true, but not very helpful."
+        }
+      ]
+    },
+
+    kid_response: {
+      player: "Player 2 - Kid",
+      prompt: "How does the kid respond?",
+      choices: [
+        {
+          text: "That’s still not fair.",
+          effect: -5,
+          next: "parent_follow",
+          feedback: "Keeps the argument going."
+        },
+        {
+          text: "Why is it different for me?",
+          effect: 10,
+          next: "parent_follow",
+          feedback: "Good question. This opens learning."
+        },
+        {
+          text: "Whatever.",
+          effect: -5,
+          next: "end_neutral",
+          feedback: "Shuts things down without solving anything."
+        }
+      ]
+    },
+
+    parent_follow: {
+      player: "Player 1 - Parent",
+      prompt: "What should the parent say next?",
+      choices: [
+        {
+          text: "Because I want you to earn trust first.",
+          effect: 10,
+          next: "end_good",
+          feedback: "Clear and connected to behavior."
+        },
+        {
+          text: "Because I said so.",
+          effect: -10,
+          next: "end_bad",
+          feedback: "Ends conversation, no learning."
+        }
+      ]
+    },
+
+    end_good: { player: "Result", prompt: "💬 Productive conversation.", choices: [] },
+    end_neutral: { player: "Result", prompt: "⚖️ Neutral ending.", choices: [] },
+    end_bad: { player: "Result", prompt: "🔥 Escalated ending.", choices: [] }
   }
+}
 ];
 let currentScenario = null;
 let currentStep = "";
