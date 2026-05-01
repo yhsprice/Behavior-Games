@@ -140,7 +140,18 @@
         </button>
       </div>
     </section>
-    <div id="conversationScreen" style="display:none;">
+    <section id="conversation-screen" class="card hidden">
+      <div id="choicesBox" class="answer-buttons"></div>
+
+<div id="feedbackBox" class="feedback-box"></div>
+
+<div class="score-pill">
+  Respect Meter: <span id="respectMeter">50</span>
+</div>
+
+<button class="small-btn" onclick="goHome()">Back</button>
+</section>
+      
   <h2 id="scenarioTitle"></h2>
 
   <div id="speakerBox"></div>
