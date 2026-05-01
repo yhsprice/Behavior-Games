@@ -1011,6 +1011,7 @@ let conversationData = [
 let currentScenario = null;
 let currentStep = "";
 let respectScore = 50;
+let conversationHistory = [];
 
 function startConversationPractice() {
   showScreen("conversation");
@@ -1065,6 +1066,7 @@ function startSelectedConversation(scenario) {
   currentScenario = scenario;
   currentStep = currentScenario.start;
   respectScore = 50;
+  conversationHistory = [];
   updateConversation();
 }
 
@@ -1081,6 +1083,13 @@ function updateConversation() {
 
   choicesBox.innerHTML = "";
   feedbackBox.innerText = "";
+
+  if (conversationHistory.length > 0) {
+    const backStepBtn = document.createElement("button");
+    backStepBtn.innerText = "⬅ Back One Step";
+    backStepBtn.onclick = goBackOneConversationStep;
+    choicesBox.appendChild(backStepBtn);
+  }
 
   if (!step.choices || step.choices.length === 0) {
     const tryAgainBtn = document.createElement("button");
@@ -1102,6 +1111,11 @@ function chooseConversationAnswer(index) {
   const step = currentScenario.steps[currentStep];
   const choice = step.choices[index];
 
+  conversationHistory.push({
+    step: currentStep,
+    score: respectScore
+  });
+
   respectScore += choice.effect || 0;
   document.getElementById("respectMeter").innerText = respectScore;
   document.getElementById("feedbackBox").innerText = choice.feedback || "";
@@ -1111,7 +1125,20 @@ function chooseConversationAnswer(index) {
   setTimeout(updateConversation, 1800);
 }
 
+function goBackOneConversationStep() {
+  if (conversationHistory.length === 0) return;
+
+  const previous = conversationHistory.pop();
+  currentStep = previous.step;
+  respectScore = previous.score;
+
+  updateConversation();
+}
+
+window.goBackOneConversationStep = goBackOneConversationStep;
+
 window.startConversationPractice = startConversationPractice;
 window.showConversationTopics = showConversationTopics;
 window.startSelectedConversation = startSelectedConversation;
 window.chooseConversationAnswer = chooseConversationAnswer;
+window.goBackOneConversationStep = goBackOneConversationStep;
