@@ -33,7 +33,7 @@ if (!trackerData.categories) {
 }
 
 function hideAllScreens() {
-  ["home-screen", "game-screen", "results-screen", "tracker-screen"].forEach(id => {
+  ["home-screen", "game-screen", "results-screen", "tracker-screen", "conversation-screen"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.add("hidden");
   });
@@ -739,7 +739,7 @@ let currentStep = 0;
 let respectScore = 50;
 
 function startConversationPractice() {
-  showScreen("conversationScreen");
+  showScreen("conversation");
 
   currentScenario = conversationData[0]; // later randomize
   currentStep = 0;
@@ -784,3 +784,5 @@ function chooseConversationAnswer(index) {
     document.getElementById("choicesBox").innerHTML = "";
   }
 }
+window.startConversationPractice = startConversationPractice;
+window.chooseConversationAnswer = chooseConversationAnswer;
