@@ -676,6 +676,7 @@ window.readQuestionAloud = readQuestionAloud;
 let conversationData = [
   {
     title: "That's not fair!",
+    role: "child",
     start: "parent_start",
     steps: {
       parent_start: {
@@ -692,7 +693,7 @@ let conversationData = [
             text: "Life isn’t fair. Get over it.",
             effect: -15,
             next: "kid_escalated_path",
-            feedback: "This may be true, but it sounds dismissive and usually makes the argument worse."
+            feedback: "This sounds dismissive and usually makes the argument worse."
           },
           {
             text: "We’re not arguing about this.",
@@ -705,51 +706,21 @@ let conversationData = [
 
       kid_good_path: {
         player: "Player 2 - Kid",
-        prompt: "Parent says: “Fair doesn’t always mean equal. Let’s talk about why this decision was made.” What should the kid say?",
+        prompt: "Parent explained calmly. What should the kid say?",
         choices: [
-          {
-            text: "I don’t want to talk about it. It’s still not fair.",
-            effect: -5,
-            next: "parent_recover_1",
-            feedback: "This is honest, but it keeps the argument going."
-          },
-          {
-            text: "Okay… but I don’t get it.",
-            effect: 10,
-            next: "parent_teach_1",
-            feedback: "Good response. It keeps the conversation open."
-          },
-          {
-            text: "Then explain it.",
-            effect: 5,
-            next: "parent_teach_1",
-            feedback: "This asks for an explanation, but tone matters."
-          }
+          { text: "Okay… but I don’t get it.", effect: 10, next: "parent_teach_1", feedback: "Good response. It keeps the conversation open." },
+          { text: "I still don’t care.", effect: -10, next: "parent_recover_1", feedback: "This keeps the argument alive." },
+          { text: "Can you explain why?", effect: 10, next: "parent_teach_1", feedback: "Great. Asking questions respectfully helps." }
         ]
       },
 
       kid_escalated_path: {
         player: "Player 2 - Kid",
-        prompt: "Parent says: “Life isn’t fair. Get over it.” What does the kid say?",
+        prompt: "Parent said: “Life isn’t fair. Get over it.” What does the kid say?",
         choices: [
-          {
-            text: "You’re so unfair!",
-            effect: -10,
-            next: "parent_escalated_end",
-            feedback: "That response throws gas on the fire."
-          },
-          {
-            text: "I hate this!",
-            effect: -10,
-            next: "parent_escalated_end",
-            feedback: "This shows big feelings, but it does not solve the problem."
-          },
-          {
-            text: "Fine. Whatever.",
-            effect: -5,
-            next: "parent_shutdown_end",
-            feedback: "This stops talking, but it does not fix the problem."
-          }
+          { text: "You’re so unfair!", effect: -10, next: "parent_escalated_end", feedback: "That throws gas on the fire." },
+          { text: "Fine. Whatever.", effect: -5, next: "parent_shutdown_end", feedback: "This shuts down instead of solving it." },
+          { text: "Can we talk about it without yelling?", effect: 10, next: "parent_recover_1", feedback: "Excellent recovery." }
         ]
       },
 
@@ -757,24 +728,9 @@ let conversationData = [
         player: "Player 2 - Kid",
         prompt: "Parent says: “We’re not arguing about this.” What does the kid say?",
         choices: [
-          {
-            text: "You never listen!",
-            effect: -10,
-            next: "parent_recover_1",
-            feedback: "This makes the parent feel attacked and can restart the fight."
-          },
-          {
-            text: "Okay, but can you tell me why later?",
-            effect: 10,
-            next: "parent_teach_1",
-            feedback: "Great response. It accepts the boundary but still asks to understand."
-          },
-          {
-            text: "Whatever.",
-            effect: -5,
-            next: "parent_shutdown_end",
-            feedback: "This ends the conversation cold. Not helpful, but common."
-          }
+          { text: "You never listen!", effect: -10, next: "parent_recover_1", feedback: "This makes the parent feel attacked." },
+          { text: "Okay, but can you tell me why later?", effect: 10, next: "parent_teach_1", feedback: "Great response. It accepts the boundary but still asks to understand." },
+          { text: "Whatever.", effect: -5, next: "parent_shutdown_end", feedback: "This ends the conversation cold." }
         ]
       },
 
@@ -782,24 +738,9 @@ let conversationData = [
         player: "Player 1 - Parent",
         prompt: "The conversation is getting tense. What should the parent say next?",
         choices: [
-          {
-            text: "I hear that you’re upset. I still want to explain it calmly.",
-            effect: 10,
-            next: "kid_final_choice",
-            feedback: "Good recovery. This lowers the temperature."
-          },
-          {
-            text: "Stop being dramatic.",
-            effect: -15,
-            next: "final_bad",
-            feedback: "That dismisses feelings and usually makes things worse."
-          },
-          {
-            text: "Go to your room.",
-            effect: -10,
-            next: "final_bad",
-            feedback: "That may stop the conversation, but it does not teach the skill."
-          }
+          { text: "I hear that you’re upset. I still want to explain it calmly.", effect: 10, next: "kid_final_choice", feedback: "Good recovery. This lowers the temperature." },
+          { text: "Stop being dramatic.", effect: -15, next: "final_bad", feedback: "That dismisses feelings and makes things worse." },
+          { text: "Go to your room.", effect: -10, next: "final_bad", feedback: "That may stop the conversation, but it does not teach the skill." }
         ]
       },
 
@@ -807,24 +748,9 @@ let conversationData = [
         player: "Player 1 - Parent",
         prompt: "The kid is willing to listen. What should the parent say?",
         choices: [
-          {
-            text: "The rule is different because trust and responsibility are different right now.",
-            effect: 10,
-            next: "kid_final_choice",
-            feedback: "Strong explanation. It connects the rule to behavior."
-          },
-          {
-            text: "Because I’m the parent.",
-            effect: -5,
-            next: "kid_final_choice",
-            feedback: "This may be true, but it does not teach much."
-          },
-          {
-            text: "You already know why.",
-            effect: -10,
-            next: "final_bad",
-            feedback: "This shuts down the chance to learn."
-          }
+          { text: "The rule is different because trust and responsibility are different right now.", effect: 10, next: "kid_final_choice", feedback: "Strong explanation. It connects the rule to behavior." },
+          { text: "Because I’m the parent.", effect: -5, next: "kid_final_choice", feedback: "This may be true, but it does not teach much." },
+          { text: "You already know why.", effect: -10, next: "final_bad", feedback: "This shuts down the chance to learn." }
         ]
       },
 
@@ -832,24 +758,9 @@ let conversationData = [
         player: "Player 2 - Kid",
         prompt: "What should the kid say to finish the conversation better?",
         choices: [
-          {
-            text: "Okay. I still don’t like it, but I understand better.",
-            effect: 15,
-            next: "final_good",
-            feedback: "Excellent. You can disagree and still be respectful."
-          },
-          {
-            text: "Can I earn more trust back?",
-            effect: 15,
-            next: "final_good",
-            feedback: "Excellent. This turns the problem into a goal."
-          },
-          {
-            text: "This is still stupid.",
-            effect: -10,
-            next: "final_bad",
-            feedback: "That keeps the argument alive."
-          }
+          { text: "Okay. I still don’t like it, but I understand better.", effect: 15, next: "final_good", feedback: "Excellent. You can disagree and still be respectful." },
+          { text: "Can I earn more trust back?", effect: 15, next: "final_good", feedback: "Excellent. This turns the problem into a goal." },
+          { text: "This is still stupid.", effect: -10, next: "final_bad", feedback: "That keeps the argument alive." }
         ]
       },
 
@@ -857,24 +768,9 @@ let conversationData = [
         player: "Player 1 - Parent",
         prompt: "The kid is upset. What should the parent do now?",
         choices: [
-          {
-            text: "Let’s pause and talk when we are both calmer.",
-            effect: 5,
-            next: "final_neutral",
-            feedback: "Good save. Sometimes pausing is the best move."
-          },
-          {
-            text: "Keep talking like that and you lose more.",
-            effect: -15,
-            next: "final_bad",
-            feedback: "That escalates the power struggle."
-          },
-          {
-            text: "I’m done with this.",
-            effect: -10,
-            next: "final_bad",
-            feedback: "This ends the conversation without repair."
-          }
+          { text: "Let’s pause and talk when we are both calmer.", effect: 5, next: "final_neutral", feedback: "Good save. Sometimes pausing is best." },
+          { text: "Keep talking like that and you lose more.", effect: -15, next: "final_bad", feedback: "That escalates the power struggle." },
+          { text: "I’m done with this.", effect: -10, next: "final_bad", feedback: "This ends the conversation without repair." }
         ]
       },
 
@@ -882,326 +778,236 @@ let conversationData = [
         player: "Player 1 - Parent",
         prompt: "The kid has shut down. What should the parent say?",
         choices: [
-          {
-            text: "We can take a break, but I want to talk about this later.",
-            effect: 5,
-            next: "final_neutral",
-            feedback: "Good boundary. It gives space without ignoring the issue."
-          },
-          {
-            text: "Fine. Don’t talk then.",
-            effect: -10,
-            next: "final_bad",
-            feedback: "This creates distance instead of repair."
-          },
-          {
-            text: "You need to learn to listen.",
-            effect: -5,
-            next: "final_bad",
-            feedback: "It may be true, but it sounds like a lecture."
-          }
+          { text: "We can take a break, but I want to talk about this later.", effect: 5, next: "final_neutral", feedback: "Good boundary. It gives space without ignoring the issue." },
+          { text: "Fine. Don’t talk then.", effect: -10, next: "final_bad", feedback: "This creates distance instead of repair." },
+          { text: "You need to learn to listen.", effect: -5, next: "final_bad", feedback: "It may be true, but it sounds like a lecture." }
         ]
       },
 
-      final_good: {
-        player: "Result",
-        prompt: "💬 Productive conversation. Both people stayed respectful enough to understand each other.",
-        choices: []
-      },
-
-      final_neutral: {
-        player: "Result",
-        prompt: "⚖️ Neutral ending. The conversation did not fully solve the issue, but it avoided a blow-up.",
-        choices: []
-      },
-
-      final_bad: {
-        player: "Result",
-        prompt: "🔥 Escalated ending. The conversation became more about winning than understanding.",
-        choices: []
-      }
+      final_good: { player: "Result", prompt: "💬 Productive conversation. Both people stayed respectful enough to understand each other.", choices: [] },
+      final_neutral: { player: "Result", prompt: "⚖️ Neutral ending. The conversation did not fully solve the issue, but it avoided a blow-up.", choices: [] },
+      final_bad: { player: "Result", prompt: "🔥 Escalated ending. The conversation became more about winning than understanding.", choices: [] }
     }
   },
 
   {
-   title: "But THEY get to do it!",
-  start: "parent_start",
-  steps: {
-    parent_start: {
-      player: "Player 1 - Parent",
-      prompt: "Your child says: “But THEY get to do it!” What should the parent say?",
-      choices: [
-        {
-          text: "I understand that feels unfair, but different families have different rules.",
-          effect: 10,
-          next: "kid_response",
-          feedback: "Good response. It acknowledges feelings without changing the rule."
-        },
-        {
-          text: "I don’t care what they get to do.",
-          effect: -15,
-          next: "end_bad",
-          feedback: "This shuts the conversation down immediately."
-        },
-        {
-          text: "That’s not our house.",
-          effect: -5,
-          next: "kid_response",
-          feedback: "This is true, but not very helpful."
-        }
-      ]
-    },
+    title: "But THEY get to do it!",
+    role: "child",
+    start: "parent_start",
+    steps: {
+      parent_start: {
+        player: "Player 1 - Parent",
+        prompt: "Your child says: “But THEY get to do it!” What should the parent say?",
+        choices: [
+          { text: "I understand that feels unfair, but different families have different rules.", effect: 10, next: "kid_response", feedback: "Good response. It acknowledges feelings without changing the rule." },
+          { text: "I don’t care what they get to do.", effect: -15, next: "end_bad", feedback: "This shuts the conversation down immediately." },
+          { text: "That’s not our house.", effect: -5, next: "kid_response", feedback: "This is true, but not very helpful." }
+        ]
+      },
+      kid_response: {
+        player: "Player 2 - Kid",
+        prompt: "How does the kid respond?",
+        choices: [
+          { text: "That’s still not fair.", effect: -5, next: "parent_follow", feedback: "Keeps the argument going." },
+          { text: "Why is it different for me?", effect: 10, next: "parent_follow", feedback: "Good question. This opens learning." },
+          { text: "Whatever.", effect: -5, next: "end_neutral", feedback: "Shuts things down without solving anything." }
+        ]
+      },
+      parent_follow: {
+        player: "Player 1 - Parent",
+        prompt: "What should the parent say next?",
+        choices: [
+          { text: "Because I want you to earn trust first.", effect: 10, next: "end_good", feedback: "Clear and connected to behavior." },
+          { text: "Because I said so.", effect: -10, next: "end_bad", feedback: "Ends conversation, no learning." }
+        ]
+      },
+      end_good: { player: "Result", prompt: "💬 Productive conversation.", choices: [] },
+      end_neutral: { player: "Result", prompt: "⚖️ Neutral ending.", choices: [] },
+      end_bad: { player: "Result", prompt: "🔥 Escalated ending.", choices: [] }
+    }
+  },
 
-    kid_response: {
-      player: "Player 2 - Kid",
-      prompt: "How does the kid respond?",
-      choices: [
-        {
-          text: "That’s still not fair.",
-          effect: -5,
-          next: "parent_follow",
-          feedback: "Keeps the argument going."
-        },
-        {
-          text: "Why is it different for me?",
-          effect: 10,
-          next: "parent_follow",
-          feedback: "Good question. This opens learning."
-        },
-        {
-          text: "Whatever.",
-          effect: -5,
-          next: "end_neutral",
-          feedback: "Shuts things down without solving anything."
-        }
-      ]
-    },
-
-    parent_follow: {
-      player: "Player 1 - Parent",
-      prompt: "What should the parent say next?",
-      choices: [
-        {
-          text: "Because I want you to earn trust first.",
-          effect: 10,
-          next: "end_good",
-          feedback: "Clear and connected to behavior."
-        },
-        {
-          text: "Because I said so.",
-          effect: -10,
-          next: "end_bad",
-          feedback: "Ends conversation, no learning."
-        }
-      ]
-    },
-
-    end_good: { player: "Result", prompt: "💬 Productive conversation.", choices: [] },
-    end_neutral: { player: "Result", prompt: "⚖️ Neutral ending.", choices: [] },
-    end_bad: { player: "Result", prompt: "🔥 Escalated ending.", choices: [] }
-  }
-},
   {
-  title: "Go clean your room",
-  start: "parent_start",
-  steps: {
-    parent_start: {
-      player: "Player 1 - Parent",
-      prompt: "Parent says: “Go clean your room.”",
-      choices: [
-        {
-          text: "Please go clean your room before dinner.",
-          effect: 10,
-          next: "kid_response",
-          feedback: "Clear and respectful instruction."
-        },
-        {
-          text: "Go clean your room right now!",
-          effect: -5,
-          next: "kid_response",
-          feedback: "Clear, but more forceful."
-        },
-        {
-          text: "Your room is disgusting. Go fix it.",
-          effect: -15,
-          next: "end_bad",
-          feedback: "This attacks instead of instructs."
-        }
-      ]
-    },
+    title: "Go clean your room",
+    role: "parent",
+    start: "parent_start",
+    steps: {
+      parent_start: {
+        player: "Player 1 - Parent",
+        prompt: "Parent says: “Go clean your room.”",
+        choices: [
+          { text: "Please go clean your room before dinner.", effect: 10, next: "kid_response", feedback: "Clear and respectful instruction." },
+          { text: "Go clean your room right now!", effect: -5, next: "kid_response", feedback: "Clear, but more forceful." },
+          { text: "Your room is disgusting. Go fix it.", effect: -15, next: "end_bad", feedback: "This attacks instead of instructs." }
+        ]
+      },
+      kid_response: {
+        player: "Player 2 - Kid",
+        prompt: "How does the kid respond?",
+        choices: [
+          { text: "Do I have to?", effect: -5, next: "parent_follow", feedback: "This pushes back but keeps talking." },
+          { text: "Okay.", effect: 10, next: "end_good", feedback: "Good response. The task gets handled." },
+          { text: "No!", effect: -10, next: "parent_follow", feedback: "This starts a power struggle." }
+        ]
+      },
+      parent_follow: {
+        player: "Player 1 - Parent",
+        prompt: "What should the parent say?",
+        choices: [
+          { text: "Yes, and you can take a break after.", effect: 10, next: "end_good", feedback: "Good. Clear expectation with a reasonable finish." },
+          { text: "Because I said so.", effect: -10, next: "end_bad", feedback: "This ends discussion, but usually builds resentment." }
+        ]
+      },
+      end_good: { player: "Result", prompt: "💬 Task handled with minimal conflict.", choices: [] },
+      end_bad: { player: "Result", prompt: "🔥 Argument escalated.", choices: [] }
+    }
+  },
 
-    kid_response: {
-      player: "Player 2 - Kid",
-      prompt: "How does the kid respond?",
-      choices: [
-        { text: "Do I have to?", effect: -5, next: "parent_follow" },
-        { text: "Okay.", effect: 10, next: "end_good" },
-        { text: "No!", effect: -10, next: "parent_follow" }
-      ]
-    },
-
-    parent_follow: {
-      player: "Player 1 - Parent",
-      prompt: "What should the parent say?",
-      choices: [
-        { text: "Yes, and you can take a break after.", effect: 10, next: "end_good" },
-        { text: "Because I said so.", effect: -10, next: "end_bad" }
-      ]
-    },
-
-    end_good: { player: "Result", prompt: "💬 Task handled with minimal conflict.", choices: [] },
-    end_bad: { player: "Result", prompt: "🔥 Argument escalated.", choices: [] }
-  }
-},
   {
-  title: "Do your homework",
-  start: "parent_start",
-  steps: {
-    parent_start: {
-      player: "Player 1 - Parent",
-      prompt: "Parent says: “Do your homework.”",
-      choices: [
-        { text: "Let’s get your homework done first.", effect: 10, next: "kid_response" },
-        { text: "Do your homework now.", effect: -5, next: "kid_response" },
-        { text: "If you don’t do it, you’re grounded.", effect: -15, next: "end_bad" }
-      ]
-    },
+    title: "Do your homework",
+    role: "parent",
+    start: "parent_start",
+    steps: {
+      parent_start: {
+        player: "Player 1 - Parent",
+        prompt: "Parent says: “Do your homework.”",
+        choices: [
+          { text: "Let’s get your homework done first.", effect: 10, next: "kid_response", feedback: "Clear and supportive." },
+          { text: "Do your homework now.", effect: -5, next: "kid_response", feedback: "Clear, but a little sharp." },
+          { text: "If you don’t do it, you’re grounded.", effect: -15, next: "end_bad", feedback: "This jumps straight to threat mode." }
+        ]
+      },
+      kid_response: {
+        player: "Player 2 - Kid",
+        prompt: "Kid responds:",
+        choices: [
+          { text: "I’ll do it later.", effect: -5, next: "parent_follow", feedback: "This delays the responsibility." },
+          { text: "I don’t get it.", effect: 10, next: "parent_follow", feedback: "Good honesty. Asking for help is better than avoiding it." },
+          { text: "No.", effect: -10, next: "parent_follow", feedback: "This creates conflict." }
+        ]
+      },
+      parent_follow: {
+        player: "Player 1 - Parent",
+        prompt: "Parent responds:",
+        choices: [
+          { text: "Let’s work through the first part together.", effect: 10, next: "end_good", feedback: "Supportive and practical." },
+          { text: "Figure it out yourself.", effect: -10, next: "end_bad", feedback: "This increases frustration." }
+        ]
+      },
+      end_good: { player: "Result", prompt: "💬 Supportive outcome.", choices: [] },
+      end_bad: { player: "Result", prompt: "🔥 Frustration increased.", choices: [] }
+    }
+  },
 
-    kid_response: {
-      player: "Player 2 - Kid",
-      prompt: "Kid responds:",
-      choices: [
-        { text: "I’ll do it later.", effect: -5, next: "parent_follow" },
-        { text: "I don’t get it.", effect: 10, next: "parent_follow" },
-        { text: "No.", effect: -10, next: "parent_follow" }
-      ]
-    },
-
-    parent_follow: {
-      player: "Player 1 - Parent",
-      prompt: "Parent responds:",
-      choices: [
-        { text: "Let’s work through it together.", effect: 10, next: "end_good" },
-        { text: "Figure it out yourself.", effect: -10, next: "end_bad" }
-      ]
-    },
-
-    end_good: { player: "Result", prompt: "💬 Supportive outcome.", choices: [] },
-    end_bad: { player: "Result", prompt: "🔥 Frustration increased.", choices: [] }
-  }
-},
   {
-  title: "Do your chores",
-  start: "parent_start",
-  steps: {
-    parent_start: {
-      player: "Player 1 - Parent",
-      prompt: "Parent says: “Do your chores.”",
-      choices: [
-        { text: "It’s time to get your chores done.", effect: 10, next: "kid_response" },
-        { text: "Why haven’t you done your chores yet?", effect: -5, next: "kid_response" },
-        { text: "You never do anything!", effect: -15, next: "end_bad" }
-      ]
-    },
+    title: "Do your chores",
+    role: "parent",
+    start: "parent_start",
+    steps: {
+      parent_start: {
+        player: "Player 1 - Parent",
+        prompt: "Parent says: “Do your chores.”",
+        choices: [
+          { text: "It’s time to get your chores done.", effect: 10, next: "kid_response", feedback: "Clear and neutral." },
+          { text: "Why haven’t you done your chores yet?", effect: -5, next: "kid_response", feedback: "This can sound blaming." },
+          { text: "You never do anything!", effect: -15, next: "end_bad", feedback: "This attacks the person instead of the behavior." }
+        ]
+      },
+      kid_response: {
+        player: "Player 2 - Kid",
+        prompt: "Kid responds:",
+        choices: [
+          { text: "I forgot.", effect: 0, next: "parent_follow", feedback: "Honest, but still needs action." },
+          { text: "I’ll do them now.", effect: 10, next: "end_good", feedback: "Good response. Responsibility accepted." },
+          { text: "Why do I have to?", effect: -5, next: "parent_follow", feedback: "This pushes back." }
+        ]
+      },
+      parent_follow: {
+        player: "Player 1 - Parent",
+        prompt: "Parent responds:",
+        choices: [
+          { text: "Because everyone contributes in this house.", effect: 10, next: "end_good", feedback: "Good. It teaches responsibility." },
+          { text: "Because I said so.", effect: -10, next: "end_bad", feedback: "This usually creates more resistance." }
+        ]
+      },
+      end_good: { player: "Result", prompt: "💬 Responsibility reinforced.", choices: [] },
+      end_bad: { player: "Result", prompt: "🔥 Resistance increased.", choices: [] }
+    }
+  },
 
-    kid_response: {
-      player: "Player 2 - Kid",
-      prompt: "Kid responds:",
-      choices: [
-        { text: "I forgot.", effect: 0, next: "parent_follow" },
-        { text: "I’ll do them now.", effect: 10, next: "end_good" },
-        { text: "Why do I have to?", effect: -5, next: "parent_follow" }
-      ]
-    },
-
-    parent_follow: {
-      player: "Player 1 - Parent",
-      prompt: "Parent responds:",
-      choices: [
-        { text: "Because everyone contributes.", effect: 10, next: "end_good" },
-        { text: "Because I said so.", effect: -10, next: "end_bad" }
-      ]
-    },
-
-    end_good: { player: "Result", prompt: "💬 Responsibility reinforced.", choices: [] },
-    end_bad: { player: "Result", prompt: "🔥 Resistance increased.", choices: [] }
-  }
-},
   {
-  title: "Go outside and play",
-  start: "parent_start",
-  steps: {
-    parent_start: {
-      player: "Player 1 - Parent",
-      prompt: "Parent says: “Go outside and play.”",
-      choices: [
-        { text: "Let’s take a break and go outside.", effect: 10, next: "kid_response" },
-        { text: "You’ve been inside too long. Go outside.", effect: -5, next: "kid_response" },
-        { text: "Get off that screen right now!", effect: -15, next: "end_bad" }
-      ]
-    },
+    title: "Go outside and play",
+    role: "parent",
+    start: "parent_start",
+    steps: {
+      parent_start: {
+        player: "Player 1 - Parent",
+        prompt: "Parent says: “Go outside and play.”",
+        choices: [
+          { text: "Let’s take a break and go outside.", effect: 10, next: "kid_response", feedback: "Positive and calm." },
+          { text: "You’ve been inside too long. Go outside.", effect: -5, next: "kid_response", feedback: "Reasonable, but a little blunt." },
+          { text: "Get off that screen right now!", effect: -15, next: "end_bad", feedback: "This can trigger a power struggle." }
+        ]
+      },
+      kid_response: {
+        player: "Player 2 - Kid",
+        prompt: "Kid responds:",
+        choices: [
+          { text: "I don’t want to.", effect: -5, next: "parent_follow", feedback: "Honest, but resistant." },
+          { text: "Okay.", effect: 10, next: "end_good", feedback: "Good response." },
+          { text: "Can I finish this first?", effect: 10, next: "parent_follow", feedback: "Good negotiating if said respectfully." }
+        ]
+      },
+      parent_follow: {
+        player: "Player 1 - Parent",
+        prompt: "Parent responds:",
+        choices: [
+          { text: "Yes, finish this part, then head outside.", effect: 10, next: "end_good", feedback: "Good compromise with a clear boundary." },
+          { text: "No, now means now.", effect: -10, next: "end_bad", feedback: "This may escalate." }
+        ]
+      },
+      end_good: { player: "Result", prompt: "💬 Balanced outcome.", choices: [] },
+      end_bad: { player: "Result", prompt: "🔥 Power struggle.", choices: [] }
+    }
+  },
 
-    kid_response: {
-      player: "Player 2 - Kid",
-      prompt: "Kid responds:",
-      choices: [
-        { text: "I don’t want to.", effect: -5, next: "parent_follow" },
-        { text: "Okay.", effect: 10, next: "end_good" },
-        { text: "Can I finish this first?", effect: 10, next: "parent_follow" }
-      ]
-    },
-
-    parent_follow: {
-      player: "Player 1 - Parent",
-      prompt: "Parent responds:",
-      choices: [
-        { text: "Yes, then head outside.", effect: 10, next: "end_good" },
-        { text: "No, now means now.", effect: -10, next: "end_bad" }
-      ]
-    },
-
-    end_good: { player: "Result", prompt: "💬 Balanced outcome.", choices: [] },
-    end_bad: { player: "Result", prompt: "🔥 Power struggle.", choices: [] }
-  }
-},
   {
-  title: "Leave the animals alone",
-  start: "parent_start",
-  steps: {
-    parent_start: {
-      player: "Player 1 - Parent",
-      prompt: "Parent says: “Leave the animals alone.”",
-      choices: [
-        { text: "The animals need space. Leave them alone.", effect: 10, next: "kid_response" },
-        { text: "Stop bothering them.", effect: -5, next: "kid_response" },
-        { text: "What is wrong with you? Leave them alone!", effect: -15, next: "end_bad" }
-      ]
-    },
-
-    kid_response: {
-      player: "Player 2 - Kid",
-      prompt: "Kid responds:",
-      choices: [
-        { text: "I just want to play with them.", effect: 0, next: "parent_follow" },
-        { text: "Okay.", effect: 10, next: "end_good" },
-        { text: "No!", effect: -10, next: "parent_follow" }
-      ]
-    },
-
-    parent_follow: {
-      player: "Player 1 - Parent",
-      prompt: "Parent responds:",
-      choices: [
-        { text: "You can play with them gently later.", effect: 10, next: "end_good" },
-        { text: "I said stop.", effect: -10, next: "end_bad" }
-      ]
-    },
-
-    end_good: { player: "Result", prompt: "💬 Respectful behavior encouraged.", choices: [] },
-    end_bad: { player: "Result", prompt: "🔥 Conflict increased.", choices: [] }
+    title: "Leave the animals alone",
+    role: "parent",
+    start: "parent_start",
+    steps: {
+      parent_start: {
+        player: "Player 1 - Parent",
+        prompt: "Parent says: “Leave the animals alone.”",
+        choices: [
+          { text: "The animals need space. Leave them alone.", effect: 10, next: "kid_response", feedback: "Clear and explains why." },
+          { text: "Stop bothering them.", effect: -5, next: "kid_response", feedback: "Clear, but not very teaching-focused." },
+          { text: "What is wrong with you? Leave them alone!", effect: -15, next: "end_bad", feedback: "This shames instead of teaches." }
+        ]
+      },
+      kid_response: {
+        player: "Player 2 - Kid",
+        prompt: "Kid responds:",
+        choices: [
+          { text: "I just want to play with them.", effect: 0, next: "parent_follow", feedback: "Honest, but the animal still needs space." },
+          { text: "Okay.", effect: 10, next: "end_good", feedback: "Good response. Respecting animals matters." },
+          { text: "No!", effect: -10, next: "parent_follow", feedback: "This ignores the boundary." }
+        ]
+      },
+      parent_follow: {
+        player: "Player 1 - Parent",
+        prompt: "Parent responds:",
+        choices: [
+          { text: "You can play with them gently later when they are ready.", effect: 10, next: "end_good", feedback: "Good. It teaches respect and gives a future option." },
+          { text: "I said stop.", effect: -10, next: "end_bad", feedback: "Clear, but likely to escalate." }
+        ]
+      },
+      end_good: { player: "Result", prompt: "💬 Respectful behavior encouraged.", choices: [] },
+      end_bad: { player: "Result", prompt: "🔥 Conflict increased.", choices: [] }
+    }
   }
-}
 ];
+
 let currentScenario = null;
 let currentStep = "";
 let respectScore = 50;
@@ -1209,10 +1015,56 @@ let respectScore = 50;
 function startConversationPractice() {
   showScreen("conversation");
 
-  currentScenario = conversationData[Math.floor(Math.random() * conversationData.length)];
+  document.getElementById("scenarioTitle").innerText = "Conversation Practice";
+  document.getElementById("speakerBox").innerText = "Choose a role";
+  document.getElementById("conversationText").innerText = "Who is starting the conversation?";
+  document.getElementById("respectMeter").innerText = "50";
+  document.getElementById("feedbackBox").innerText = "";
+
+  const choicesBox = document.getElementById("choicesBox");
+  choicesBox.innerHTML = "";
+
+  const parentBtn = document.createElement("button");
+  parentBtn.innerText = "Parent Starts";
+  parentBtn.onclick = () => showConversationTopics("parent");
+  choicesBox.appendChild(parentBtn);
+
+  const childBtn = document.createElement("button");
+  childBtn.innerText = "Child Starts";
+  childBtn.onclick = () => showConversationTopics("child");
+  choicesBox.appendChild(childBtn);
+}
+
+function showConversationTopics(role) {
+  const topics = conversationData.filter(scenario => scenario.role === role);
+
+  document.getElementById("scenarioTitle").innerText =
+    role === "parent" ? "Parent Starts" : "Child Starts";
+
+  document.getElementById("speakerBox").innerText = "Choose a topic";
+  document.getElementById("conversationText").innerText = "Pick the conversation you want to practice.";
+  document.getElementById("feedbackBox").innerText = "";
+
+  const choicesBox = document.getElementById("choicesBox");
+  choicesBox.innerHTML = "";
+
+  topics.forEach((scenario) => {
+    const btn = document.createElement("button");
+    btn.innerText = scenario.title;
+    btn.onclick = () => startSelectedConversation(scenario);
+    choicesBox.appendChild(btn);
+  });
+
+  const backBtn = document.createElement("button");
+  backBtn.innerText = "Back to Role Choice";
+  backBtn.onclick = startConversationPractice;
+  choicesBox.appendChild(backBtn);
+}
+
+function startSelectedConversation(scenario) {
+  currentScenario = scenario;
   currentStep = currentScenario.start;
   respectScore = 50;
-
   updateConversation();
 }
 
@@ -1231,8 +1083,10 @@ function updateConversation() {
   feedbackBox.innerText = "";
 
   if (!step.choices || step.choices.length === 0) {
-    choicesBox.innerHTML =
-      '<button class="primary-btn" onclick="startConversationPractice()">Try Again</button>';
+    const tryAgainBtn = document.createElement("button");
+    tryAgainBtn.innerText = "Choose Another Topic";
+    tryAgainBtn.onclick = startConversationPractice;
+    choicesBox.appendChild(tryAgainBtn);
     return;
   }
 
@@ -1248,9 +1102,9 @@ function chooseConversationAnswer(index) {
   const step = currentScenario.steps[currentStep];
   const choice = step.choices[index];
 
-  respectScore += choice.effect;
+  respectScore += choice.effect || 0;
   document.getElementById("respectMeter").innerText = respectScore;
-  document.getElementById("feedbackBox").innerText = choice.feedback;
+  document.getElementById("feedbackBox").innerText = choice.feedback || "";
 
   currentStep = choice.next;
 
@@ -1258,5 +1112,6 @@ function chooseConversationAnswer(index) {
 }
 
 window.startConversationPractice = startConversationPractice;
+window.showConversationTopics = showConversationTopics;
+window.startSelectedConversation = startSelectedConversation;
 window.chooseConversationAnswer = chooseConversationAnswer;
-
