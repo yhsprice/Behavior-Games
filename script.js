@@ -672,3 +672,115 @@ window.addCategoryChoice = addCategoryChoice;
 window.resetTracker = resetTracker;
 window.toggleReadAloud = toggleReadAloud;
 window.readQuestionAloud = readQuestionAloud;
+
+let conversationData = [
+  {
+    title: "Screen Time Argument",
+    steps: [
+      {
+        speaker: "Parent",
+        text: "Time to get off your phone.",
+        choices: [
+          {
+            text: "Get off now. I’m not asking again.",
+            effect: -10,
+            next: 1,
+            feedback: "This is harsh and escalates quickly."
+          },
+          {
+            text: "I know you're enjoying it, but it's time to stop.",
+            effect: +10,
+            next: 1,
+            feedback: "This shows understanding while holding the boundary."
+          }
+        ]
+      },
+      {
+        speaker: "Child",
+        text: "Just a few more minutes!",
+        choices: [
+          {
+            text: "Fine, whatever.",
+            effect: -10,
+            next: 2,
+            feedback: "This shows attitude and shuts down communication."
+          },
+          {
+            text: "Can I finish this and then stop?",
+            effect: +10,
+            next: 2,
+            feedback: "This is respectful and asks for compromise."
+          }
+        ]
+      },
+      {
+        speaker: "Parent",
+        text: "We’ve talked about this before.",
+        choices: [
+          {
+            text: "No. Give it to me now.",
+            effect: -10,
+            next: null,
+            feedback: "This ends the conversation but increases frustration."
+          },
+          {
+            text: "You can have 2 more minutes, then it's done.",
+            effect: +10,
+            next: null,
+            feedback: "This keeps control but allows a small compromise."
+          }
+        ]
+      }
+    ]
+  }
+];
+let currentScenario = null;
+let currentStep = 0;
+let respectScore = 50;
+
+function startConversationPractice() {
+  showScreen("conversationScreen");
+
+  currentScenario = conversationData[0]; // later randomize
+  currentStep = 0;
+  respectScore = 50;
+
+  updateConversation();
+}
+
+function updateConversation() {
+  let step = currentScenario.steps[currentStep];
+
+  document.getElementById("scenarioTitle").innerText = currentScenario.title;
+  document.getElementById("speakerBox").innerText = step.speaker;
+  document.getElementById("conversationText").innerText = step.text;
+  document.getElementById("respectMeter").innerText = respectScore;
+
+  let choicesBox = document.getElementById("choicesBox");
+  choicesBox.innerHTML = "";
+
+  step.choices.forEach((choice, index) => {
+    let btn = document.createElement("button");
+    btn.innerText = choice.text;
+    btn.onclick = () => chooseConversationAnswer(index);
+    choicesBox.appendChild(btn);
+  });
+}
+
+function chooseConversationAnswer(index) {
+  let step = currentScenario.steps[currentStep];
+  let choice = step.choices[index];
+
+  respectScore += choice.effect;
+
+  document.getElementById("feedbackBox").innerText = choice.feedback;
+
+  if (choice.next !== null) {
+    currentStep = choice.next;
+    setTimeout(updateConversation, 1500);
+  } else {
+    document.getElementById("conversationText").innerText =
+      "Conversation ended. Final Respect Score: " + respectScore;
+    document.getElementById("choicesBox").innerHTML = "";
+  }
+}
