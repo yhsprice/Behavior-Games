@@ -675,65 +675,255 @@ window.readQuestionAloud = readQuestionAloud;
 
 let conversationData = [
   {
-    title: "Screen Time Argument",
-    steps: [
-      {
-        speaker: "Parent",
-        text: "Time to get off your phone.",
+    title: "That's not fair!",
+    start: "parent_start",
+    steps: {
+      parent_start: {
+        player: "Player 1 - Parent",
+        prompt: "Your child says: “That’s not fair!” What should the parent say?",
         choices: [
           {
-            text: "Get off now. I’m not asking again.",
-            effect: -10,
-            next: 1,
-            feedback: "This is harsh and escalates quickly."
+            text: "Fair doesn’t always mean equal. Let’s talk about why this decision was made.",
+            effect: 10,
+            next: "kid_good_path",
+            feedback: "Good response. It explains the rule without shutting the child down."
           },
           {
-            text: "I know you're enjoying it, but it's time to stop.",
-            effect: +10,
-            next: 1,
-            feedback: "This shows understanding while holding the boundary."
+            text: "Life isn’t fair. Get over it.",
+            effect: -15,
+            next: "kid_escalated_path",
+            feedback: "This may be true, but it sounds dismissive and usually makes the argument worse."
+          },
+          {
+            text: "We’re not arguing about this.",
+            effect: -5,
+            next: "kid_shutdown_path",
+            feedback: "This sets a boundary, but it does not help the child understand."
           }
         ]
       },
-      {
-        speaker: "Child",
-        text: "Just a few more minutes!",
+
+      kid_good_path: {
+        player: "Player 2 - Kid",
+        prompt: "Parent says: “Fair doesn’t always mean equal. Let’s talk about why this decision was made.” What should the kid say?",
         choices: [
           {
-            text: "Fine, whatever.",
-            effect: -10,
-            next: 2,
-            feedback: "This shows attitude and shuts down communication."
+            text: "I don’t want to talk about it. It’s still not fair.",
+            effect: -5,
+            next: "parent_recover_1",
+            feedback: "This is honest, but it keeps the argument going."
           },
           {
-            text: "Can I finish this and then stop?",
-            effect: +10,
-            next: 2,
-            feedback: "This is respectful and asks for compromise."
+            text: "Okay… but I don’t get it.",
+            effect: 10,
+            next: "parent_teach_1",
+            feedback: "Good response. It keeps the conversation open."
+          },
+          {
+            text: "Then explain it.",
+            effect: 5,
+            next: "parent_teach_1",
+            feedback: "This asks for an explanation, but tone matters."
           }
         ]
       },
-      {
-        speaker: "Parent",
-        text: "We’ve talked about this before.",
+
+      kid_escalated_path: {
+        player: "Player 2 - Kid",
+        prompt: "Parent says: “Life isn’t fair. Get over it.” What does the kid say?",
         choices: [
           {
-            text: "No. Give it to me now.",
+            text: "You’re so unfair!",
             effect: -10,
-            next: null,
-            feedback: "This ends the conversation but increases frustration."
+            next: "parent_escalated_end",
+            feedback: "That response throws gas on the fire."
           },
           {
-            text: "You can have 2 more minutes, then it's done.",
-            effect: +10,
-            next: null,
-            feedback: "This keeps control but allows a small compromise."
+            text: "I hate this!",
+            effect: -10,
+            next: "parent_escalated_end",
+            feedback: "This shows big feelings, but it does not solve the problem."
+          },
+          {
+            text: "Fine. Whatever.",
+            effect: -5,
+            next: "parent_shutdown_end",
+            feedback: "This stops talking, but it does not fix the problem."
           }
         ]
+      },
+
+      kid_shutdown_path: {
+        player: "Player 2 - Kid",
+        prompt: "Parent says: “We’re not arguing about this.” What does the kid say?",
+        choices: [
+          {
+            text: "You never listen!",
+            effect: -10,
+            next: "parent_recover_1",
+            feedback: "This makes the parent feel attacked and can restart the fight."
+          },
+          {
+            text: "Okay, but can you tell me why later?",
+            effect: 10,
+            next: "parent_teach_1",
+            feedback: "Great response. It accepts the boundary but still asks to understand."
+          },
+          {
+            text: "Whatever.",
+            effect: -5,
+            next: "parent_shutdown_end",
+            feedback: "This ends the conversation cold. Not helpful, but common."
+          }
+        ]
+      },
+
+      parent_recover_1: {
+        player: "Player 1 - Parent",
+        prompt: "The conversation is getting tense. What should the parent say next?",
+        choices: [
+          {
+            text: "I hear that you’re upset. I still want to explain it calmly.",
+            effect: 10,
+            next: "kid_final_choice",
+            feedback: "Good recovery. This lowers the temperature."
+          },
+          {
+            text: "Stop being dramatic.",
+            effect: -15,
+            next: "final_bad",
+            feedback: "That dismisses feelings and usually makes things worse."
+          },
+          {
+            text: "Go to your room.",
+            effect: -10,
+            next: "final_bad",
+            feedback: "That may stop the conversation, but it does not teach the skill."
+          }
+        ]
+      },
+
+      parent_teach_1: {
+        player: "Player 1 - Parent",
+        prompt: "The kid is willing to listen. What should the parent say?",
+        choices: [
+          {
+            text: "The rule is different because trust and responsibility are different right now.",
+            effect: 10,
+            next: "kid_final_choice",
+            feedback: "Strong explanation. It connects the rule to behavior."
+          },
+          {
+            text: "Because I’m the parent.",
+            effect: -5,
+            next: "kid_final_choice",
+            feedback: "This may be true, but it does not teach much."
+          },
+          {
+            text: "You already know why.",
+            effect: -10,
+            next: "final_bad",
+            feedback: "This shuts down the chance to learn."
+          }
+        ]
+      },
+
+      kid_final_choice: {
+        player: "Player 2 - Kid",
+        prompt: "What should the kid say to finish the conversation better?",
+        choices: [
+          {
+            text: "Okay. I still don’t like it, but I understand better.",
+            effect: 15,
+            next: "final_good",
+            feedback: "Excellent. You can disagree and still be respectful."
+          },
+          {
+            text: "Can I earn more trust back?",
+            effect: 15,
+            next: "final_good",
+            feedback: "Excellent. This turns the problem into a goal."
+          },
+          {
+            text: "This is still stupid.",
+            effect: -10,
+            next: "final_bad",
+            feedback: "That keeps the argument alive."
+          }
+        ]
+      },
+
+      parent_escalated_end: {
+        player: "Player 1 - Parent",
+        prompt: "The kid is upset. What should the parent do now?",
+        choices: [
+          {
+            text: "Let’s pause and talk when we are both calmer.",
+            effect: 5,
+            next: "final_neutral",
+            feedback: "Good save. Sometimes pausing is the best move."
+          },
+          {
+            text: "Keep talking like that and you lose more.",
+            effect: -15,
+            next: "final_bad",
+            feedback: "That escalates the power struggle."
+          },
+          {
+            text: "I’m done with this.",
+            effect: -10,
+            next: "final_bad",
+            feedback: "This ends the conversation without repair."
+          }
+        ]
+      },
+
+      parent_shutdown_end: {
+        player: "Player 1 - Parent",
+        prompt: "The kid has shut down. What should the parent say?",
+        choices: [
+          {
+            text: "We can take a break, but I want to talk about this later.",
+            effect: 5,
+            next: "final_neutral",
+            feedback: "Good boundary. It gives space without ignoring the issue."
+          },
+          {
+            text: "Fine. Don’t talk then.",
+            effect: -10,
+            next: "final_bad",
+            feedback: "This creates distance instead of repair."
+          },
+          {
+            text: "You need to learn to listen.",
+            effect: -5,
+            next: "final_bad",
+            feedback: "It may be true, but it sounds like a lecture."
+          }
+        ]
+      },
+
+      final_good: {
+        player: "Result",
+        prompt: "💬 Productive conversation. Both people stayed respectful enough to understand each other.",
+        choices: []
+      },
+
+      final_neutral: {
+        player: "Result",
+        prompt: "⚖️ Neutral ending. The conversation did not fully solve the issue, but it avoided a blow-up.",
+        choices: []
+      },
+
+      final_bad: {
+        player: "Result",
+        prompt: "🔥 Escalated ending. The conversation became more about winning than understanding.",
+        choices: []
       }
-    ]
+    }
   }
 ];
+
 let currentScenario = null;
 let currentStep = 0;
 let respectScore = 50;
