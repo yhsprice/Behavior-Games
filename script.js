@@ -706,7 +706,7 @@ let conversationData = [
 
       kid_good_path: {
         player: "Player 2 - Kid",
-        prompt: "Parent explained calmly. What should the kid say?",
+        prompt: "A parent calmly explains why a rule matters. What is the best way for the child to respond?",
         choices: [
           { text: "Okay… but I don’t get it.", effect: 10, next: "parent_teach_1", feedback: "Good response. It keeps the conversation open." },
           { text: "I still don’t care.", effect: -10, next: "parent_recover_1", feedback: "This keeps the argument alive." },
@@ -730,7 +730,7 @@ let conversationData = [
         choices: [
           { text: "You never listen!", effect: -10, next: "parent_recover_1", feedback: "This makes the parent feel attacked." },
           { text: "Okay, but can you tell me why later?", effect: 10, next: "parent_teach_1", feedback: "Great response. It accepts the boundary but still asks to understand." },
-          { text: "Whatever.", effect: -5, next: "parent_shutdown_end", feedback: "This ends the conversation cold." }
+          { text: "Whatever.", effect: -5, next: "parent_shutdown_end", feedback: "This ends the conversation cold. Try starting over in a different way." }
         ]
       },
 
