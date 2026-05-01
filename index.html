@@ -46,7 +46,12 @@
           <span class="category-name">Interrupting</span>
           <span id="best-interrupting" class="category-sub">Best Score: 0</span>
         </button>
-
+        
+        <button class="category-btn" onclick="startConversationPractice()">
+        <span class="category-name">Conversation Practice</span>
+        <span class="category-sub">Practice real conversations</span>
+        </button>
+        
         <button class="category-btn" onclick="startGame('kindness')">
           <span class="category-name">Kindness</span>
           <span id="best-kindness" class="category-sub">Best Score: 0</span>
@@ -85,7 +90,8 @@
         <button class="category-btn" onclick="startGame('mixed')">
         <span class="category-name">Mixed Practice</span>
         <span id="best-mixed" class="category-sub">Best Score: 0</span>
-        </button>
+        </button>   
+        
       </div>
     </section>
 
@@ -134,6 +140,23 @@
         </button>
       </div>
     </section>
+    <div id="conversationScreen" style="display:none;">
+  <h2 id="scenarioTitle"></h2>
+
+  <div id="speakerBox"></div>
+
+  <div id="conversationText"></div>
+
+  <div id="choicesBox"></div>
+
+  <div id="feedbackBox"></div>
+
+  <div id="meterBox">
+    Respect Meter: <span id="respectMeter">50</span>
+  </div>
+
+  <button onclick="goHome()">Back</button>
+</div>
 
     <section id="results-screen" class="card hidden">
       <div class="top-row">
