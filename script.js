@@ -981,4 +981,3 @@ function chooseConversationAnswer(index) {
 window.startConversationPractice = startConversationPractice;
 window.chooseConversationAnswer = chooseConversationAnswer;
 
-onversationAnswer = chooseConversationAnswer;
