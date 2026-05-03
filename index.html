@@ -27,8 +27,47 @@
     </section>
 
     <section id="home-screen" class="card">
-      <h2>Game Categories</h2>
-      <p>Pick a category and answer real-life questions.</p>
+  <h2>Game Categories</h2>
+  <p>Pick a category and answer real-life questions.</p>
+
+  <div class="game-setting-box">
+    <label for="question-count-select"><strong>How many questions?</strong></label>
+    <select id="question-count-select">
+      <option value="5" selected>5 Questions</option>
+      <option value="10">10 Questions</option>
+      <option value="15">15 Questions</option>
+      <option value="20">20 Questions</option>
+      <option value="all">All Questions</option>
+    </select>
+  </div>
+
+  <div class="category-grid">
+    <button class="category-btn" onclick="startGame('beginner')">
+      <span class="category-name">Beginner</span>
+      <span id="best-beginner" class="category-sub">Best Score: 0</span>
+    </button>
+
+    <button class="category-btn" onclick="startGame('advanced')">
+      <span class="category-name">Advanced</span>
+      <span id="best-advanced" class="category-sub">Best Score: 0</span>
+    </button>
+
+    <button class="category-btn" onclick="startGame('mixed')">
+      <span class="category-name">Mixed Practice</span>
+      <span id="best-mixed" class="category-sub">Best Score: 0</span>
+    </button>
+  </div>
+
+  <h3 style="margin-top: 25px; color:#2f67ea;">Advanced Practice</h3>
+  <p>Practice real-life conversations and responses.</p>
+
+  <div class="category-grid">
+    <button class="category-btn" onclick="startConversationPractice()">
+      <span class="category-name">Conversation Practice</span>
+      <span class="category-sub">Practice real conversations</span>
+    </button>
+  </div>
+</section>
 
       <div class="game-setting-box">
   <label for="question-count-select"><strong>How many questions?</strong></label>
