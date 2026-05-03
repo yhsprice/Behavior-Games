@@ -108,7 +108,6 @@ function finishGame() {
 
 // ===== SCREEN CONTROL =====
 function showScreen(name) {
-  function showScreen(name) {
   const screens = [
     "home-screen",
     "game-screen",
@@ -125,9 +124,10 @@ function showScreen(name) {
   const target = document.getElementById(name + "-screen");
   if (target) target.classList.remove("hidden");
 }
-  document.getElementById(name + "-screen").classList.remove("hidden");
-}
 
+function goHome() {
+  showScreen("home");
+}
 // ===== UTIL =====
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
