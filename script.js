@@ -146,3 +146,4 @@ function formatCategoryName(cat) {
 window.startGame = startGame;
 window.nextQuestion = nextQuestion;
 window.showScreen = showScreen;
+window.goHome = goHome;
