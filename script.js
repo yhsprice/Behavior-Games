@@ -108,7 +108,23 @@ function finishGame() {
 
 // ===== SCREEN CONTROL =====
 function showScreen(name) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+  function showScreen(name) {
+  const screens = [
+    "home-screen",
+    "game-screen",
+    "results-screen",
+    "tracker-screen",
+    "conversation-screen"
+  ];
+
+  screens.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add("hidden");
+  });
+
+  const target = document.getElementById(name + "-screen");
+  if (target) target.classList.remove("hidden");
+}
   document.getElementById(name + "-screen").classList.remove("hidden");
 }
 
