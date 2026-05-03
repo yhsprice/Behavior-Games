@@ -1,4 +1,4 @@
-const APP_VERSION = "FINAL-V118-CONVERSATION";
+const APP_VERSION = "FINAL-V120-CONVERSATION";
 
 let currentCategory = "";
 let currentQuestions = [];
