@@ -1,5 +1,5 @@
 const allQuestions = {
-  respect: [
+  beginner: [
     {
       question: "What does it mean to show respect?",
       choices: [
