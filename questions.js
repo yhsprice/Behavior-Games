@@ -942,5 +942,5 @@ interrupting: [
   ],
   correct: 0,
   explanation: "A quick check can prevent a lot of problems. Ask yourself: Is this respectful? Is this the right moment? How will this affect the person or situation? If one of those feels off, pause. Most bad decisions happen because people act without thinking about timing or impact."
-}
+},
 };
