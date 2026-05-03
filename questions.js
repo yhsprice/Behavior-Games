@@ -821,5 +821,126 @@ interrupting: [
       difficulty: "advanced",
       image: "images/online-8.png"
     }
-  ]
+  ],
+  advanced: [
+
+{
+  question: "You joke about your friend in a group chat and everyone laughs… except them. What should you do?",
+  choices: [
+    "Apologize privately and acknowledge it crossed a line",
+    "Say they are too sensitive",
+    "Ignore it, everyone else laughed",
+    "Make another joke to lighten the mood"
+  ],
+  correct: 0,
+  explanation: "Even if others laugh, that does not mean the joke was okay. Sometimes people laugh just to fit in. If one person is hurt, the joke failed. Apologizing privately shows maturity and respect. Saying they are too sensitive shifts blame and damages trust. Ignoring it makes it worse over time. Before joking, ask yourself if you would say it one-on-one or if it targets something personal."
+},
+
+{
+  question: "You want attention and post something like 'I guess nobody cares…' online. What is the best choice?",
+  choices: [
+    "Say directly what you need or talk to someone you trust",
+    "Wait and see who responds",
+    "Post something even more dramatic",
+    "Delete it and pretend it didn’t happen"
+  ],
+  correct: 0,
+  explanation: "Vague emotional posts are usually a way to get attention without being honest. The problem is people don’t know how to respond, or they feel manipulated. Being direct builds stronger relationships and real support. Waiting for responses creates frustration. Making it more dramatic increases drama, not help. If you need support, say it clearly."
+},
+
+{
+  question: "A parent asks you to do something and you roll your eyes but still do it. What is the issue?",
+  choices: [
+    "The attitude still shows disrespect even if the task is done",
+    "Nothing, because you still did it",
+    "It only matters if you say something rude",
+    "It is fine as long as you are annoyed"
+  ],
+  correct: 0,
+  explanation: "Body language is communication. Eye rolling shows disrespect even if no words are said. Over time, this affects how people see you and how they respond to you. You don’t have to be happy, but you don’t have to make it worse either. Ask yourself how you would feel if someone reacted that way to you."
+},
+
+{
+  question: "You are joking loudly, but someone nearby is clearly upset. What should you do?",
+  choices: [
+    "Adjust your behavior and be aware of the situation",
+    "Keep going, it is not your problem",
+    "Tell them to lighten up",
+    "Ignore them completely"
+  ],
+  correct: 0,
+  explanation: "Awareness matters. Even if you did not cause the situation, ignoring it makes you seem self-centered. People notice when you read the room and adjust. That is emotional intelligence. If the energy feels off, it probably is. Paying attention to others builds stronger relationships."
+},
+
+{
+  question: "You break something and no one saw it happen. What is the best decision?",
+  choices: [
+    "Own it immediately and be honest",
+    "Say nothing and hope no one notices",
+    "Blame someone else later if needed",
+    "Wait to see if it becomes a problem"
+  ],
+  correct: 0,
+  explanation: "Getting away with something once builds a habit of avoiding responsibility. That habit spreads into bigger situations. Owning mistakes builds trust quickly. Waiting or hiding it usually makes things worse later. Ask yourself: if this is found out later, will it look worse? The answer is almost always yes."
+},
+
+{
+  question: "You send a screenshot of a private conversation to someone else. Why is this a problem?",
+  choices: [
+    "It breaks trust and can damage relationships quickly",
+    "It is fine if it is interesting",
+    "It only matters if they find out",
+    "It is okay if you do not share everything"
+  ],
+  correct: 0,
+  explanation: "Sharing private conversations without permission breaks trust immediately. Even if it seems harmless, it tells people they cannot trust you. Once trust is gone, it is very hard to rebuild. Before sharing anything, ask yourself if you would be okay with your messages being shared the same way."
+},
+
+{
+  question: "Your friend is doing something wrong and expects you to go along with it. What is the best choice?",
+  choices: [
+    "Speak up or step away, even if it is uncomfortable",
+    "Stay quiet to avoid drama",
+    "Go along with it to stay friends",
+    "Ignore it and pretend you didn’t see it"
+  ],
+  correct: 0,
+  explanation: "Real friends do not expect you to do the wrong thing. Staying quiet may feel easier, but it supports the behavior. Going along with it can get you in trouble too. Speaking up or stepping away shows strong character. Sometimes the right choice is uncomfortable."
+},
+
+{
+  question: "You feel uncomfortable in a situation but don’t want to be rude. What should you do?",
+  choices: [
+    "Set a boundary and remove yourself if needed",
+    "Stay quiet to avoid awkwardness",
+    "Laugh it off and deal with it",
+    "Do what others expect"
+  ],
+  correct: 0,
+  explanation: "Your comfort matters more than avoiding awkwardness. Many bad situations continue because people are afraid to speak up. Saying no or leaving is not rude—it is self-respect. If something feels off, trust that feeling. That instinct is there for a reason."
+},
+
+{
+  question: "You exaggerate a story to make it more interesting. Why is this risky?",
+  choices: [
+    "It damages your credibility over time",
+    "It makes people like you more",
+    "It is harmless if it is small",
+    "Everyone does it so it is fine"
+  ],
+  correct: 0,
+  explanation: "Exaggerating might get attention short-term, but it damages trust long-term. Once people realize you stretch the truth, they question everything you say. If you feel like you need to exaggerate to be interesting, the real issue is confidence—not the story."
+},
+
+{
+  question: "You are about to say something. How do you decide if it is a good time or not?",
+  choices: [
+    "Think about respect, timing, and how it will affect others",
+    "Say it if it is funny",
+    "Say it if you feel like it",
+    "Say it quickly before you forget"
+  ],
+  correct: 0,
+  explanation: "A quick check can prevent a lot of problems. Ask yourself: Is this respectful? Is this the right moment? How will this affect the person or situation? If one of those feels off, pause. Most bad decisions happen because people act without thinking about timing or impact."
+}
 };
