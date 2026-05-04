@@ -984,6 +984,36 @@ function addRewardPiece() {
 
   startGame(selectedDifficulty);
 }
+
+function updateRewardDisplay() {
+  const rewardBox = document.getElementById("reward-box");
+  if (!rewardBox || !selectedRewardTheme) return;
+
+  const pieces = rewardThemes[selectedRewardTheme] || [];
+  const earned = pieces.slice(0, rewardPiecesEarned);
+  const remaining = pieces.slice(rewardPiecesEarned);
+
+  rewardBox.innerHTML = `
+    <h3>${playerName}'s Reward Puzzle</h3>
+    <div style="font-size:22px; line-height:1.6;">
+      <strong>Earned:</strong><br>
+      ${earned.length ? earned.join(" | ") : "No pieces yet"}
+      <br><br>
+      <strong>Still hidden:</strong><br>
+      ${remaining.map(() => "⬜").join(" ")}
+    </div>
+  `;
+}
+
+function addRewardPiece() {
+  const pieces = rewardThemes[selectedRewardTheme] || [];
+
+  if (rewardPiecesEarned < pieces.length) {
+    rewardPiecesEarned++;
+  }
+
+  updateRewardDisplay();
+}
              
 window.startGame = startGame;
 window.nextQuestion = nextQuestion;
