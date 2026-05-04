@@ -919,7 +919,7 @@ function chooseConversationAnswer(choice) {
   nextBtn.className = "primary-btn";
   nextBtn.style.marginTop = "18px";
   nextBtn.onclick = showConversationStep;
-
+  
   feedbackBox.appendChild(nextBtn);
 }
 
@@ -931,6 +931,10 @@ function goBackOneStep() {
   respectScore = previous.score;
 
   showConversationStep();
+}
+
+function selectRewardTheme(theme) {
+  startGame(selectedDifficulty);
 }
              
 window.startGame = startGame;
@@ -946,6 +950,7 @@ window.addNeedsWork = addNeedsWork;
 window.resetTracker = resetTracker;
 window.addCategoryChoice = addCategoryChoice;
 window.startGameSetup = startGameSetup;
+window.selectRewardTheme = selectRewardTheme;
 
 document.addEventListener("DOMContentLoaded", () => {
   goHome();
