@@ -865,3 +865,17 @@ button:disabled {
     transform: translateY(0) scale(1);
   }
 }
+#answer-buttons {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+}
+
+#answer-buttons button {
+  display: block !important;
+  width: 100% !important;
+  text-align: left !important;
+  padding: 14px 18px !important;
+  margin: 0 !important;
+}
