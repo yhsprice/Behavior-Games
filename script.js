@@ -952,3 +952,9 @@ window.addCategoryChoice = addCategoryChoice;
 document.addEventListener("DOMContentLoaded", () => {
   goHome();
 });
+let selectedDifficulty = "";
+
+function startGameSetup(difficulty) {
+  selectedDifficulty = difficulty;
+  showScreen("setup-screen");
+}
