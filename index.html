@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -15,25 +16,29 @@
   </div>
 
   <div class="page">
-    <section class="card hero">
-      <div class="site-logo-wrap">
-        <img src="RoxyRealityCheck.png" alt="Roxy's Reality Check logo" class="site-logo" />
-      </div>
 
-      <div class="hero-buttons">
-        <button class="primary-btn" onclick="goHome()">Play Games</button>
-        <button class="secondary-btn" onclick="showScreen('tracker')">Goal Tracker</button>
-      </div>
-    </section>
+```
+<!-- HERO -->
+<section class="card hero">
+  <div class="site-logo-wrap">
+    <img src="RoxyRealityCheck.png" class="site-logo" />
+  </div>
 
-    <section id="home-screen" class="card">
+  <div class="hero-buttons">
+    <button class="primary-btn" onclick="goHome()">Play Games</button>
+    <button class="secondary-btn" onclick="showScreen('tracker')">Goal Tracker</button>
+  </div>
+</section>
+
+<!-- HOME SCREEN -->
+<section id="home-screen" class="card">
   <h2>Game Categories</h2>
   <p>Pick a category and answer real-life questions.</p>
 
   <div class="game-setting-box">
-    <label for="question-count-select"><strong>How many questions?</strong></label>
+    <label><strong>How many questions?</strong></label>
     <select id="question-count-select">
-      <option value="5" selected>5 Questions</option>
+      <option value="5">5 Questions</option>
       <option value="10">10 Questions</option>
       <option value="15">15 Questions</option>
       <option value="20">20 Questions</option>
@@ -44,305 +49,55 @@
   <div class="category-grid">
     <button class="category-btn" onclick="startGame('beginner')">
       <span class="category-name">Beginner</span>
-      <span id="best-beginner" class="category-sub">Best Score: 0</span>
     </button>
 
     <button class="category-btn" onclick="startGame('advanced')">
       <span class="category-name">Advanced</span>
-      <span id="best-advanced" class="category-sub">Best Score: 0</span>
     </button>
 
     <button class="category-btn" onclick="startGame('mixed')">
       <span class="category-name">Mixed Practice</span>
-      <span id="best-mixed" class="category-sub">Best Score: 0</span>
     </button>
   </div>
 
-  <h3 style="margin-top: 25px; color:#2f67ea;">Advanced Practice</h3>
+  <h3 style="margin-top:25px;color:#2f67ea;">Advanced Practice</h3>
   <p>Practice real-life conversations and responses.</p>
 
   <div class="category-grid">
     <button class="category-btn" onclick="startConversationPractice()">
       <span class="category-name">Conversation Practice</span>
-      <span class="category-sub">Practice real conversations</span>
     </button>
   </div>
 </section>
 
-      <div class="game-setting-box">
-  <label for="question-count-select"><strong>How many questions?</strong></label>
-  <select id="question-count-select">
-   <option value="5" selected>5 Questions</option>
-<option value="10">10 Questions</option>
-<option value="15">15 Questions</option>
-<option value="20">20 Questions</option>
-<option value="all">All Questions</option>
-  </select>
-</div>
-
-        <h3 style="margin-top: 25px; color:#2f67ea;">Advanced Practice</h3>
-        <p>Practice real-life conversations and responses.</p>
-
-        <button class="category-btn" onclick="startConversationPractice()">
-        <span class="category-name">Conversation Practice</span>
-        <span class="category-sub">Practice real conversations</span>
-        </button>
-        
-      </div>
-    </section>
-
-    <section id="game-screen" class="card hidden">
-      <div class="top-row">
-        <h2 id="game-title">Game</h2>
-        <button class="small-btn" onclick="goHome()">Back</button>
-      </div>
-
-      <div class="progress-wrap">
-        <div class="progress-bar-bg">
-          <div id="game-progress-bar" class="progress-bar-fill"></div>
-        </div>
-        <div id="progress-text" class="progress-text">Question 1 of 10</div>
-      </div>
-    
-    <div class="race-track">
-      <div id="race-car">🚗</div>
-      <div class="finish-line">🏁</div>
-    </div>
-      
-      <div class="game-info-row">
-        <span id="score-text" class="score-pill">Score: 0</span>
-        <button id="read-toggle-btn" class="secondary-btn" onclick="toggleReadAloud()">
-  🔇 Read Aloud: OFF
-</button>
-      </div>
-
-      <div id="question-box" class="question-box">
-        <div id="category-animation" class="category-animation">
-          <div id="animation-icon" class="animation-icon">⭐</div>
-          <div id="animation-label" class="animation-label">Choose wisely.</div>
-        </div>
-
-        <img id="question-image" class="question-image hidden" alt="Question image" />
-        <button id="read-question-btn" class="secondary-btn" onclick="readQuestionAloud()">
-  🔊 Read Question
-</button>
-        <h3 id="question-text">Question goes here</h3>
-        
-        <div id="answer-buttons" class="answer-buttons"></div>
-        <div id="feedback-box" class="feedback-box"></div>
-
-        <button id="next-btn" class="primary-btn hidden" onclick="nextQuestion()">
-          Next Question
-        </button>
-      </div>
-    </section>
-<section id="conversation-screen" class="card hidden">
-
+<!-- GAME SCREEN -->
+<section id="game-screen" class="card hidden">
   <div class="top-row">
-    <h2 id="scenarioTitle">Conversation Practice</h2>
-    <button class="small-btn" onclick="goHome()">Back</button>
+    <h2 id="game-title">Game</h2>
+    <button onclick="goHome()">Back</button>
   </div>
 
-  <div id="speakerBox" class="question-box"></div>
-
-  <h3 id="conversationText">Conversation text goes here</h3>
-
-  <div id="choicesBox" class="answer-buttons"></div>
-
-  <div id="feedbackBox" class="feedback-box"></div>
-
-  <div class="score-pill">
-    Respect Meter: <span id="respectMeter">50</span>
+  <div id="question-box">
+    <h3 id="question-text"></h3>
+    <div id="answer-buttons"></div>
+    <div id="feedback-box"></div>
+    <button id="next-btn" onclick="nextQuestion()">Next</button>
   </div>
-
 </section>
 
+<!-- RESULTS -->
+<section id="results-screen" class="card hidden">
+  <h2>Results</h2>
+  <div id="results-score"></div>
   <button onclick="goHome()">Back</button>
-</div>
+</section>
+```
 
-    <section id="results-screen" class="card hidden">
-      <div class="top-row">
-        <h2>Results</h2>
-        <button class="small-btn" onclick="goHome()">Back</button>
-      </div>
-
-      <div class="results-box">
-        <div id="new-high-score" class="new-high-score hidden">🏆 NEW HIGH SCORE!</div>
-        <div id="results-score" class="results-score">Score: 0/100</div>
-        <div id="results-badge" class="results-badge">Badge: Starting Out</div>
-        <div id="results-streak" class="results-streak">Current Streak: 0</div>
-        <p id="results-message">Nice work.</p>
-      </div>
-
-      <div class="bottom-buttons">
-        <button class="primary-btn" onclick="restartCurrentGame()">Play Again</button>
-        <button class="secondary-btn" onclick="goHome()">Main Page</button>
-      </div>
-    </section>
-
-    <section id="tracker-screen" class="card hidden">
-      <div class="top-row">
-        <h2>Goal Tracker</h2>
-        <button class="small-btn" onclick="goHome()">Back</button>
-      </div>
-
-      <p>Track real-life choices during the week and watch your progress grow.</p>
-
-      <div class="tracker-highlight-row">
-        <div class="tracker-highlight-box">
-          <div class="tracker-highlight-label">This Week</div>
-          <div id="tracker-week-text" class="tracker-highlight-value">Week of --</div>
-        </div>
-
-        <div class="tracker-highlight-box">
-          <div class="tracker-highlight-label">Tracker Level</div>
-          <div id="tracker-badge" class="tracker-highlight-value">Starting Out</div>
-        </div>
-
-        <div class="tracker-highlight-box">
-          <div class="tracker-highlight-label">Progress Message</div>
-          <div id="tracker-message" class="tracker-highlight-value">Let’s get started.</div>
-        </div>
-      </div>
-
-      <div class="tracker-stats">
-        <div class="stat-box good-box">
-          <div class="stat-label">Good Choices</div>
-          <div id="good-count" class="stat-number">0</div>
-        </div>
-
-        <div class="stat-box needs-box">
-          <div class="stat-label">Needs Work</div>
-          <div id="bad-count" class="stat-number">0</div>
-        </div>
-
-        <div class="stat-box total-box">
-          <div class="stat-label">Total Choices</div>
-          <div id="tracker-total-number" class="stat-number">0</div>
-        </div>
-      </div>
-
-      <div class="progress-wrap">
-        <div class="progress-bar-bg">
-          <div id="tracker-progress-bar" class="progress-bar-fill"></div>
-        </div>
-        <div id="tracker-percent-text" class="progress-text">0% good choices</div>
-      </div>
-
-      <div class="tracker-mini-bars">
-        <div class="mini-bar-group">
-          <div class="mini-bar-label">Good Choices</div>
-          <div class="mini-bar-bg">
-            <div id="good-bar" class="mini-bar-fill good-fill"></div>
-          </div>
-        </div>
-
-        <div class="mini-bar-group">
-          <div class="mini-bar-label">Needs Work</div>
-          <div class="mini-bar-bg">
-            <div id="needs-bar" class="mini-bar-fill needs-fill"></div>
-          </div>
-        </div>
-      </div>
-
-      <h3>Track by Skill Area</h3>
-      <p>Pick the area you want to track and mark whether it went well or needs work.</p>
-
-      <div class="tracker-category-grid">
-        <div class="tracker-category-card">
-          <div class="tracker-category-title">Listening</div>
-          <div class="tracker-category-counts">
-            <span id="listening-good">Good: 0</span>
-            <span id="listening-bad">Needs Work: 0</span>
-          </div>
-          <div class="tracker-category-buttons">
-            <button class="primary-btn" onclick="addCategoryChoice('listening', true)">+ Good</button>
-            <button class="secondary-btn" onclick="addCategoryChoice('listening', false)">+ Needs Work</button>
-          </div>
-        </div>
-
-        <div class="tracker-category-card">
-          <div class="tracker-category-title">Kindness</div>
-          <div class="tracker-category-counts">
-            <span id="kindness-good">Good: 0</span>
-            <span id="kindness-bad">Needs Work: 0</span>
-          </div>
-          <div class="tracker-category-buttons">
-            <button class="primary-btn" onclick="addCategoryChoice('kindness', true)">+ Good</button>
-            <button class="secondary-btn" onclick="addCategoryChoice('kindness', false)">+ Needs Work</button>
-          </div>
-        </div>
-
-        <div class="tracker-category-card">
-          <div class="tracker-category-title">Calm Body</div>
-          <div class="tracker-category-counts">
-            <span id="calmBody-good">Good: 0</span>
-            <span id="calmBody-bad">Needs Work: 0</span>
-          </div>
-          <div class="tracker-category-buttons">
-            <button class="primary-btn" onclick="addCategoryChoice('calmBody', true)">+ Good</button>
-            <button class="secondary-btn" onclick="addCategoryChoice('calmBody', false)">+ Needs Work</button>
-          </div>
-        </div>
-
-        <div class="tracker-category-card">
-          <div class="tracker-category-title">Honesty</div>
-          <div class="tracker-category-counts">
-            <span id="honesty-good">Good: 0</span>
-            <span id="honesty-bad">Needs Work: 0</span>
-          </div>
-          <div class="tracker-category-buttons">
-            <button class="primary-btn" onclick="addCategoryChoice('honesty', true)">+ Good</button>
-            <button class="secondary-btn" onclick="addCategoryChoice('honesty', false)">+ Needs Work</button>
-          </div>
-        </div>
-
-        <div class="tracker-category-card">
-          <div class="tracker-category-title">Respect</div>
-          <div class="tracker-category-counts">
-            <span id="respect-good">Good: 0</span>
-            <span id="respect-bad">Needs Work: 0</span>
-          </div>
-          <div class="tracker-category-buttons">
-            <button class="primary-btn" onclick="addCategoryChoice('respect', true)">+ Good</button>
-            <button class="secondary-btn" onclick="addCategoryChoice('respect', false)">+ Needs Work</button>
-          </div>
-        </div>
-
-        <div class="tracker-category-card">
-          <div class="tracker-category-title">Responsibility</div>
-          <div class="tracker-category-counts">
-            <span id="responsibility-good">Good: 0</span>
-            <span id="responsibility-bad">Needs Work: 0</span>
-          </div>
-          <div class="tracker-category-buttons">
-            <button class="primary-btn" onclick="addCategoryChoice('responsibility', true)">+ Good</button>
-            <button class="secondary-btn" onclick="addCategoryChoice('responsibility', false)">+ Needs Work</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="tracker-summary-grid">
-        <div class="tracker-summary-card">
-          <div class="tracker-summary-label">Most Improved Area</div>
-          <div id="most-improved" class="tracker-summary-value">--</div>
-        </div>
-
-        <div class="tracker-summary-card">
-          <div class="tracker-summary-label">Focus Area Next</div>
-          <div id="focus-area" class="tracker-summary-value">--</div>
-        </div>
-      </div>
-
-      <div class="tracker-buttons">
-        <button class="primary-btn" onclick="addGoodChoice()">+ Good Choice</button>
-        <button class="secondary-btn" onclick="addNeedsWork()">+ Needs Work</button>
-        <button class="danger-btn" onclick="resetTracker()">Reset Tracker</button>
-      </div>
-    </section>
   </div>
 
-<script src="questions.js?v=120"></script>
-<script src="script.js?v=120"></script>
+  <script src="questions.js?v=121"></script>
+
+  <script src="script.js?v=121"></script>
+
 </body>
 </html>
