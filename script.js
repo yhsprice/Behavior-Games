@@ -1,4 +1,4 @@
-const APP_VERSION = "FINAL-CLEAN-V125";
+const APP_VERSION = "FINAL-CLEAN-V126";
 
 let currentCategory = "";
 let currentQuestions = [];
