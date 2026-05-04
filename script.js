@@ -955,18 +955,38 @@ function selectRewardTheme(theme) {
   const rewardBox = document.getElementById("reward-box");
   if (!rewardBox || !selectedRewardTheme) return;
 
-  const pieces = rewardThemes[selectedRewardTheme] || [];
-  const earned = pieces.slice(0, rewardPiecesEarned);
-  const remaining = pieces.slice(rewardPiecesEarned);
+  const visuals = {
+    character: ["👟", "👖", "👕", "🎀", "😊"],
+    truck: ["🛞", "🛞", "🚚", "🪟", "💡"],
+    house: ["⬛", "🧱", "🏠", "🚪", "🌸"],
+    robot: ["🦿", "🤖", "🦾", "🔋", "✨"]
+  };
+
+  const finalImages = {
+    character: "👟 👖 👕 🎀 😊",
+    truck: "🛞 🚚 🛞 🪟 💡",
+    house: "⬛ 🧱 🏠 🚪 🌸",
+    robot: "🦿 🤖 🦾 🔋 ✨"
+  };
+
+  const pieces = visuals[selectedRewardTheme] || [];
+  const shownPieces = pieces
+    .map((piece, index) => index < rewardPiecesEarned ? piece : "⬜")
+    .join(" ");
+
+  const isComplete = rewardPiecesEarned >= pieces.length;
 
   rewardBox.innerHTML = `
     <h3>${playerName}'s Reward Puzzle</h3>
-    <div style="font-size: 22px; line-height: 1.6;">
-      <strong>Earned:</strong><br>
-      ${earned.length ? earned.join(" | ") : "No pieces yet"}
-      <br><br>
-      <strong>Still hidden:</strong><br>
-      ${remaining.map(() => "⬜").join(" ")}
+
+    <div style="font-size:48px; line-height:1.6; margin:15px 0;">
+      ${isComplete ? finalImages[selectedRewardTheme] : shownPieces}
+    </div>
+
+    <div style="font-size:18px;">
+      ${isComplete 
+        ? "🎉 Finished! Great job building your reward!"
+        : "Keep answering correctly to reveal more pieces."}
     </div>
   `;
 }
