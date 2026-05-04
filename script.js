@@ -739,18 +739,29 @@ function chooseConversationAnswer(choice) {
   });
 
   respectScore += choice.effect || 0;
+
   document.getElementById("respectMeter").textContent = respectScore;
-  document.getElementById("feedbackBox").textContent = choice.feedback || "";
+
+  const feedbackBox = document.getElementById("feedbackBox");
+  feedbackBox.textContent = choice.feedback || "";
+
+  const choicesBox = document.getElementById("choicesBox");
+
+  // Disable all buttons instead of deleting them
+  document.querySelectorAll("#choicesBox button").forEach(btn => {
+    btn.disabled = true;
+  });
 
   currentStep = choice.next;
 
-  const box = document.getElementById("choicesBox");
-  box.innerHTML = "";
-
+  // Create Next button BELOW feedback
   const nextBtn = document.createElement("button");
   nextBtn.textContent = "Next";
+  nextBtn.style.marginTop = "15px";
   nextBtn.onclick = showConversationStep;
-  box.appendChild(nextBtn);
+
+  feedbackBox.appendChild(document.createElement("br"));
+  feedbackBox.appendChild(nextBtn);
 }
 
 function goBackOneStep() {
