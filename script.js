@@ -10,7 +10,7 @@ let selectedDifficulty = "";
 
 function startGameSetup(difficulty) {
   selectedDifficulty = difficulty;
-  showScreen("setup-screen");
+  showScreen("setup");
 }
 
 function startGame(category) {
