@@ -7,6 +7,16 @@ let score = 0;
 let answered = false;
 
 let selectedDifficulty = "";
+let playerName = "";
+let selectedRewardTheme = "";
+let rewardPiecesEarned = 0;
+
+const rewardThemes = {
+  character: ["👟 Shoes", "👖 Pants", "👕 Shirt", "🎀 Accessory", "😊 Finished Character"],
+  truck: ["🛞 Wheels", "🚚 Truck Body", "🪟 Windows", "💡 Lights", "🏁 Finished Truck"],
+  house: ["⬛ Foundation", "🧱 Walls", "🏠 Roof", "🚪 Door", "🌸 Finished House"],
+  robot: ["🦿 Legs", "🤖 Body", "🦾 Arms", "🔋 Power", "✨ Finished Robot"]
+};
 
 function startGameSetup(difficulty) {
   selectedDifficulty = difficulty;
@@ -18,11 +28,13 @@ function startGame(category) {
     alert("Questions not loading correctly.");
     return;
   }
-
+  
   currentCategory = category;
   currentQuestionIndex = 0;
   score = 0;
   answered = false;
+
+  rewardPiecesEarned = 0;
 
   let pool = category === "mixed"
     ? Object.values(allQuestions).flat()
@@ -46,6 +58,7 @@ function startGame(category) {
   document.getElementById("score-text").textContent = "Score: 0";
 
   showScreen("game");
+  updateRewardDisplay();
   loadQuestion();
 }
 
@@ -86,7 +99,8 @@ function selectAnswer(index, btn) {
   });
 
   if (index === q.correct) {
-    score += 10;
+  score += 10;
+  addRewardPiece();
     btn.classList.add("correct");
     document.getElementById("feedback-box").textContent = "✅ " + q.explanation;
   } else {
@@ -934,6 +948,40 @@ function goBackOneStep() {
 }
 
 function selectRewardTheme(theme) {
+  selectedRewardTheme = theme;
+  rewardPiecesEarned = 0;
+
+  function updateRewardDisplay() {
+  const rewardBox = document.getElementById("reward-box");
+  if (!rewardBox || !selectedRewardTheme) return;
+
+  const pieces = rewardThemes[selectedRewardTheme] || [];
+  const earned = pieces.slice(0, rewardPiecesEarned);
+  const remaining = pieces.slice(rewardPiecesEarned);
+
+  rewardBox.innerHTML = `
+    <h3>${playerName}'s Reward Puzzle</h3>
+    <div style="font-size: 22px; line-height: 1.6;">
+      <strong>Earned:</strong><br>
+      ${earned.length ? earned.join(" | ") : "No pieces yet"}
+      <br><br>
+      <strong>Still hidden:</strong><br>
+      ${remaining.map(() => "⬜").join(" ")}
+    </div>
+  `;
+}
+
+function addRewardPiece() {
+  const pieces = rewardThemes[selectedRewardTheme] || [];
+  if (rewardPiecesEarned < pieces.length) {
+    rewardPiecesEarned++;
+  }
+  updateRewardDisplay();
+}
+
+  const nameInput = document.getElementById("player-name-input");
+  playerName = nameInput && nameInput.value.trim() ? nameInput.value.trim() : "Player";
+
   startGame(selectedDifficulty);
 }
              
