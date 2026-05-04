@@ -932,17 +932,7 @@ function goBackOneStep() {
 
   showConversationStep();
 }
-
-function goBackOneStep() {
-  if (conversationHistory.length === 0) return;
-
-  const previous = conversationHistory.pop();
-  currentStep = previous.step;
-  respectScore = previous.score;
-
-  showConversationStep();
-}
-              
+             
 window.startGame = startGame;
 window.nextQuestion = nextQuestion;
 window.showScreen = showScreen;
