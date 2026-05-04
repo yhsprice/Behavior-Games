@@ -289,10 +289,11 @@ button:disabled {
   animation: warningBlink 0.8s infinite steps(2, end);
 }
 
-.answer-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.answer-buttons button {
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  font-size: 16px;
 }
 
 .answer-buttons button {
