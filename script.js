@@ -739,28 +739,34 @@ function chooseConversationAnswer(choice) {
   });
 
   respectScore += choice.effect || 0;
+  currentStep = choice.next;
 
   document.getElementById("respectMeter").textContent = respectScore;
 
-  const feedbackBox = document.getElementById("feedbackBox");
-  feedbackBox.textContent = choice.feedback || "";
-
   const choicesBox = document.getElementById("choicesBox");
+  const feedbackBox = document.getElementById("feedbackBox");
 
-  // Disable all buttons instead of deleting them
-  document.querySelectorAll("#choicesBox button").forEach(btn => {
-    btn.disabled = true;
-  });
+  // Clear answer buttons
+  choicesBox.innerHTML = "";
 
-  currentStep = choice.next;
+  // Show chosen answer + explanation
+  feedbackBox.innerHTML = `
+    <div style="font-size:22px; line-height:1.5; margin-top:15px;">
+      <strong>You chose:</strong><br>
+      ${choice.text}
+      <br><br>
+      <strong>Why:</strong><br>
+      ${choice.feedback || ""}
+    </div>
+  `;
 
-  // Create Next button BELOW feedback
+  // Put Next BELOW the explanation
   const nextBtn = document.createElement("button");
   nextBtn.textContent = "Next";
-  nextBtn.style.marginTop = "15px";
+  nextBtn.className = "primary-btn";
+  nextBtn.style.marginTop = "18px";
   nextBtn.onclick = showConversationStep;
 
-  feedbackBox.appendChild(document.createElement("br"));
   feedbackBox.appendChild(nextBtn);
 }
 
