@@ -891,3 +891,14 @@ button:disabled {
   padding: 14px !important;
   font-size: 16px !important;
 }
+#choicesBox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#choicesBox button {
+  width: 100%;
+  padding: 14px;
+  text-align: left;
+}
