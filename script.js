@@ -126,7 +126,7 @@ function showScreen(name) {
     "game-screen",
     "results-screen",
     "tracker-screen",
-    "conversation-screen"
+    "conversation-screen",
     "setup-screen",
   ];
 
