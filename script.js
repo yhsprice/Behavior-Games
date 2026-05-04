@@ -742,15 +742,26 @@ function chooseConversationAnswer(choice) {
   document.getElementById("respectMeter").textContent = respectScore;
   document.getElementById("feedbackBox").textContent = choice.feedback || "";
 
- currentStep = choice.next;
+  currentStep = choice.next;
 
-const box = document.getElementById("choicesBox");
-box.innerHTML = "";
+  const box = document.getElementById("choicesBox");
+  box.innerHTML = "";
 
-const nextBtn = document.createElement("button");
-nextBtn.textContent = "Next";
-nextBtn.onclick = showConversationStep;
-box.appendChild(nextBtn);
+  const nextBtn = document.createElement("button");
+  nextBtn.textContent = "Next";
+  nextBtn.onclick = showConversationStep;
+  box.appendChild(nextBtn);
+}
+
+function goBackOneStep() {
+  if (conversationHistory.length === 0) return;
+
+  const previous = conversationHistory.pop();
+  currentStep = previous.step;
+  respectScore = previous.score;
+
+  showConversationStep();
+}
 
 function goBackOneStep() {
   if (conversationHistory.length === 0) return;
