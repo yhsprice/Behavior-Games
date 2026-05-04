@@ -8,9 +8,8 @@ let currentQuestionIndex = 0;
 let score = 0;
 let answered = false;
 
-// ===== START GAME =====
 function startGame(category) {
-  if (!allQuestions || !allQuestions[category] && category !== "mixed") {
+  if (!allQuestions || (!allQuestions[category] && category !== "mixed")) {
     alert("Questions not loading correctly.");
     return;
   }
@@ -28,7 +27,33 @@ function startGame(category) {
     pool = [...allQuestions[category]];
   }
 
-  currentQuestions = shuffle(pool).slice(0, 10);
+  const questionCountValue =
+    document.getElementById("question-count-select")?.value || "10";
+
+  const count =
+    questionCountValue === "all" ? pool.length : Number(questionCountValue);
+
+  const recentKey = "recentQuestions_" + category;
+  const recentQuestions = JSON.parse(localStorage.getItem(recentKey)) || [];
+
+  let freshQuestions = pool.filter(q => !recentQuestions.includes(q.question));
+
+  if (freshQuestions.length < count) {
+    freshQuestions = pool;
+  }
+
+  currentQuestions = shuffle(freshQuestions).slice(0, count);
+
+  const newRecent = [
+    ...recentQuestions,
+    ...currentQuestions.map(q => q.question)
+  ];
+
+  const maxRecent = Math.min(pool.length, 30);
+  localStorage.setItem(
+    recentKey,
+    JSON.stringify(newRecent.slice(-maxRecent))
+  );
 
   document.getElementById("game-title").textContent = formatCategoryName(category);
   document.getElementById("score-text").textContent = "Score: 0";
@@ -50,13 +75,16 @@ function loadQuestion() {
   answerBox.innerHTML = "";
 
  // Shuffle answers while keeping track of correct one
-const shuffled = q.choices
+const shuffledChoices = q.choices
   .map((choice, index) => ({ choice, index }))
   .sort(() => Math.random() - 0.5);
 
-shuffled.forEach((item) => {
+shuffledChoices.forEach(item => {
   const btn = document.createElement("button");
   btn.textContent = item.choice;
+  btn.onclick = () => selectAnswer(item.index, btn);
+  answerBox.appendChild(btn);
+});
 
   btn.onclick = () => selectAnswer(item.index, btn);
 
