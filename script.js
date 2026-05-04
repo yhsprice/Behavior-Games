@@ -127,7 +127,7 @@ function showScreen(name) {
     "results-screen",
     "tracker-screen",
     "conversation-screen",
-    "setup-screen",
+    "setup-screen"
   ];
 
   screens.forEach(id => {
