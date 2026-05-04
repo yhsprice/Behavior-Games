@@ -70,6 +70,42 @@
   </div>
 </section>
 
+    <section id="setup-screen" class="card hidden">
+  <div class="top-row">
+    <h2>Before You Play</h2>
+    <button class="small-btn" onclick="goHome()">Back</button>
+  </div>
+
+  <p>Enter your name and choose what you want to build as you answer questions.</p>
+
+  <label><strong>Your name:</strong></label>
+  <input id="player-name-input" type="text" placeholder="Type your name" />
+
+  <h3>Choose your reward puzzle</h3>
+
+  <div class="category-grid">
+    <button class="category-btn" onclick="selectRewardTheme('character')">
+      <span class="category-name">Dress-Up Character</span>
+      <span class="category-sub">Add pieces as you answer</span>
+    </button>
+
+    <button class="category-btn" onclick="selectRewardTheme('truck')">
+      <span class="category-name">Build a Truck</span>
+      <span class="category-sub">Add truck parts</span>
+    </button>
+
+    <button class="category-btn" onclick="selectRewardTheme('house')">
+      <span class="category-name">Build a House</span>
+      <span class="category-sub">Add house pieces</span>
+    </button>
+
+    <button class="category-btn" onclick="selectRewardTheme('robot')">
+      <span class="category-name">Build a Robot</span>
+      <span class="category-sub">Add robot parts</span>
+    </button>
+  </div>
+</section>
+    
 <!-- GAME SCREEN -->
 <section id="game-screen" class="card hidden">
   <div class="top-row">
