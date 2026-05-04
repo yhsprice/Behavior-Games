@@ -213,7 +213,7 @@ const conversationTopics = [
   buildConversation("That’s not fair!", "child", [
     {
       speaker: "Player 1 - Parent",
-      text: "Your child says: “That’s not fair!” What should the parent say?",
+      text: "Your child says: “That’s not fair!” What is a good response?",
       choices: [
         { text: "Fair doesn’t always mean equal. Let’s talk about why this decision was made.", effect: 10, feedback: "Good choice. This keeps the boundary but also explains the reason. Kids may not like the answer, but explanations help them learn instead of just feeling shut down." },
         { text: "Life isn’t fair. Get over it.", effect: -15, feedback: "This usually makes things worse. It may be true, but it sounds dismissive and teaches frustration instead of understanding." },
@@ -251,7 +251,7 @@ const conversationTopics = [
       speaker: "Player 1 - Parent",
       text: "What should the parent say to close the conversation?",
       choices: [
-        { text: "Thank you for talking it through. We can work on earning more trust.", effect: 10, feedback: "Great close. It reinforces communication and gives a path forward." },
+        { text: "Trust can be earned, but it is not automatic. As long as you keep trying then trust will build.", effect: 10, feedback: "Great close. It reinforces communication and gives a path forward." },
         { text: "See, I told you I was right.", effect: -10, feedback: "This turns a learning moment into a parent victory lap. Nobody likes a victory lap in the kitchen." },
         { text: "Now stop bringing it up.", effect: -5, feedback: "This ends the topic, but it also discourages future communication." }
       ]
