@@ -902,3 +902,13 @@ button:disabled {
   padding: 14px;
   text-align: left;
 }
+.build-image {
+  width: 220px;
+  max-width: 90%;
+  display: block;
+  margin: 15px auto;
+}
+
+.hidden {
+  display: none;
+}
