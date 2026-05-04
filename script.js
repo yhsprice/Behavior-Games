@@ -49,12 +49,19 @@ function loadQuestion() {
   const answerBox = document.getElementById("answer-buttons");
   answerBox.innerHTML = "";
 
-  q.choices.forEach((choice, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = choice;
-    btn.onclick = () => selectAnswer(i, btn);
-    answerBox.appendChild(btn);
-  });
+ // Shuffle answers while keeping track of correct one
+const shuffled = q.choices
+  .map((choice, index) => ({ choice, index }))
+  .sort(() => Math.random() - 0.5);
+
+shuffled.forEach((item) => {
+  const btn = document.createElement("button");
+  btn.textContent = item.choice;
+
+  btn.onclick = () => selectAnswer(item.index, btn);
+
+  answerBox.appendChild(btn);
+});
 
   document.getElementById("feedback-box").textContent = "";
   document.getElementById("next-btn").classList.add("hidden");
