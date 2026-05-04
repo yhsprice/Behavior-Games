@@ -1,6 +1,4 @@
-// ===== FINAL CLEAN VERSION (Beginner + Advanced Working) =====
-
-const APP_VERSION = "FINAL-CLEAN-V1";
+const APP_VERSION = "FINAL-CLEAN-V2";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -9,7 +7,7 @@ let score = 0;
 let answered = false;
 
 function startGame(category) {
-  if (!allQuestions || (!allQuestions[category] && category !== "mixed")) {
+  if (typeof allQuestions === "undefined" || (!allQuestions[category] && category !== "mixed")) {
     alert("Questions not loading correctly.");
     return;
   }
@@ -19,41 +17,23 @@ function startGame(category) {
   score = 0;
   answered = false;
 
-  let pool = [];
+  let pool = category === "mixed"
+    ? Object.values(allQuestions).flat()
+    : [...allQuestions[category]];
 
-  if (category === "mixed") {
-    pool = Object.values(allQuestions).flat();
-  } else {
-    pool = [...allQuestions[category]];
-  }
-
-  const questionCountValue =
-    document.getElementById("question-count-select")?.value || "10";
-
-  const count =
-    questionCountValue === "all" ? pool.length : Number(questionCountValue);
+  const questionCountValue = document.getElementById("question-count-select")?.value || "10";
+  const count = questionCountValue === "all" ? pool.length : Number(questionCountValue);
 
   const recentKey = "recentQuestions_" + category;
-  const recentQuestions = JSON.parse(localStorage.getItem(recentKey)) || [];
+  const recentQuestions = JSON.parse(localStorage.getItem(recentKey) || "[]");
 
   let freshQuestions = pool.filter(q => !recentQuestions.includes(q.question));
+  if (freshQuestions.length < count) freshQuestions = pool;
 
-  if (freshQuestions.length < count) {
-    freshQuestions = pool;
-  }
+  currentQuestions = shuffle([...freshQuestions]).slice(0, count);
 
-  currentQuestions = shuffle(freshQuestions).slice(0, count);
-
-  const newRecent = [
-    ...recentQuestions,
-    ...currentQuestions.map(q => q.question)
-  ];
-
-  const maxRecent = Math.min(pool.length, 30);
-  localStorage.setItem(
-    recentKey,
-    JSON.stringify(newRecent.slice(-maxRecent))
-  );
+  const newRecent = [...recentQuestions, ...currentQuestions.map(q => q.question)];
+  localStorage.setItem(recentKey, JSON.stringify(newRecent.slice(-30)));
 
   document.getElementById("game-title").textContent = formatCategoryName(category);
   document.getElementById("score-text").textContent = "Score: 0";
@@ -62,7 +42,6 @@ function startGame(category) {
   loadQuestion();
 }
 
-// ===== LOAD QUESTION =====
 function loadQuestion() {
   const q = currentQuestions[currentQuestionIndex];
   if (!q) return;
@@ -74,55 +53,44 @@ function loadQuestion() {
   const answerBox = document.getElementById("answer-buttons");
   answerBox.innerHTML = "";
 
- // Shuffle answers while keeping track of correct one
-const shuffledChoices = q.choices
-  .map((choice, index) => ({ choice, index }))
-  .sort(() => Math.random() - 0.5);
+  const shuffledChoices = q.choices
+    .map((choice, index) => ({ choice, index }))
+    .sort(() => Math.random() - 0.5);
 
-shuffledChoices.forEach(item => {
-  const btn = document.createElement("button");
-  btn.textContent = item.choice;
-  btn.onclick = () => selectAnswer(item.index, btn);
-  answerBox.appendChild(btn);
-});
-
-  btn.onclick = () => selectAnswer(item.index, btn);
-
-  answerBox.appendChild(btn);
-});
+  shuffledChoices.forEach(item => {
+    const btn = document.createElement("button");
+    btn.textContent = item.choice;
+    btn.onclick = () => selectAnswer(item.index, btn);
+    answerBox.appendChild(btn);
+  });
 
   document.getElementById("feedback-box").textContent = "";
   document.getElementById("next-btn").classList.add("hidden");
 }
 
-// ===== SELECT ANSWER =====
 function selectAnswer(index, btn) {
   if (answered) return;
   answered = true;
 
   const q = currentQuestions[currentQuestionIndex];
-  const buttons = document.querySelectorAll("#answer-buttons button");
 
-  buttons.forEach(b => b.disabled = true);
+  document.querySelectorAll("#answer-buttons button").forEach(b => {
+    b.disabled = true;
+  });
 
   if (index === q.correct) {
     score += 10;
     btn.classList.add("correct");
-
-    document.getElementById("feedback-box").textContent =
-      "✅ " + q.explanation;
+    document.getElementById("feedback-box").textContent = "✅ " + q.explanation;
   } else {
     btn.classList.add("wrong");
-
-    document.getElementById("feedback-box").textContent =
-      "❌ " + q.explanation;
+    document.getElementById("feedback-box").textContent = "❌ " + q.explanation;
   }
 
   document.getElementById("score-text").textContent = "Score: " + score;
   document.getElementById("next-btn").classList.remove("hidden");
 }
 
-// ===== NEXT QUESTION =====
 function nextQuestion() {
   currentQuestionIndex++;
 
@@ -133,7 +101,6 @@ function nextQuestion() {
   }
 }
 
-// ===== FINISH =====
 function finishGame() {
   showScreen("results");
 
@@ -141,7 +108,11 @@ function finishGame() {
     "Score: " + score + "/" + (currentQuestions.length * 10);
 }
 
-// ===== SCREEN CONTROL =====
+function restartCurrentGame() {
+  if (currentCategory) startGame(currentCategory);
+  else goHome();
+}
+
 function showScreen(name) {
   const screens = [
     "home-screen",
@@ -163,7 +134,7 @@ function showScreen(name) {
 function goHome() {
   showScreen("home");
 }
-// ===== UTIL =====
+
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
@@ -177,20 +148,17 @@ function formatCategoryName(cat) {
   return map[cat] || cat;
 }
 
-// ===== BUTTON EXPORTS =====
-window.startGame = startGame;
-window.nextQuestion = nextQuestion;
-window.showScreen = showScreen;
-window.goHome = goHome;
-// ===== SIMPLE CONVERSATION PRACTICE FIX =====
+/* Prevent buttons from breaking if these features are not active */
+function toggleReadAloud() {}
+function readQuestionAloud() {}
+function addGoodChoice() {}
+function addNeedsWork() {}
+function resetTracker() {}
+function addCategoryChoice() {}
 
-// ===== CONVERSATION PRACTICE (FULL VERSION) =====
-
+/* Conversation Practice */
 function startConversationPractice() {
   showScreen("conversation");
-
-  const box = document.getElementById("choicesBox");
-  box.innerHTML = "";
 
   document.getElementById("scenarioTitle").textContent = "Conversation Practice";
   document.getElementById("speakerBox").textContent = "Choose a role";
@@ -198,28 +166,30 @@ function startConversationPractice() {
   document.getElementById("feedbackBox").textContent = "";
   document.getElementById("respectMeter").textContent = "50";
 
+  const box = document.getElementById("choicesBox");
+  box.innerHTML = "";
+
   const parentBtn = document.createElement("button");
   parentBtn.textContent = "Parent Starts";
   parentBtn.onclick = () => showTopics("parent");
+  box.appendChild(parentBtn);
 
   const childBtn = document.createElement("button");
   childBtn.textContent = "Child Starts";
   childBtn.onclick = () => showTopics("child");
-
-  box.appendChild(parentBtn);
   box.appendChild(childBtn);
 }
 
-// ===== SHOW TOPICS =====
 function showTopics(role) {
   const topics = role === "parent" ? parentTopics : childTopics;
 
-  const box = document.getElementById("choicesBox");
-  box.innerHTML = "";
-
-  document.getElementById("speakerBox").textContent = role === "parent" ? "Parent Topics" : "Child Topics";
+  document.getElementById("speakerBox").textContent =
+    role === "parent" ? "Parent Topics" : "Child Topics";
   document.getElementById("conversationText").textContent = "Pick a situation:";
   document.getElementById("feedbackBox").textContent = "";
+
+  const box = document.getElementById("choicesBox");
+  box.innerHTML = "";
 
   topics.forEach(topic => {
     const btn = document.createElement("button");
@@ -234,15 +204,14 @@ function showTopics(role) {
   box.appendChild(back);
 }
 
-// ===== LOAD TOPIC =====
 function loadTopic(topic) {
-  const box = document.getElementById("choicesBox");
-  box.innerHTML = "";
-
   document.getElementById("scenarioTitle").textContent = topic.title;
   document.getElementById("speakerBox").textContent = "Scenario";
   document.getElementById("conversationText").textContent = topic.prompt;
   document.getElementById("feedbackBox").textContent = "";
+
+  const box = document.getElementById("choicesBox");
+  box.innerHTML = "";
 
   topic.choices.forEach(choice => {
     const btn = document.createElement("button");
@@ -259,43 +228,23 @@ function loadTopic(topic) {
   box.appendChild(back);
 }
 
-// ===== DATA =====
-
 const parentTopics = [
   {
     title: "Go clean your room",
-    prompt: "Parent gives instruction. What is the BEST way to say it?",
+    prompt: "Parent gives instruction. What is the best way to say it?",
     choices: [
-      {
-        text: "Please go clean your room before dinner.",
-        feedback: "Good. Clear + respectful."
-      },
-      {
-        text: "Go clean your room NOW!",
-        feedback: "Clear, but more aggressive tone."
-      },
-      {
-        text: "Your room is disgusting.",
-        feedback: "Attacks the person, not the behavior."
-      }
+      { text: "Please go clean your room before dinner.", feedback: "Good. Clear and respectful." },
+      { text: "Go clean your room NOW!", feedback: "Clear, but more aggressive." },
+      { text: "Your room is disgusting.", feedback: "This attacks the person instead of the behavior." }
     ]
   },
   {
     title: "Do your homework",
-    prompt: "Parent wants homework done. Best response?",
+    prompt: "Parent wants homework done. What is the best response?",
     choices: [
-      {
-        text: "Let’s get your homework done first.",
-        feedback: "Supportive and clear."
-      },
-      {
-        text: "Do it now.",
-        feedback: "Works, but less cooperative."
-      },
-      {
-        text: "If you don’t, you’re grounded.",
-        feedback: "Jumps straight to punishment."
-      }
+      { text: "Let’s get your homework done first.", feedback: "Supportive and clear." },
+      { text: "Do it now.", feedback: "Clear, but less cooperative." },
+      { text: "If you don’t, you’re grounded.", feedback: "This jumps straight to punishment." }
     ]
   }
 ];
@@ -305,72 +254,35 @@ const childTopics = [
     title: "That’s not fair!",
     prompt: "Parent says no. What should the child say?",
     choices: [
-      {
-        text: "I don’t like it, but can you explain why?",
-        feedback: "Excellent. Respectful disagreement."
-      },
-      {
-        text: "You never let me do anything!",
-        feedback: "Escalates the situation."
-      },
-      {
-        text: "Whatever.",
-        feedback: "Shuts down communication."
-      }
+      { text: "I don’t like it, but can you explain why?", feedback: "Excellent. Respectful disagreement." },
+      { text: "You never let me do anything!", feedback: "This escalates the situation." },
+      { text: "Whatever.", feedback: "This shuts down communication." }
     ]
   },
   {
     title: "Why do I have to?",
-    prompt: "Parent asks you to do something.",
+    prompt: "Parent asks you to do something. What is the best response?",
     choices: [
-      {
-        text: "Okay, I’ll do it.",
-        feedback: "Responsible."
-      },
-      {
-        text: "Why me?",
-        feedback: "Pushback that slows things down."
-      },
-      {
-        text: "No.",
-        feedback: "Starts a conflict."
-      }
+      { text: "Okay, I’ll do it.", feedback: "Responsible." },
+      { text: "Why me?", feedback: "Pushback that slows things down." },
+      { text: "No.", feedback: "This starts conflict." }
     ]
   }
 ];
 
+window.startGame = startGame;
+window.nextQuestion = nextQuestion;
+window.showScreen = showScreen;
+window.goHome = goHome;
+window.restartCurrentGame = restartCurrentGame;
 window.startConversationPractice = startConversationPractice;
-  topics.forEach(topic => {
-    const btn = document.createElement("button");
-    btn.textContent = topic.title;
-    btn.onclick = () => loadConversationTopic(topic);
-    choicesBox.appendChild(btn);
-  });
-}
+window.toggleReadAloud = toggleReadAloud;
+window.readQuestionAloud = readQuestionAloud;
+window.addGoodChoice = addGoodChoice;
+window.addNeedsWork = addNeedsWork;
+window.resetTracker = resetTracker;
+window.addCategoryChoice = addCategoryChoice;
 
-function loadConversationTopic(topic) {
-  document.getElementById("scenarioTitle").textContent = topic.title;
-  document.getElementById("speakerBox").textContent = "Scenario";
-  document.getElementById("conversationText").textContent = topic.prompt;
-  document.getElementById("feedbackBox").textContent = "";
-
-  const choicesBox = document.getElementById("choicesBox");
-  choicesBox.innerHTML = "";
-
-  topic.choices.forEach(choice => {
-    const btn = document.createElement("button");
-    btn.textContent = choice.text;
-    btn.onclick = () => {
-      document.getElementById("feedbackBox").textContent = choice.feedback;
-    };
-    choicesBox.appendChild(btn);
-  });
-
-  const backBtn = document.createElement("button");
-  backBtn.textContent = "Back to Topics";
-  backBtn.onclick = startConversationPractice;
-  choicesBox.appendChild(backBtn);
-}
-
-window.startConversationPractice = startConversationPractice;
-window.loadConversationTopic = loadConversationTopic;
+document.addEventListener("DOMContentLoaded", () => {
+  goHome();
+});
