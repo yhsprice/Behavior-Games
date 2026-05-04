@@ -1,4 +1,4 @@
-const APP_VERSION = "FINAL-CLEAN-V128";
+const APP_VERSION = "FINAL-CLEAN-V129";
 
 let currentCategory = "";
 let currentQuestions = [];
@@ -1029,6 +1029,8 @@ window.resetTracker = resetTracker;
 window.addCategoryChoice = addCategoryChoice;
 window.startGameSetup = startGameSetup;
 window.selectRewardTheme = selectRewardTheme;
+window.updateRewardDisplay = updateRewardDisplay;
+window.addRewardPiece = addRewardPiece;
 
 document.addEventListener("DOMContentLoaded", () => {
   goHome();
