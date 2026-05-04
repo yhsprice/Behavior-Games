@@ -290,8 +290,9 @@ button:disabled {
 }
 
 .answer-buttons {
+  display: flex;
   flex-direction: column;
-  margin-top: 18px;
+  gap: 10px;
 }
 
 .answer-buttons button {
