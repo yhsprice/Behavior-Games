@@ -742,10 +742,15 @@ function chooseConversationAnswer(choice) {
   document.getElementById("respectMeter").textContent = respectScore;
   document.getElementById("feedbackBox").textContent = choice.feedback || "";
 
-  currentStep = choice.next;
+ currentStep = choice.next;
 
-  setTimeout(showConversationStep, 2200);
-}
+const box = document.getElementById("choicesBox");
+box.innerHTML = "";
+
+const nextBtn = document.createElement("button");
+nextBtn.textContent = "Next";
+nextBtn.onclick = showConversationStep;
+box.appendChild(nextBtn);
 
 function goBackOneStep() {
   if (conversationHistory.length === 0) return;
