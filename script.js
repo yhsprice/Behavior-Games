@@ -6,6 +6,13 @@ let currentQuestionIndex = 0;
 let score = 0;
 let answered = false;
 
+let selectedDifficulty = "";
+
+function startGameSetup(difficulty) {
+  selectedDifficulty = difficulty;
+  showScreen("setup");
+}
+
 function startGame(category) {
   if (typeof allQuestions === "undefined" || (!allQuestions[category] && category !== "mixed")) {
     alert("Questions not loading correctly.");
@@ -948,6 +955,7 @@ window.addGoodChoice = addGoodChoice;
 window.addNeedsWork = addNeedsWork;
 window.resetTracker = resetTracker;
 window.addCategoryChoice = addCategoryChoice;
+window.startGameSetup = startGameSetup;
 
 document.addEventListener("DOMContentLoaded", () => {
   goHome();
