@@ -971,46 +971,6 @@ function selectRewardTheme(theme) {
   selectedRewardTheme = theme;
   rewardPiecesEarned = 0;
 
- function updateRewardDisplay() {
-  const rewardBox = document.getElementById("reward-box");
-  if (!rewardBox || !selectedRewardTheme) return;
-
-  const pieces = rewardThemes[selectedRewardTheme] || [];
-
-  rewardBox.innerHTML = `
-    <h3>${playerName}'s Reward Puzzle</h3>
-    <div style="font-size:18px; margin-bottom:10px;">
-      ${rewardPiecesEarned >= pieces.length
-        ? "🎉 Finished! Great job building your reward!"
-        : "Keep answering correctly to reveal more pieces."}
-    </div>
-    <img 
-      id="buildImage" 
-      class="build-image" 
-      src="${pieces[Math.max(0, rewardPiecesEarned - 1)] || ""}" 
-      alt="Reward build image"
-      style="max-width:260px; width:100%; display:${rewardPiecesEarned > 0 ? "block" : "none"}; margin:auto;"
-    >
-  `;
-}
-
-function addRewardPiece() {
-  const pieces = rewardThemes[selectedRewardTheme] || [];
-
-  if (rewardPiecesEarned < pieces.length) {
-    rewardPiecesEarned++;
-  }
-
-  updateRewardDisplay();
-}
-function addRewardPiece() {
-  const pieces = rewardThemes[selectedRewardTheme] || [];
-  if (rewardPiecesEarned < pieces.length) {
-    rewardPiecesEarned++;
-  }
-  updateRewardDisplay();
-}
-
   const nameInput = document.getElementById("player-name-input");
   playerName = nameInput && nameInput.value.trim() ? nameInput.value.trim() : "Player";
 
@@ -1036,7 +996,7 @@ function updateRewardDisplay() {
     ${currentImage ? `
       <img 
         class="build-image" 
-        src="${currentImage}?v=130" 
+        src="${currentImage}?v=131" 
         alt="Reward build image"
         style="max-width:260px; width:100%; display:block; margin:auto;"
       >
