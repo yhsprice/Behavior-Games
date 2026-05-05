@@ -12,10 +12,30 @@ let selectedRewardTheme = "";
 let rewardPiecesEarned = 0;
 
 const rewardThemes = {
-  character: ["👟 Shoes", "👖 Pants", "👕 Shirt", "🎀 Accessory", "😊 Finished Character"],
-  truck: ["🛞 Wheels", "🚚 Truck Body", "🪟 Windows", "💡 Lights", "🏁 Finished Truck"],
-  house: ["⬛ Foundation", "🧱 Walls", "🏠 Roof", "🚪 Door", "🌸 Finished House"],
-  robot: ["🦿 Legs", "🤖 Body", "🦾 Arms", "🔋 Power", "✨ Finished Robot"]
+  character: [
+    "images/character/character_02_pants.png",
+    "images/character/character_03_shirt.png",
+    "images/character/character_04_accessory.png",
+    "images/character/character_05_finished.png"
+  ],
+  truck: [
+    "images/truck/truck_02_body.png",
+    "images/truck/truck_03_windows.png",
+    "images/truck/truck_04_lights.png",
+    "images/truck/truck_05_finished.png"
+  ],
+  house: [
+    "images/house/house_02_walls.png",
+    "images/house/house_03_roof.png",
+    "images/house/house_04_door.png",
+    "images/house/house_05_finished.png"
+  ],
+  robot: [
+    "images/robot/robot_02_body.png",
+    "images/robot/robot_03_arms.png",
+    "images/robot/robot_04_power.png",
+    "images/robot/robot_05_finished.png"
+  ]
 };
 
 function startGameSetup(difficulty) {
@@ -951,46 +971,38 @@ function selectRewardTheme(theme) {
   selectedRewardTheme = theme;
   rewardPiecesEarned = 0;
 
-  function updateRewardDisplay() {
+ function updateRewardDisplay() {
   const rewardBox = document.getElementById("reward-box");
   if (!rewardBox || !selectedRewardTheme) return;
 
-  const visuals = {
-    character: ["👟", "👖", "👕", "🎀", "😊"],
-    truck: ["🛞", "🛞", "🚚", "🪟", "💡"],
-    house: ["⬛", "🧱", "🏠", "🚪", "🌸"],
-    robot: ["🦿", "🤖", "🦾", "🔋", "✨"]
-  };
-
-  const finalImages = {
-    character: "👟 👖 👕 🎀 😊",
-    truck: "🛞 🚚 🛞 🪟 💡",
-    house: "⬛ 🧱 🏠 🚪 🌸",
-    robot: "🦿 🤖 🦾 🔋 ✨"
-  };
-
-  const pieces = visuals[selectedRewardTheme] || [];
-  const shownPieces = pieces
-    .map((piece, index) => index < rewardPiecesEarned ? piece : "⬜")
-    .join(" ");
-
-  const isComplete = rewardPiecesEarned >= pieces.length;
+  const pieces = rewardThemes[selectedRewardTheme] || [];
 
   rewardBox.innerHTML = `
     <h3>${playerName}'s Reward Puzzle</h3>
-
-    <div style="font-size:48px; line-height:1.6; margin:15px 0;">
-      ${isComplete ? finalImages[selectedRewardTheme] : shownPieces}
-    </div>
-
-    <div style="font-size:18px;">
-      ${isComplete 
+    <div style="font-size:18px; margin-bottom:10px;">
+      ${rewardPiecesEarned >= pieces.length
         ? "🎉 Finished! Great job building your reward!"
         : "Keep answering correctly to reveal more pieces."}
     </div>
+    <img 
+      id="buildImage" 
+      class="build-image" 
+      src="${pieces[Math.max(0, rewardPiecesEarned - 1)] || ""}" 
+      alt="Reward build image"
+      style="max-width:260px; width:100%; display:${rewardPiecesEarned > 0 ? "block" : "none"}; margin:auto;"
+    >
   `;
 }
 
+function addRewardPiece() {
+  const pieces = rewardThemes[selectedRewardTheme] || [];
+
+  if (rewardPiecesEarned < pieces.length) {
+    rewardPiecesEarned++;
+  }
+
+  updateRewardDisplay();
+}
 function addRewardPiece() {
   const pieces = rewardThemes[selectedRewardTheme] || [];
   if (rewardPiecesEarned < pieces.length) {
