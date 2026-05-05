@@ -1022,18 +1022,27 @@ function updateRewardDisplay() {
   if (!rewardBox || !selectedRewardTheme) return;
 
   const pieces = rewardThemes[selectedRewardTheme] || [];
-  const earned = pieces.slice(0, rewardPiecesEarned);
-  const remaining = pieces.slice(rewardPiecesEarned);
+  const currentImage = pieces[rewardPiecesEarned - 1];
 
   rewardBox.innerHTML = `
     <h3>${playerName}'s Reward Puzzle</h3>
-    <div style="font-size:22px; line-height:1.6;">
-      <strong>Earned:</strong><br>
-      ${earned.length ? earned.join(" | ") : "No pieces yet"}
-      <br><br>
-      <strong>Still hidden:</strong><br>
-      ${remaining.map(() => "⬜").join(" ")}
+
+    <div style="font-size:18px; margin-bottom:10px;">
+      ${rewardPiecesEarned >= pieces.length
+        ? "🎉 Finished! Great job building your reward!"
+        : "Keep answering correctly to reveal more pieces."}
     </div>
+
+    ${currentImage ? `
+      <img 
+        class="build-image" 
+        src="${currentImage}?v=130" 
+        alt="Reward build image"
+        style="max-width:260px; width:100%; display:block; margin:auto;"
+      >
+    ` : `
+      <div style="font-size:18px;">No pieces yet. Answer correctly to start building.</div>
+    `}
   `;
 }
 
